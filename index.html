@@ -867,8 +867,13 @@ input::placeholder{color:var(--text3)}
 </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-var currentUser={nome:'Pedro',email:'pedro@email.com'};
+const SUPA_URL='https://krqlbdpuuamimbliddtj.supabase.co';
+const SUPA_KEY='sb_publishable_DWDJXwLW4zXqeApYiZOLGA_yt9pJj1e';
+const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
+
+var currentUser={nome:'',email:''};
 var qrTimer=null;
 var qrSeconds=120;
 
@@ -892,31 +897,43 @@ function toast(msg,err){
   setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-function doLogin(){
+async function doLogin(){
   var email=document.getElementById('login-email').value;
   var senha=document.getElementById('login-senha').value;
   if(!email||!senha){toast('Preencha e-mail e senha',true);return}
-  currentUser.nome=email.split('@')[0];
-  currentUser.nome=currentUser.nome.charAt(0).toUpperCase()+currentUser.nome.slice(1);
-  document.getElementById('topbar-name').textContent=currentUser.nome;
-  document.getElementById('topbar-name2').textContent=currentUser.nome;
-  document.getElementById('topbar-avatar').textContent=currentUser.nome.charAt(0).toUpperCase();
+  var btn=document.querySelector('#screen-login .btn-primary');
+  btn.textContent='Entrando...';btn.disabled=true;
+  var {data,error}=await sb.auth.signInWithPassword({email,password:senha});
+  btn.textContent='Entrar';btn.disabled=false;
+  if(error){toast(error.message==='Invalid login credentials'?'E-mail ou senha incorretos':error.message,true);return}
+  var nome=data.user.user_metadata?.nome||email.split('@')[0];
+  nome=nome.charAt(0).toUpperCase()+nome.slice(1);
+  currentUser={nome,email:data.user.email};
+  document.getElementById('topbar-name').textContent=nome;
+  document.getElementById('topbar-name2').textContent=nome;
+  document.getElementById('topbar-avatar').textContent=nome.charAt(0).toUpperCase();
   goTo('screen-dashboard');
-  toast('Bem-vindo, '+currentUser.nome+'!');
+  toast('Bem-vindo, '+nome+'!');
 }
 
-function doCadastro(){
-  var nome=document.getElementById('cad-nome').value;
-  var email=document.getElementById('cad-email').value;
+async function doCadastro(){
+  var nome=document.getElementById('cad-nome').value.trim();
+  var email=document.getElementById('cad-email').value.trim();
   var s1=document.getElementById('cad-senha').value;
   var s2=document.getElementById('cad-senha2').value;
   if(!nome||!email||!s1){toast('Preencha todos os campos',true);return}
   if(s1!==s2){toast('As senhas não conferem',true);return}
   if(s1.length<8){toast('Senha deve ter ao menos 8 caracteres',true);return}
-  currentUser.nome=nome.split(' ')[0];
-  document.getElementById('topbar-name').textContent=currentUser.nome;
-  document.getElementById('topbar-name2').textContent=currentUser.nome;
-  document.getElementById('topbar-avatar').textContent=currentUser.nome.charAt(0).toUpperCase();
+  var btn=document.querySelector('#screen-cadastro .btn-primary');
+  btn.textContent='Criando conta...';btn.disabled=true;
+  var {data,error}=await sb.auth.signUp({email,password:s1,options:{data:{nome}}});
+  btn.textContent='Criar conta';btn.disabled=false;
+  if(error){toast(error.message,true);return}
+  var primeiroNome=nome.split(' ')[0];
+  currentUser={nome:primeiroNome,email};
+  document.getElementById('topbar-name').textContent=primeiroNome;
+  document.getElementById('topbar-name2').textContent=primeiroNome;
+  document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
   goTo('screen-qr');
   toast('Conta criada! Conecte seu WhatsApp.');
 }
