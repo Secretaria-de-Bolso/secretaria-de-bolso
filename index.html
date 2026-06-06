@@ -468,7 +468,7 @@ async function carregarDashboard(){
     }).catch(e=>console.log('Erro receitas:',e));
   }catch(e){console.log('Erro sheets:',e)}
 }
-
+async function carregarAgendaHoje(){var agora=new Date();var inicio=new Date(agora);inicio.setHours(0,0,0,0);var fim=new Date(agora);fim.setHours(23,59,59,999);var url=`https://www.googleapis.com/calendar/v3/calendars/${GCAL_ID}/events?key=${GCAL_KEY}&timeMin=${inicio.toISOString()}&timeMax=${fim.toISOString()}&singleEvents=true&orderBy=startTime`;var el=document.getElementById('dash-agenda-hoje');var elData=document.getElementById('dash-data-hoje');if(elData)elData.textContent=agora.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});try{var res=await fetch(url);var data=await res.json();if(!data.items||!data.items.length){el.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhum evento hoje.</div>';return;}var html='';data.items.forEach(ev=>{var hora=ev.start.dateTime?new Date(ev.start.dateTime).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'Dia todo';html+=`<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--teal);min-width:48px">${hora}</div><div style="font-size:14px">${ev.summary||'Sem título'}</div></div>`;});el.innerHTML=html;}catch(e){el.innerHTML='<div style="color:var(--text2);font-size:13px">Erro ao carregar.</div>';}}
 async function carregarAgenda(){
   var agora=new Date();
   var inicio=agora.toISOString();
