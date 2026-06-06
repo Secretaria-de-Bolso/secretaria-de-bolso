@@ -933,7 +933,7 @@ async function doLogin(){
   if(error){toast(error.message==='Invalid login credentials'?'E-mail ou senha incorretos':error.message,true);return}
   var nome=data.user.user_metadata?.nome||email.split('@')[0];
   nome=nome.charAt(0).toUpperCase()+nome.slice(1);
-  ccurrentUser={nome,email:data.user.email,id:data.user.id};
+  currentUser={nome,email:data.user.email,id:data.user.id};
   document.getElementById('topbar-name').textContent=nome;
   document.getElementById('topbar-name2').textContent=nome;
   document.getElementById('topbar-avatar').textContent=nome.charAt(0).toUpperCase();
