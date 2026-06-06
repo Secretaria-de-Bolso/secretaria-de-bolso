@@ -875,6 +875,30 @@ var currentUser={nome:'',email:''};
 var qrTimer=null;
 var qrSeconds=120;
 
+async function carregarDashboard(){
+  try{
+    var {data:cliente}=await sb.from('clientes').select('sheets_id').eq('user_id',currentUser.id).single();
+    if(!cliente||!cliente.sheets_id)return;
+    var sid=cliente.sheets_id;
+    var url=`https://docs.google.com/spreadsheets/d/${sid}/gviz/tq?tqx=out:json&sheet=Despesas`;
+    var res=await fetch(url);
+    var txt=await res.text();
+    var json=JSON.parse(txt.substring(47,txt.length-2));
+    var rows=json.table.rows;
+    var totalDesp=0;
+    var tbody=document.getElementById('tbody-despesas');
+    tbody.innerHTML='';
+    rows.forEach(r=>{
+      if(!r.c[2]||!r.c[2].v)return;
+      var data=r.c[0]?r.c[0].v:'—';
+      var desc=r.c[1]?r.c[1].v:'—';
+      var val=parseFloat(r.c[2].v)||0;
+      var cat=r.c[3]?r.c[3].v:'—';
+      totalDesp+=val;
+      tbody.innerHTML+=`<tr><td>${data}</td><td><span class="desc-view">${desc}</span></td><td><span class="badge badge-yellow">${cat}</span></td><td style="color:var(--red);font-weight:600">R$ ${val.toFixed(2)}</td><td></td></tr>`;
+    });
+    document.getEle
+
 function goTo(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
