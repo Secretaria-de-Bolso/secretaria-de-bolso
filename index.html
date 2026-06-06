@@ -960,6 +960,7 @@ async function doCadastro(){
   document.getElementById('topbar-name').textContent=primeiroNome;
   document.getElementById('topbar-name2').textContent=primeiroNome;
   document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
+  await sb.from('clientes').insert({user_id:data.user.id,nome:primeiroNome,whatsapp:'',whatsapp_conectado:false});
   goTo('screen-qr');
   toast('Conta criada! Conecte seu WhatsApp.');
 }
