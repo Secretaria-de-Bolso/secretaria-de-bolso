@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/evolution/:path*",
+      "destination": "http://2.25.164.165:8080/:path*"
+    }
+  ]
+}
