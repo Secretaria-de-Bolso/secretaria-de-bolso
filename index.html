@@ -220,19 +220,9 @@ input::placeholder{color:var(--text3)}
   </div>
   <div class="form-group">
     <label>E-mail</label>
-    <input type="email" id="cad-email" placeholder="seu@email.com">
-  </div>
-  <div class="form-group">
-    <label>Senha</label>
-    <div style="position:relative"><input type="password" id="cad-senha" placeholder="Mínimo 8 caracteres" style="width:100%;padding-right:40px"><span onclick="var i=document.getElementById('cad-senha');i.type=i.type=='password'?'text':'password'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span></div>
-  </div>
-  <div class="form-group"><label>WhatsApp (com DDD)</label><div style="display:flex;gap:8px"><select id="cad-pais" style="width:90px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px;color:var(--text);font-size:14px"><option value="+55">🇧🇷 +55</option><option value="+1">🇺🇸 +1</option><option value="+351">🇵🇹 +351</option></select><input type="tel" id="cad-telefone" placeholder="(44) 99999-9999" style="flex:1"></div></div>
-  <div class="form-group">
-    
-    <input type="password" id="cad-senha2" placeholder="Repita a senha">
-  </div>
-  <button class="btn btn-primary btn-full btn-lg" onclick="doCadastro()" style="margin-top:8px">Criar conta</button>
-  <div class="auth-footer">
+    <input type="email" id="cad-email" placeholder="seu@email.com"><div class="form-group"><label>WhatsApp (com DDD)</label><div style="display:flex;gap:8px"><select id="cad-pais" style="width:90px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px;color:var(--text);font-size:14px"><option value="+55">🇧🇷 +55</option><option value="+1">🇺🇸 +1</option><option value="+351">🇵🇹 +351</option></select><input type="tel" id="cad-telefone" placeholder="(44) 99999-9999" style="flex:1"></div></div>
+<div class="form-group"><label>Senha</label><div style="position:relative"><input type="password" id="cad-senha" placeholder="Mínimo 8 caracteres" style="width:100%;padding-right:40px"><span onclick="var i=document.getElementById('cad-senha');i.type=i.type=='password'?'text':'password'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span></div></div>
+<div class="form-group"><label>Confirmar senha</label><div style="position:relative"><input type="password" id="cad-senha2" placeholder="Repita a senha" style="width:100%;padding-right:40px"><span onclick="var i=document.getElementById('cad-senha2');i.type=i.type=='password'?'text':'password'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span></div></div>
     Já tem conta? <a onclick="goTo('screen-login')">Entrar</a>
   </div>
 </div>
