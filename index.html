@@ -949,7 +949,7 @@ async function doCadastro(){
   btn.textContent='Criando conta...';btn.disabled=true;
   var {data,error}=await sb.auth.signUp({email,password:s1,options:{data:{nome}}});
   btn.textContent='Criar conta';btn.disabled=false;
-  if(error){toast(error.message,true);return}
+  if(error){var msg=error.message==='User already registered'?'E-mail já cadastrado. Tente fazer login.':error.message==='Password should be at least 6 characters'?'A senha deve ter pelo menos 6 caracteres':error.message;toast(msg,true);return}
   var primeiroNome=nome.split(' ')[0];
   currentUser={nome:primeiroNome,email};
   document.getElementById('topbar-name').textContent=primeiroNome;
