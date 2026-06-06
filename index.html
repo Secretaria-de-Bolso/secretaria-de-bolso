@@ -898,6 +898,7 @@ async function carregarDashboard(){
       tbody.innerHTML+=`<tr><td>${data}</td><td><span class="desc-view">${desc}</span></td><td><span class="badge badge-yellow">${cat}</span></td><td style="color:var(--red);font-weight:600">R$ ${val.toFixed(2)}</td><td></td></tr>`;
     });
   document.getElementById('m-despesas').textContent='R$ '+totalDesp.toFixed(2);document.getElementById('m-lancamentos').textContent=rows.length;
+  var url2=`https://docs.google.com/spreadsheets/d/${sid}/gviz/tq?tqx=out:json&sheet=Receita (ganhos)`;fetch(url2).then(r=>r.text()).then(txt=>{var j=JSON.parse(txt.substring(47,txt.length-2));var totalRec=0;j.table.rows.forEach(r=>{if(r.c[2]&&r.c[2].v)totalRec+=parseFloat(r.c[2].v)||0;});document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2);document.getElementById('m-saldo').textContent='R$ '+(totalRec-totalDesp).toFixed(2);}).catch(e=>console.log('Erro receitas:',e));
 
   }catch(e){console.log('Erro sheets:',e)}
 }
