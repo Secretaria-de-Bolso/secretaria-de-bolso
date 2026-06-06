@@ -571,7 +571,7 @@ async function doLogin(){
   document.getElementById('topbar-avatar').textContent=nome.charAt(0).toUpperCase();
   goTo('screen-dashboard');
   toast('Bem-vindo, '+nome+'!');
-  carregarDashboard();
+  carregarDashboard();carregarAgendaHoje();
 }
 
 async function doCadastro(){
