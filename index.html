@@ -95,8 +95,6 @@ input::placeholder{color:var(--text3)}
 .auth-footer{text-align:center;margin-top:20px;font-size:14px;color:var(--text2)}
 .auth-footer a{color:var(--teal);cursor:pointer;text-decoration:none}
 .auth-footer a:hover{text-decoration:underline}
-.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text3);font-size:13px}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 .page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px}
 .page-sub{color:var(--text2);font-size:14px;margin-bottom:28px}
 .steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:40px}
@@ -111,9 +109,6 @@ input::placeholder{color:var(--text3)}
 .qr-box{background:white;border-radius:16px;padding:20px;display:inline-flex;margin:0 auto}
 .qr-box img{width:200px;height:200px}
 .qr-timer{display:flex;align-items:center;gap:6px;color:var(--yellow);font-size:13px;margin-top:12px;justify-content:center}
-.chart-bar{display:flex;align-items:flex-end;gap:4px;height:100px}
-.bar{flex:1;border-radius:4px 4px 0 0;min-width:24px;transition:opacity 0.2s}
-.bar:hover{opacity:0.8}
 .wa-status{display:flex;align-items:center;gap:12px;padding:16px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;margin-bottom:20px}
 .wa-icon{width:40px;height:40px;border-radius:50%;background:var(--teal-dim);display:flex;align-items:center;justify-content:center}
 .wa-icon svg{width:20px;height:20px;fill:var(--teal)}
@@ -510,9 +505,15 @@ function renderAgenda(eventos){
     var s=`<div style="margin-bottom:28px"><div style="font-size:11px;color:${cor};text-transform:uppercase;letter-spacing:0.1em;font-family:'Syne',sans-serif;margin-bottom:12px">${label}</div><div style="display:flex;flex-direction:column;gap:8px">`;
     items.forEach(it=>{
       s+=`<div style="display:flex;gap:0;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;align-items:stretch">
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 18px;min-width:90px;background:var(--bg3);border-right:1px solid var(--border);gap:4px">
-          <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--text2)">${it.data}</div>
-          <div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--text)">${it.hora}</div>
+        <div style="display:flex;align-items:stretch;background:var(--bg3);border-right:1px solid var(--border)">
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 18px;min-width:80px;gap:3px;border-right:1px solid var(--border)">
+            <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-family:'Syne',sans-serif">Data</div>
+            <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text)">${it.data}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 18px;min-width:80px;gap:3px">
+            <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-family:'Syne',sans-serif">Hora</div>
+            <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--teal)">${it.hora}</div>
+          </div>
         </div>
         <div style="width:3px;background:var(--teal);flex-shrink:0"></div>
         <div style="padding:14px 20px;display:flex;align-items:center;flex:1">
