@@ -965,7 +965,7 @@ async function doCadastro(){
   toast('Conta criada! Conecte seu WhatsApp.');
 }
 
-function gerarQR(){
+async function gerarQR(){
   var num=document.getElementById('qr-numero').value.replace(/\D/g,'');
   if(num.length<10){toast('Número inválido',true);return}
   document.getElementById('qr-step1').style.display='none';
