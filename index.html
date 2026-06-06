@@ -448,7 +448,7 @@ async function carregarDashboard(){
       j.table.rows.forEach(r=>{
         if(r.c[2]&&r.c[2].v){
           totalRec+=parseFloat(r.c[2].v)||0;
-         var data=r.c[0]?(r.c[0].v+'').replace(/Date\((\d+),(\d+),(\d+)\)/,(_,y,m,d)=>String(d).padStart(2,'0')+'/'+String(+m+1).padStart(2,'0')+'/'+y.padStart(4,'0')):'—';
+         var data=r.c[0]?(r.c[0].v+'').replace(/Date\((\d+),(\d+),(\d+)\)/,(_,y,m,d)=>String(d).padStart(2,'0')+'/'+String(+m+1).padStart(2,'0')+'/'+y):'—';
           var desc=r.c[1]?r.c[1].v:'—';
           var val=parseFloat(r.c[2].v)||0;
           recentes.push({data,desc,val,tipo:'receita'});
