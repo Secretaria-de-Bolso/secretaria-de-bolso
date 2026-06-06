@@ -973,6 +973,7 @@ function gerarQR(){
   document.getElementById('qr-numero-final').textContent='+55 ('+num.substring(0,2)+') '+num.substring(2,7)+'-'+num.substring(7);
   document.getElementById('wa-numero-display').textContent='+55 ('+num.substring(0,2)+') '+num.substring(2,7)+'-'+num.substring(7);
   startQRTimer();
+  await sb.from('clientes').update({whatsapp:'+55'+num}).eq('user_id',currentUser.id);
 }
 
 function startQRTimer(){
