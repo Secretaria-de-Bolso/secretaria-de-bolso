@@ -897,7 +897,10 @@ async function carregarDashboard(){
       totalDesp+=val;
       tbody.innerHTML+=`<tr><td>${data}</td><td><span class="desc-view">${desc}</span></td><td><span class="badge badge-yellow">${cat}</span></td><td style="color:var(--red);font-weight:600">R$ ${val.toFixed(2)}</td><td></td></tr>`;
     });
-    document.getEle
+  document.getElementById('m-despesas').textContent='R$ '+totalDesp.toFixed(2);document.getElementById('m-lancamentos').textContent=rows.length;
+
+  }catch(e){console.log('Erro sheets:',e)}
+}
 
 function goTo(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
