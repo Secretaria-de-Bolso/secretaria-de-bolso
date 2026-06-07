@@ -469,18 +469,7 @@ async function carregarDashboard(){
   }catch(e){console.log('Erro sheets:',e)}
 }
   async function carregarAgendaHoje(){var agora=new Date();var inicio=new Date(agora);inicio.setHours(0,0,0,0);var fim=new Date(agora);fim.setHours(23,59,59,999);var url=`https://www.googleapis.com/calendar/v3/calendars/${GCAL_ID}/events?key=${GCAL_KEY}&timeMin=${inicio.toISOString()}&timeMax=${fim.toISOString()}&singleEvents=true&orderBy=startTime`;var el=document.getElementById('dash-agenda-hoje');var elData=document.getElementById('dash-data-hoje');if(elData)elData.textContent=agora.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});try{var res=await fetch(url);var data=await res.json();if(!data.items||!data.items.length){el.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhum evento hoje.</div>';return;}var html='';data.items.forEach(ev=>{var hora=ev.start.dateTime?new Date(ev.start.dateTime).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'Dia todo';var titulo=(ev.summary||'Sem título').replace(/\s*[-–]\s*R\$\s*[\d,.]+/g,'').replace(/\s+às\s+\d{1,2}:\d{2}/g,'').trim();html+=`<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--teal);min-width:48px">${hora}</div><div style="font-size:14px">${titulo}</div></div>`;});el.innerHTML=html;}catch(e){el.innerHTML='<div style="color:var(--text2);font-size:13px">Erro ao carregar.</div>';}}
-  var agora=new Date();
-  var inicio=agora.toISOString();
-  var fim=new Date(agora.getTime()+30*24*60*60*1000).toISOString();
-  var url=`https://www.googleapis.com/calendar/v3/calendars/${GCAL_ID}/events?key=${GCAL_KEY}&timeMin=${inicio}&timeMax=${fim}&singleEvents=true&orderBy=startTime&maxResults=30`;
-  try{
-    var res=await fetch(url);
-    var data=await res.json();
-    if(data.error){document.getElementById('agenda-lista').innerHTML='<div style="color:var(--red);font-size:13px">Erro ao carregar agenda: '+data.error.message+'</div>';return;}
-    renderAgenda(data.items||[]);
-  }catch(e){document.getElementById('agenda-lista').innerHTML='<div style="color:var(--text2);font-size:13px">Não foi possível carregar os eventos.</div>';}
-}
-
+  
 function renderAgenda(eventos){
   var container=document.getElementById('agenda-lista');
   if(!eventos.length){container.innerHTML='<div style="color:var(--text2);font-size:14px;padding:20px 0">Nenhum evento nos próximos 30 dias.</div>';return;}
