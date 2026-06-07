@@ -274,15 +274,13 @@ input::placeholder{color:var(--text3)}
     <div class="page-title">Início</div>
     <div class="page-sub" id="dash-mes">Junho de 2026</div>
 
-    <!-- WhatsApp em cima -->
     <div class="wa-status" id="wa-status-bar">
       <div class="wa-icon"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
-      <div style="flex:1"><div style="font-weight:500;font-size:14px">WhatsApp conectado</div><div style="font-size:12px;color:var(--text2)" id="wa-numero-display">+55 (44) 99715-4115</div></div>
+      <div style="flex:1"><div style="font-weight:500;font-size:14px">WhatsApp conectado</div><div style="font-size:12px;color:var(--text2)" id="wa-numero-display">—</div></div>
       <div class="badge badge-green"><div class="dot"></div>Online</div>
       <button class="btn btn-outline" style="font-size:13px;padding:6px 14px" onclick="goTo('screen-qr')">Reconectar</button>
     </div>
 
-    <!-- Salário fixo embaixo do WhatsApp -->
     <div class="card" style="margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
       <div style="flex:1;min-width:200px">
         <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:14px;margin-bottom:4px">💼 Salário fixo mensal</div>
@@ -304,11 +302,7 @@ input::placeholder{color:var(--text3)}
       <div class="card">
         <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:15px;margin-bottom:20px">Despesas por categoria</div>
         <div style="display:flex;flex-direction:column;gap:10px" id="cat-chart">
-          <div style="display:flex;align-items:center;gap:10px"><div style="font-size:13px;color:var(--text2);width:140px">Alimentação</div><div style="flex:1;background:var(--bg3);border-radius:4px;height:8px"><div style="width:45%;background:var(--teal);height:100%;border-radius:4px"></div></div><div style="font-size:13px;font-weight:500;width:70px;text-align:right">R$ 820</div></div>
-          <div style="display:flex;align-items:center;gap:10px"><div style="font-size:13px;color:var(--text2);width:140px">Moradia</div><div style="flex:1;background:var(--bg3);border-radius:4px;height:8px"><div style="width:30%;background:var(--teal);height:100%;border-radius:4px;opacity:0.7"></div></div><div style="font-size:13px;font-weight:500;width:70px;text-align:right">R$ 600</div></div>
-          <div style="display:flex;align-items:center;gap:10px"><div style="font-size:13px;color:var(--text2);width:140px">Transporte</div><div style="flex:1;background:var(--bg3);border-radius:4px;height:8px"><div style="width:22%;background:var(--teal);height:100%;border-radius:4px;opacity:0.5"></div></div><div style="font-size:13px;font-weight:500;width:70px;text-align:right">R$ 380</div></div>
-          <div style="display:flex;align-items:center;gap:10px"><div style="font-size:13px;color:var(--text2);width:140px">Saúde</div><div style="flex:1;background:var(--bg3);border-radius:4px;height:8px"><div style="width:15%;background:var(--teal);height:100%;border-radius:4px;opacity:0.4"></div></div><div style="font-size:13px;font-weight:500;width:70px;text-align:right">R$ 250</div></div>
-          <div style="display:flex;align-items:center;gap:10px"><div style="font-size:13px;color:var(--text2);width:140px">Outros</div><div style="flex:1;background:var(--bg3);border-radius:4px;height:8px"><div style="width:8%;background:var(--teal);height:100%;border-radius:4px;opacity:0.2"></div></div><div style="font-size:13px;font-weight:500;width:70px;text-align:right">R$ 500</div></div>
+          <div style="color:var(--text2);font-size:13px">Carregando...</div>
         </div>
       </div>
       <div class="card" style="margin-bottom:16px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="font-family:'Syne',sans-serif;font-weight:600;font-size:15px">📅 Hoje na agenda</div><div style="font-size:12px;color:var(--text2)" id="dash-data-hoje"></div></div><div id="dash-agenda-hoje"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
@@ -345,10 +339,9 @@ input::placeholder{color:var(--text3)}
   </div>
   <div class="content fade-in">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px">
-      <div><div class="page-title">Lançamentos</div><div style="color:var(--text2);font-size:14px">Junho de 2026</div></div>
+      <div><div class="page-title">Lançamentos</div><div style="color:var(--text2);font-size:14px" id="lanc-mes-label">Junho de 2026</div></div>
       <div style="display:flex;gap:10px">
         <select style="padding:8px 14px;width:auto" id="filtro-tipo" onchange="filtrarLancamentos()"><option value="">Todos</option><option value="despesa">Despesas</option><option value="receita">Receitas</option></select>
-        <select style="padding:8px 14px;width:auto" id="filtro-mes"><option>Junho 2026</option><option>Maio 2026</option><option>Abril 2026</option></select>
       </div>
     </div>
     <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px">
@@ -356,14 +349,14 @@ input::placeholder{color:var(--text3)}
       <div class="tab" id="tab-receitas" onclick="switchTab('receitas')" style="padding:10px 20px;cursor:pointer;font-size:14px;border-bottom:2px solid transparent;color:var(--text2)">Receitas (ganhos)</div>
     </div>
     <div id="tabela-despesas">
-    <div class="card" style="padding:0;overflow:hidden"><div class="table-wrap"><table id="tabela-desp">
-      <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead>
-      <tbody id="tbody-despesas"><tr><td colspan="5" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody>
+    <div class="card" style="padding:0;overflow:hidden"><div class="table-wrap"><table>
+      <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th></tr></thead>
+      <tbody id="tbody-despesas"><tr><td colspan="4" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody>
     </table></div></div>
     </div>
     <div id="tabela-receitas" style="display:none">
     <div class="card" style="padding:0;overflow:hidden"><div class="table-wrap"><table>
-      <thead><tr><th>Data</th><th>Origem</th><th>Valor</th><th></th></tr></thead>
+      <thead><tr><th>Data</th><th>Descrição</th><th>Origem</th><th>Valor</th></tr></thead>
       <tbody id="tbody-receitas"><tr><td colspan="4" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody>
     </table></div></div>
     </div>
@@ -460,8 +453,8 @@ const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
 var currentUser={nome:'',email:'',id:''};
 var qrTimer=null;
 var qrSeconds=120;
-var totalReceitasPlanilha=0;
-var totalDespesasGlobal=0;
+var totalReceitasSupa=0;
+var totalDespesasSupa=0;
 
 function parseSalario(str){
   if(!str)return 0;
@@ -470,9 +463,9 @@ function parseSalario(str){
 
 function recalcularComSalario(){
   var sal=parseSalario(document.getElementById('dash-salario').value);
-  var totalRec=totalReceitasPlanilha+sal;
+  var totalRec=totalReceitasSupa+sal;
   document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2);
-  var saldo=totalRec-totalDespesasGlobal;
+  var saldo=totalRec-totalDespesasSupa;
   var elSaldo=document.getElementById('m-saldo');
   elSaldo.textContent='R$ '+saldo.toFixed(2);
   elSaldo.className='metric-value '+(saldo>=0?'green':'red');
@@ -487,68 +480,88 @@ async function salvarSalarioDash(){
 
 async function carregarDashboard(){
   try{
-    var {data:cliente}=await sb.from('clientes').select('sheets_id,salario_fixo,whatsapp').eq('user_id',currentUser.id).single();
-    if(!cliente||!cliente.sheets_id)return;
-    if(cliente.salario_fixo){
-      document.getElementById('dash-salario').value='R$ '+parseFloat(cliente.salario_fixo).toFixed(2).replace('.',',');
+    // Carregar dados do cliente
+    var {data:cliente}=await sb.from('clientes').select('salario_fixo,whatsapp').eq('user_id',currentUser.id).single();
+    if(cliente){
+      if(cliente.salario_fixo){
+        document.getElementById('dash-salario').value='R$ '+parseFloat(cliente.salario_fixo).toFixed(2).replace('.',',');
+      }
+      if(cliente.whatsapp){
+        document.getElementById('wa-numero-display').textContent=cliente.whatsapp;
+      }
     }
-    if(cliente.whatsapp){
-      document.getElementById('wa-numero-display').textContent=cliente.whatsapp;
-    }
-    var sid=cliente.sheets_id;
-    var url=`https://docs.google.com/spreadsheets/d/${sid}/gviz/tq?tqx=out:json&sheet=Despesas`;
-    var res=await fetch(url);
-    var txt=await res.text();
-    var json=JSON.parse(txt.substring(47,txt.length-2));
-    var rows=json.table.rows;
+
+    // Carregar lançamentos do Supabase
+    var {data:lancamentos,error}=await sb.from('lancamentos').select('*').order('created_at',{ascending:false});
+    if(error||!lancamentos)return;
+
     var totalDesp=0;
-    var tbody=document.getElementById('tbody-despesas');
-    tbody.innerHTML='';
+    var totalRec=0;
+    var tbodyD=document.getElementById('tbody-despesas');
+    var tbodyR=document.getElementById('tbody-receitas');
+    tbodyD.innerHTML='';
+    tbodyR.innerHTML='';
     var recentes=[];
-    rows.forEach(r=>{
-      if(!r.c[2]||!r.c[2].v)return;
-      var data=r.c[0]?(r.c[0].v+'').replace(/Date\((\d+),(\d+),(\d+)\)/,(_,y,m,d)=>String(d).padStart(2,'0')+'/'+String(+m+1).padStart(2,'0')+'/'+y):'—';
-      var desc=r.c[1]?r.c[1].v:'—';
-      var val=parseFloat(r.c[2].v)||0;
-      var cat=r.c[3]?r.c[3].v:'—';
-      totalDesp+=val;
-      recentes.push({data,desc,val,tipo:'despesa'});
-      tbody.innerHTML+=`<tr><td>${data}</td><td><span class="desc-view">${desc}</span></td><td><span class="badge badge-yellow">${cat}</span></td><td style="color:var(--red);font-weight:600">R$ ${val.toFixed(2)}</td><td></td></tr>`;
+    var categorias={};
+
+    lancamentos.forEach(l=>{
+      var val=parseFloat(l.valor)||0;
+      if(l.tipo==='despesa'){
+        totalDesp+=val;
+        categorias[l.categoria||'Outros']=(categorias[l.categoria||'Outros']||0)+val;
+        recentes.push({data:l.data||'—',desc:l.descricao||'—',val,tipo:'despesa'});
+        tbodyD.innerHTML+=`<tr><td>${l.data||'—'}</td><td>${l.descricao||'—'}</td><td><span class="badge badge-yellow">${l.categoria||'Outros'}</span></td><td style="color:var(--red);font-weight:600">R$ ${val.toFixed(2)}</td></tr>`;
+      } else if(l.tipo==='receita'){
+        totalRec+=val;
+        recentes.push({data:l.data||'—',desc:l.descricao||l.origem||'—',val,tipo:'receita'});
+        tbodyR.innerHTML+=`<tr><td>${l.data||'—'}</td><td>${l.descricao||'—'}</td><td>${l.origem||'—'}</td><td style="color:var(--teal);font-weight:600">R$ ${val.toFixed(2)}</td></tr>`;
+      }
     });
-    totalDespesasGlobal=totalDesp;
+
+    totalDespesasSupa=totalDesp;
+    totalReceitasSupa=totalRec;
+
     document.getElementById('m-despesas').textContent='R$ '+totalDesp.toFixed(2);
-    document.getElementById('m-lancamentos').textContent=rows.length;
-    var url2=`https://docs.google.com/spreadsheets/d/${sid}/gviz/tq?tqx=out:json&sheet=Receita (ganhos)`;
-    fetch(url2).then(r=>r.text()).then(txt=>{
-      var j=JSON.parse(txt.substring(47,txt.length-2));
-      var totalRec=0;
-      var tbodyR=document.getElementById('tbody-receitas');
-      tbodyR.innerHTML='';
-      j.table.rows.forEach(r=>{
-        if(r.c[2]&&r.c[2].v){
-          totalRec+=parseFloat(r.c[2].v)||0;
-          var data=r.c[0]?(r.c[0].v+'').replace(/Date\((\d+),(\d+),(\d+)\)/,(_,y,m,d)=>String(d).padStart(2,'0')+'/'+String(+m+1).padStart(2,'0')+'/'+y):'—';
-          var desc=r.c[1]?r.c[1].v:'—';
-          var val=parseFloat(r.c[2].v)||0;
-          recentes.push({data,desc,val,tipo:'receita'});
-          tbodyR.innerHTML+=`<tr><td>${data}</td><td><span class="desc-view">${desc}</span></td><td style="color:var(--teal);font-weight:600">R$ ${val.toFixed(2)}</td><td></td></tr>`;
-        }
-      });
-      totalReceitasPlanilha=totalRec;
-      var sal=parseSalario(document.getElementById('dash-salario').value);
-      var totalRecComSal=totalRec+sal;
-      document.getElementById('m-receitas').textContent='R$ '+totalRecComSal.toFixed(2);
-      var saldo=totalRecComSal-totalDesp;
-      var elSaldo=document.getElementById('m-saldo');
-      elSaldo.textContent='R$ '+saldo.toFixed(2);
-      elSaldo.className='metric-value '+(saldo>=0?'green':'red');
-      var rl=document.getElementById('recentes-list');
-      rl.innerHTML='';
-      recentes.slice(-5).reverse().forEach(it=>{
+    document.getElementById('m-lancamentos').textContent=lancamentos.filter(l=>l.tipo==='despesa'||l.tipo==='receita').length;
+
+    var sal=parseSalario(document.getElementById('dash-salario').value);
+    var totalRecComSal=totalRec+sal;
+    document.getElementById('m-receitas').textContent='R$ '+totalRecComSal.toFixed(2);
+    var saldo=totalRecComSal-totalDesp;
+    var elSaldo=document.getElementById('m-saldo');
+    elSaldo.textContent='R$ '+saldo.toFixed(2);
+    elSaldo.className='metric-value '+(saldo>=0?'green':'red');
+
+    // Últimos lançamentos
+    var rl=document.getElementById('recentes-list');
+    rl.innerHTML='';
+    if(recentes.length===0){
+      rl.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhum lançamento ainda.</div>';
+    } else {
+      recentes.slice(0,5).forEach(it=>{
         rl.innerHTML+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:14px;font-weight:500">${it.desc}</div><div style="font-size:12px;color:var(--text2)">${it.data}</div></div><div style="color:${it.tipo==='receita'?'var(--teal)':'var(--red)'};font-weight:600">${it.tipo==='receita'?'+':'-'}R$ ${it.val.toFixed(2)}</div></div>`;
       });
-    }).catch(e=>console.log('Erro receitas:',e));
-  }catch(e){console.log('Erro sheets:',e)}
+    }
+
+    // Despesas por categoria
+    var catChart=document.getElementById('cat-chart');
+    var cats=Object.entries(categorias).sort((a,b)=>b[1]-a[1]);
+    if(cats.length===0){
+      catChart.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhuma despesa ainda.</div>';
+    } else {
+      var maxVal=cats[0][1];
+      catChart.innerHTML='';
+      cats.forEach(([cat,val],i)=>{
+        var pct=Math.round((val/maxVal)*100);
+        var op=Math.max(0.3,1-(i*0.15));
+        catChart.innerHTML+=`<div style="display:flex;align-items:center;gap:10px"><div style="font-size:13px;color:var(--text2);width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cat}</div><div style="flex:1;background:var(--bg3);border-radius:4px;height:8px"><div style="width:${pct}%;background:var(--teal);height:100%;border-radius:4px;opacity:${op}"></div></div><div style="font-size:13px;font-weight:500;width:80px;text-align:right">R$ ${val.toFixed(2)}</div></div>`;
+      });
+    }
+
+    if(tbodyD.innerHTML==='') tbodyD.innerHTML='<tr><td colspan="4" style="color:var(--text2);text-align:center">Nenhuma despesa registrada.</td></tr>';
+    if(tbodyR.innerHTML==='') tbodyR.innerHTML='<tr><td colspan="4" style="color:var(--text2);text-align:center">Nenhuma receita registrada.</td></tr>';
+
+  }catch(e){console.log('Erro ao carregar dashboard:',e)}
 }
 
 async function carregarPerfil(){
@@ -687,7 +700,8 @@ async function doLogin(){
   document.getElementById('topbar-avatar').textContent=nome.charAt(0).toUpperCase();
   goTo('screen-dashboard');
   toast('Bem-vindo, '+nome+'!');
-  carregarDashboard();carregarAgendaHoje();
+  carregarDashboard();
+  carregarAgendaHoje();
 }
 
 async function doLogout(){
@@ -762,18 +776,6 @@ function switchTab(tab){
   document.getElementById('tab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';
   document.getElementById('tab-receitas').style.borderBottomColor=tab==='receitas'?'var(--teal)':'transparent';
   document.getElementById('tab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';
-}
-
-function editarLinha(btn){
-  var tr=btn.closest('tr');
-  var view=tr.querySelector('.desc-view');
-  var edit=tr.querySelector('.desc-edit');
-  if(btn.textContent==='Editar'){view.style.display='none';edit.style.display='block';edit.focus();btn.textContent='Salvar';btn.className='btn btn-primary td-edit';btn.style.fontSize='12px';btn.style.padding='4px 10px';}
-  else{view.textContent=edit.value;view.style.display='inline';edit.style.display='none';btn.textContent='Editar';btn.className='btn btn-outline td-edit';btn.style.fontSize='12px';btn.style.padding='4px 10px';toast('Lançamento atualizado!');}
-}
-
-function deletarLinha(btn){
-  if(confirm('Excluir este lançamento?')){btn.closest('tr').style.animation='fadeIn 0.2s reverse';setTimeout(()=>btn.closest('tr').remove(),200);toast('Lançamento excluído.');}
 }
 
 function filtrarLancamentos(){
