@@ -494,7 +494,7 @@ function renderAgenda(eventos){
     var dd=new Date(d);dd.setHours(0,0,0,0);
     var hora=ev.start.dateTime?d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'Dia todo';
     var dataFmt=dd.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
-    var item={titulo:ev.summary||'Sem título',hora,data:dataFmt};
+    var item={titulo:(ev.summary||'Sem título').replace(/\s*[-–]\s*R\$\s*[\d,.]+/g,'').replace(/\s+às\s+\d{1,2}:\d{2}/g,'').trim(),hora,data:dataFmt};
     if(dd.getTime()===hoje.getTime())grupos.hoje.push(item);
     else if(dd.getTime()===amanha.getTime())grupos.amanha.push(item);
     else grupos.proximos.push(item);
