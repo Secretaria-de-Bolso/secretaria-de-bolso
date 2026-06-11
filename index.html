@@ -964,12 +964,18 @@ async function marcarPago(id,btn){
 
 // PERFIL
 async function carregarPerfil(){
-  document.getElementById('perf-nome').value=currentUser.nome;
-  document.getElementById('perf-email').value=currentUser.email;
   try{
+    var {data:authData}=await sb.auth.getUser();
+    var nomeAuth=authData?.user?.user_metadata?.nome||currentUser.nome;
+    var emailAuth=authData?.user?.email||currentUser.email;
+    document.getElementById('perf-nome').value=nomeAuth;
+    document.getElementById('perf-email').value=emailAuth;
     var {data}=await sb.from('clientes').select('whatsapp').eq('user_id',currentUser.id).single();
     if(data)document.getElementById('perf-wa-numero').textContent=data.whatsapp||'—';
-  }catch(e){}
+  }catch(e){
+    document.getElementById('perf-nome').value=currentUser.nome;
+    document.getElementById('perf-email').value=currentUser.email;
+  }
 }
 
 async function salvarPerfil(){
