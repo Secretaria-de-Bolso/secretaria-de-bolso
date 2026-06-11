@@ -484,14 +484,24 @@ input::placeholder{color:var(--text3)}
   <div class="content fade-in">
     <div class="page-title">Agenda</div>
     <div class="page-sub" id="agenda-sub">Seus compromissos</div>
-    <div class="kanban">
-      <!-- HOJE -->
+    <div class="grid-2">
+      <!-- HOJE COM SETAS -->
       <div class="kanban-col">
-        <div class="kanban-header">
-          <div><div class="kanban-title" style="color:var(--teal)">Hoje</div><div style="font-size:11px;color:var(--text2)" id="label-hoje"></div></div>
-          <div class="kanban-count" id="cnt-hoje">0</div>
+        <div class="kanban-header" style="flex-direction:column;gap:8px;align-items:stretch">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="kanban-title" style="color:var(--teal)">Agenda</div>
+            <div class="kanban-count" id="cnt-hoje">0</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button onclick="agendaNavDia(-1)" style="background:var(--teal-dim);border:1px solid var(--teal);border-radius:8px;padding:5px 12px;cursor:pointer;color:var(--teal);font-size:12px;font-weight:600;font-family:'Syne',sans-serif;transition:all 0.15s;flex-shrink:0" onmouseover="this.style.background='var(--teal)';this.style.color='var(--bg)'" onmouseout="this.style.background='var(--teal-dim)';this.style.color='var(--teal)'">← Ontem</button>
+            <div style="flex:1;text-align:center">
+              <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text)" id="agenda-nav-label">Hoje</div>
+              <div style="font-size:11px;color:var(--text2)" id="agenda-nav-data"></div>
+            </div>
+            <button onclick="agendaNavDia(+1)" style="background:var(--teal-dim);border:1px solid var(--teal);border-radius:8px;padding:5px 12px;cursor:pointer;color:var(--teal);font-size:12px;font-weight:600;font-family:'Syne',sans-serif;transition:all 0.15s;flex-shrink:0" onmouseover="this.style.background='var(--teal)';this.style.color='var(--bg)'" onmouseout="this.style.background='var(--teal-dim)';this.style.color='var(--teal)'">Amanhã →</button>
+          </div>
         </div>
-        <div class="kanban-body" id="col-hoje"><div class="kanban-empty">Nenhum compromisso hoje</div></div>
+        <div class="kanban-body" id="col-hoje"><div class="kanban-empty">Nenhum compromisso neste dia</div></div>
       </div>
       <!-- ESTA SEMANA -->
       <div class="kanban-col">
@@ -500,22 +510,6 @@ input::placeholder{color:var(--text3)}
           <div class="kanban-count" id="cnt-semana">0</div>
         </div>
         <div class="kanban-body" id="col-semana"><div class="kanban-empty">Nenhum compromisso esta semana</div></div>
-      </div>
-      <!-- PRÓXIMOS COM SETAS -->
-      <div class="kanban-col">
-        <div class="kanban-header">
-          <div style="flex:1">
-            <div style="display:flex;align-items:center;justify-content:space-between">
-              <div><div class="kanban-title">Próximos</div><div style="font-size:11px;color:var(--text2)" id="label-proximos"></div></div>
-              <div style="display:flex;align-items:center;gap:4px">
-                <button onclick="proximosDia(-1)" style="background:var(--bg3);border:1px solid var(--border2);border-radius:6px;width:26px;height:26px;cursor:pointer;color:var(--text2);font-size:13px;display:flex;align-items:center;justify-content:center">←</button>
-                <button onclick="proximosDia(+1)" style="background:var(--bg3);border:1px solid var(--border2);border-radius:6px;width:26px;height:26px;cursor:pointer;color:var(--text2);font-size:13px;display:flex;align-items:center;justify-content:center">→</button>
-              </div>
-            </div>
-          </div>
-          <div class="kanban-count" id="cnt-proximos" style="margin-left:8px">0</div>
-        </div>
-        <div class="kanban-body" id="col-proximos"><div class="kanban-empty">Nenhum compromisso futuro</div></div>
       </div>
     </div>
   </div>
@@ -588,11 +582,11 @@ input::placeholder{color:var(--text3)}
         </div>
         <div class="card">
           <div class="section-label">Como usar</div>
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:16px">🎤</div><div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Mande um áudio ou texto</div><div style="font-size:11px;color:var(--text2)">Ex: "mercado, cem reais, dia 7"</div></div></div>
-            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:16px">💸</div><div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Registre despesas</div><div style="font-size:11px;color:var(--text2)">Ex: "gasolina, oitenta reais, dia 5"</div></div></div>
-            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:16px">💰</div><div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Registre receitas</div><div style="font-size:11px;color:var(--text2)">Ex: "recebi da Paula, trezentos reais"</div></div></div>
-            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:16px">📅</div><div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Agende compromissos</div><div style="font-size:11px;color:var(--text2)">Ex: "dentista dia 10 às 15 horas"</div></div></div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:18px">🎤</div><div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Registre um gasto</div><div style="font-size:11px;color:var(--text2)">Ex: "Uber, 25 reais, hoje"</div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:18px">💰</div><div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Registre uma receita</div><div style="font-size:11px;color:var(--text2)">Ex: "Recebi do cliente Pedro, 300 reais"</div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:18px">📅</div><div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Agende um compromisso</div><div style="font-size:11px;color:var(--text2)">Ex: "Reunião com fornecedor dia 20 às 10h"</div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:18px">🧾</div><div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Cadastre um boleto</div><div style="font-size:11px;color:var(--text2)">Ex: "Boleto internet, 89 reais, vence dia 20"</div></div></div>
           </div>
         </div>
         <button class="btn btn-danger btn-full btn-sm" onclick="doLogout()">Sair da conta</button>
@@ -932,72 +926,65 @@ async function toggleCategoria(cat,chip){
 
 // AGENDA
 var agendaTodos=[];
-var proximosOffset=0;
-var PROXIMOS_POR_PAG=5;
+var agendaOffset=0;
 
 async function carregarAgenda(){
   try{
     var hoje=new Date();hoje.setHours(0,0,0,0);
     var hojeStr=hoje.toISOString().split('T')[0];
     var fimSemana=new Date(hoje);fimSemana.setDate(hoje.getDate()+7);
-    var elLH=document.getElementById('label-hoje');
     var elLS=document.getElementById('label-semana');
-    if(elLH)elLH.textContent=hoje.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
     if(elLS)elLS.textContent='até '+fimSemana.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
-    var {data}=await sb.from('agendamentos').select('*').eq('user_id',currentUser.id).gte('data',hojeStr).order('data').order('hora');
+    var {data}=await sb.from('agendamentos').select('*').eq('user_id',currentUser.id).order('data').order('hora');
     agendaTodos=data||[];
-    var colHoje=document.getElementById('col-hoje');
+    // Esta semana
     var colSem=document.getElementById('col-semana');
-    colHoje.innerHTML='';colSem.innerHTML='';
-    var cntH=0,cntS=0;
+    colSem.innerHTML='';
+    var cntS=0;
     agendaTodos.forEach(ag=>{
       var d=new Date(ag.data+'T00:00:00');
       var hora=ag.hora?ag.hora.substring(0,5):'';
-      var card=`<div class="kanban-card"><div class="kanban-card-title">${ag.descricao||'Compromisso'}</div><div class="kanban-card-meta">${formatData(ag.data)}${hora?' às '+hora:''}</div></div>`;
-      if(d.getTime()===hoje.getTime()){colHoje.innerHTML+=card;cntH++;}
-      else if(d<fimSemana){colSem.innerHTML+=card;cntS++;}
+      if(d>hoje&&d<fimSemana){
+        colSem.innerHTML+=`<div class="kanban-card"><div class="kanban-card-title">${ag.descricao||'Compromisso'}</div><div class="kanban-card-meta">${formatData(ag.data)}${hora?' às '+hora:''}</div></div>`;
+        cntS++;
+      }
     });
-    if(!cntH)colHoje.innerHTML='<div class="kanban-empty">Nenhum compromisso hoje</div>';
     if(!cntS)colSem.innerHTML='<div class="kanban-empty">Nenhum compromisso esta semana</div>';
-    document.getElementById('cnt-hoje').textContent=cntH;
     document.getElementById('cnt-semana').textContent=cntS;
-    proximosOffset=0;
-    renderProximos();
+    agendaOffset=0;
+    renderAgendaDia();
   }catch(e){console.log(e)}
 }
 
-function renderProximos(){
+function renderAgendaDia(){
   var hoje=new Date();hoje.setHours(0,0,0,0);
-  var fimSemana=new Date(hoje);fimSemana.setDate(hoje.getDate()+7);
-  var fimSemStr=fimSemana.toISOString().split('T')[0];
-  var proximos=agendaTodos.filter(ag=>ag.data>=fimSemStr);
-  var total=proximos.length;
-  var inicio=proximosOffset*PROXIMOS_POR_PAG;
-  var pagina=proximos.slice(inicio,inicio+PROXIMOS_POR_PAG);
-  var col=document.getElementById('col-proximos');
+  var dia=new Date(hoje);dia.setDate(hoje.getDate()+agendaOffset);
+  var diaStr=dia.toISOString().split('T')[0];
+  var label='';
+  if(agendaOffset===0)label='Hoje';
+  else if(agendaOffset===1)label='Amanhã';
+  else if(agendaOffset===-1)label='Ontem';
+  else if(agendaOffset>1)label='Amanhã +'+agendaOffset;
+  else label=dia.toLocaleDateString('pt-BR',{weekday:'short'});
+  document.getElementById('agenda-nav-label').textContent=label;
+  document.getElementById('agenda-nav-data').textContent=dia.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+  var col=document.getElementById('col-hoje');
   col.innerHTML='';
-  if(!total){col.innerHTML='<div class="kanban-empty">Nenhum compromisso futuro</div>';}
+  var items=agendaTodos.filter(ag=>ag.data===diaStr);
+  var cnt=items.length;
+  if(!cnt){col.innerHTML='<div class="kanban-empty">Nenhum compromisso neste dia</div>';}
   else{
-    pagina.forEach(ag=>{
+    items.forEach(ag=>{
       var hora=ag.hora?ag.hora.substring(0,5):'';
-      col.innerHTML+=`<div class="kanban-card"><div class="kanban-card-title">${ag.descricao||'Compromisso'}</div><div class="kanban-card-meta">${formatData(ag.data)}${hora?' às '+hora:''}</div></div>`;
+      col.innerHTML+=`<div class="kanban-card"><div style="display:flex;align-items:center;gap:10px">${hora?`<div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--teal);min-width:40px">${hora}</div>`:''}<div class="kanban-card-title">${ag.descricao||'Compromisso'}</div></div></div>`;
     });
-    if(!pagina.length)col.innerHTML='<div class="kanban-empty">Sem mais compromissos</div>';
   }
-  document.getElementById('cnt-proximos').textContent=total;
-  var elLP=document.getElementById('label-proximos');
-  if(elLP&&total>PROXIMOS_POR_PAG)elLP.textContent='pág '+(proximosOffset+1)+' de '+Math.ceil(total/PROXIMOS_POR_PAG);
-  else if(elLP)elLP.textContent='';
+  document.getElementById('cnt-hoje').textContent=cnt;
 }
 
-function proximosDia(delta){
-  var hoje=new Date();hoje.setHours(0,0,0,0);
-  var fimSemana=new Date(hoje);fimSemana.setDate(hoje.getDate()+7);
-  var fimSemStr=fimSemana.toISOString().split('T')[0];
-  var proximos=agendaTodos.filter(ag=>ag.data>=fimSemStr);
-  var maxPag=Math.max(0,Math.ceil(proximos.length/PROXIMOS_POR_PAG)-1);
-  proximosOffset=Math.min(maxPag,Math.max(0,proximosOffset+delta));
-  renderProximos();
+function agendaNavDia(delta){
+  agendaOffset+=delta;
+  renderAgendaDia();
 }
 
 // BOLETOS
