@@ -625,6 +625,7 @@ function switchTab2(tab){
   if(tab==='agenda')carregarAgenda();
   if(tab==='boletos')carregarBoletos();
   if(tab==='perfil')carregarPerfil();
+  if(tab==='financeiro')carregarDashboard();
 }
 
 function switchLTab(tab){
@@ -661,7 +662,6 @@ async function iniciarSessao(user){
   document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
   goTo('screen-dashboard');
   toast('Bem-vindo, '+primeiroNome+'!');
-  switchTab2('perfil');
   switchTab2('perfil');
   await Promise.all([carregarWAStatus(),carregarCategorias(),carregarPerfil()]);
 }
