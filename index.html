@@ -69,7 +69,7 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 /* METRICS */
 .metric{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
 .metric-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;font-family:'Syne',sans-serif;margin-bottom:6px}
-.metric-value{font-family:'Syne',sans-serif;font-size:22px;font-weight:700}
+.metric-value{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:700}
 .metric-value.green{color:var(--teal)}
 .metric-value.red{color:var(--red)}
 .metric-value.yellow{color:var(--yellow)}
@@ -105,8 +105,8 @@ th{text-align:left;padding:10px 14px;font-size:10px;color:var(--text2);text-tran
 td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg3)}
-.td-edit-btn{opacity:0;transition:opacity 0.15s;background:var(--bg4);border:1px solid var(--border2);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--text2);cursor:pointer}
-tr:hover .td-edit-btn{opacity:1}
+.td-edit-btn{background:var(--bg4);border:1px solid var(--border2);border-radius:6px;padding:3px 10px;font-size:11px;color:var(--teal);cursor:pointer;font-weight:600;font-family:'Syne',sans-serif;transition:all 0.15s}
+.td-edit-btn:hover{background:var(--teal-dim);border-color:var(--teal)}
 
 /* INLINE EDIT */
 .inline-input{background:var(--bg3);border:1px solid var(--teal);border-radius:6px;padding:4px 8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%}
@@ -367,7 +367,11 @@ input::placeholder{color:var(--text3)}
 
   <!-- ABAS -->
   <div class="tabs">
-    <div class="tab-btn active" id="tab-financeiro" onclick="switchTab2('financeiro')">
+    <div class="tab-btn active" id="tab-perfil" onclick="switchTab2('perfil')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Perfil
+    </div>
+    <div class="tab-btn" id="tab-financeiro" onclick="switchTab2('financeiro')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
       Financeiro
     </div>
@@ -379,18 +383,26 @@ input::placeholder{color:var(--text3)}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
       Boletos
     </div>
-    <div class="tab-btn" id="tab-perfil" onclick="switchTab2('perfil')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      Perfil
-    </div>
   </div>
 
   <!-- ABA FINANCEIRO -->
-  <div class="tab-content active" id="content-financeiro">
+  <div class="tab-content" id="content-financeiro">
   <div class="content fade-in">
 
+    <!-- SALÁRIO acima dos cards -->
+    <div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="flex:1;min-width:160px">
+        <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:13px;margin-bottom:2px">💼 Salário fixo mensal</div>
+        <div style="font-size:11px;color:var(--text2)">Incluído automaticamente nas receitas</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input type="text" id="dash-salario" placeholder="R$ 0,00" style="width:140px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;text-align:right" oninput="recalcularComSalario()">
+        <button class="btn btn-primary btn-sm" onclick="salvarSalarioDash()">Salvar</button>
+      </div>
+    </div>
+
     <!-- METRICS -->
-    <div class="grid-4" style="margin-bottom:20px">
+    <div class="grid-4" style="margin-bottom:16px">
       <div class="metric">
         <div class="metric-label">Receitas</div>
         <div class="metric-value green" id="m-receitas">R$ —</div>
@@ -410,18 +422,6 @@ input::placeholder{color:var(--text3)}
         <div class="metric-label">Lançamentos</div>
         <div class="metric-value yellow" id="m-total">—</div>
         <div class="metric-sub">Este mês</div>
-      </div>
-    </div>
-
-    <!-- SALÁRIO -->
-    <div class="card" style="margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-      <div style="flex:1;min-width:160px">
-        <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:13px;margin-bottom:2px">💼 Salário fixo mensal</div>
-        <div style="font-size:11px;color:var(--text2)">Incluído automaticamente nas receitas</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <input type="text" id="dash-salario" placeholder="R$ 0,00" style="width:140px;font-family:'Syne',sans-serif;font-weight:600;font-size:14px;text-align:right" oninput="recalcularComSalario()">
-        <button class="btn btn-primary btn-sm" onclick="salvarSalarioDash()">Salvar</button>
       </div>
     </div>
 
@@ -484,15 +484,24 @@ input::placeholder{color:var(--text3)}
     <div class="page-sub" id="agenda-sub">Seus compromissos</div>
     <div class="kanban" id="agenda-kanban">
       <div class="kanban-col">
-        <div class="kanban-header"><div class="kanban-title" style="color:var(--teal)">Hoje</div><div class="kanban-count" id="cnt-hoje">0</div></div>
+        <div class="kanban-header">
+          <div><div class="kanban-title" style="color:var(--teal)">Hoje</div><div style="font-size:11px;color:var(--text2)" id="label-hoje"></div></div>
+          <div class="kanban-count" id="cnt-hoje">0</div>
+        </div>
         <div class="kanban-body" id="col-hoje"><div class="kanban-empty">Nenhum compromisso hoje</div></div>
       </div>
       <div class="kanban-col">
-        <div class="kanban-header"><div class="kanban-title">Esta semana</div><div class="kanban-count" id="cnt-semana">0</div></div>
+        <div class="kanban-header">
+          <div><div class="kanban-title">Esta semana</div><div style="font-size:11px;color:var(--text2)" id="label-semana"></div></div>
+          <div class="kanban-count" id="cnt-semana">0</div>
+        </div>
         <div class="kanban-body" id="col-semana"><div class="kanban-empty">Nenhum compromisso esta semana</div></div>
       </div>
       <div class="kanban-col">
-        <div class="kanban-header"><div class="kanban-title">Próximos</div><div class="kanban-count" id="cnt-proximos">0</div></div>
+        <div class="kanban-header">
+          <div><div class="kanban-title">Próximos</div><div style="font-size:11px;color:var(--text2)" id="label-proximos"></div></div>
+          <div class="kanban-count" id="cnt-proximos">0</div>
+        </div>
         <div class="kanban-body" id="col-proximos"><div class="kanban-empty">Nenhum compromisso futuro</div></div>
       </div>
     </div>
@@ -506,7 +515,7 @@ input::placeholder{color:var(--text3)}
     <div class="page-sub">Controle seus pagamentos</div>
     <div class="kanban">
       <div class="kanban-col">
-        <div class="kanban-header"><div class="kanban-title" style="color:var(--red)">Vencendo hoje</div><div class="kanban-count" id="cnt-bol-hoje">0</div></div>
+        <div class="kanban-header"><div class="kanban-title" style="color:var(--red)">Vencidos e Hoje</div><div class="kanban-count" id="cnt-bol-hoje">0</div></div>
         <div class="kanban-body" id="col-bol-hoje"><div class="kanban-empty">Nenhum boleto vencendo hoje</div></div>
       </div>
       <div class="kanban-col">
@@ -522,7 +531,7 @@ input::placeholder{color:var(--text3)}
   </div>
 
   <!-- ABA PERFIL -->
-  <div class="tab-content" id="content-perfil">
+  <div class="tab-content active" id="content-perfil">
   <div class="content fade-in">
     <div class="page-title">Perfil</div>
     <div class="page-sub">Suas informações e configurações</div>
@@ -652,7 +661,9 @@ async function iniciarSessao(user){
   document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
   goTo('screen-dashboard');
   toast('Bem-vindo, '+primeiroNome+'!');
-  await Promise.all([carregarDashboard(),carregarWAStatus(),carregarCategorias()]);
+  switchTab2('perfil');
+  switchTab2('perfil');
+  await Promise.all([carregarWAStatus(),carregarCategorias(),carregarPerfil()]);
 }
 
 async function doLogout(){
@@ -896,6 +907,12 @@ async function carregarAgenda(){
     var hoje=new Date();hoje.setHours(0,0,0,0);
     var fimSemana=new Date(hoje);fimSemana.setDate(hoje.getDate()+7);
     var hojeStr=hoje.toISOString().split('T')[0];
+    var elLH=document.getElementById('label-hoje');
+    var elLS=document.getElementById('label-semana');
+    var elLP=document.getElementById('label-proximos');
+    if(elLH)elLH.textContent=hoje.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+    if(elLS)elLS.textContent='até '+fimSemana.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+    if(elLP)elLP.textContent='após '+fimSemana.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
     var {data}=await sb.from('agendamentos').select('*').eq('user_id',currentUser.id).gte('data',hojeStr).order('data').order('hora');
     var colHoje=document.getElementById('col-hoje');
     var colSem=document.getElementById('col-semana');
@@ -943,7 +960,7 @@ async function carregarBoletos(){
         </div>
       </div>`;
       if(b.pago){colP.innerHTML+=card;cP++;}
-      else if(venc===hoje){colH.innerHTML+=card;cH++;}
+      else if(venc<=hoje){colH.innerHTML+=card;cH++;}
       else{colA.innerHTML+=card;cA++;}
     });
     if(!cH)colH.innerHTML='<div class="kanban-empty">Nenhum boleto vencendo hoje</div>';
