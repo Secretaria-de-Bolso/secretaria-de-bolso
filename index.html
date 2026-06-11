@@ -2,134 +2,238 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Secretária">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>Secretária de Bolso</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0a0a0a;
-  --bg2:#111111;
-  --bg3:#1a1a1a;
-  --bg4:#222222;
-  --border:#2a2a2a;
-  --border2:#333333;
-  --teal:#00d4a0;
-  --teal2:#00b389;
-  --teal-dim:rgba(0,212,160,0.12);
-  --teal-dim2:rgba(0,212,160,0.06);
-  --text:#f0f0f0;
-  --text2:#888;
-  --text3:#555;
-  --red:#ff4d4d;
-  --red-dim:rgba(255,77,77,0.12);
-  --yellow:#ffd166;
-  --yellow-dim:rgba(255,209,102,0.12);
+  --bg:#0a0a0a;--bg2:#111111;--bg3:#1a1a1a;--bg4:#222222;
+  --border:#2a2a2a;--border2:#333333;
+  --teal:#00d4a0;--teal2:#00b389;--teal-dim:rgba(0,212,160,0.12);--teal-dim2:rgba(0,212,160,0.06);
+  --text:#f0f0f0;--text2:#888;--text3:#555;
+  --red:#ff4d4d;--red-dim:rgba(255,77,77,0.12);
+  --yellow:#ffd166;--yellow-dim:rgba(255,209,102,0.12);
+  --green:#00d4a0;--green-dim:rgba(0,212,160,0.12);
 }
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
 h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
-.screen{display:none;min-height:100vh}
-.screen.active{display:flex;flex-direction:column}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100}
-.logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
-.logo-icon{width:34px;height:34px;background:var(--teal);border-radius:10px;display:flex;align-items:center;justify-content:center}
-.logo-icon svg{width:18px;height:18px;fill:var(--bg)}
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:100;gap:12px}
+.logo{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;white-space:nowrap}
+.logo-icon{width:30px;height:30px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-icon svg{width:16px;height:16px;fill:var(--bg)}
 .logo span{color:var(--teal)}
-.topbar-right{display:flex;align-items:center;gap:12px}
-.avatar{width:34px;height:34px;border-radius:50%;background:var(--teal-dim);border:1px solid var(--teal);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--teal);cursor:pointer}
-.layout{display:flex;flex:1}
-.sidebar{width:220px;background:var(--bg);border-right:1px solid var(--border);padding:24px 0;display:flex;flex-direction:column;gap:4px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;cursor:pointer;color:var(--text2);font-size:14px;font-weight:400;transition:all 0.15s;border-left:2px solid transparent}
-.nav-item:hover{color:var(--text);background:var(--bg2)}
-.nav-item.active{color:var(--teal);background:var(--teal-dim2);border-left-color:var(--teal)}
-.nav-item svg{width:18px;height:18px;flex-shrink:0}
-.nav-section{padding:16px 20px 6px;font-size:10px;letter-spacing:0.1em;color:var(--text3);text-transform:uppercase;font-family:'Syne',sans-serif}
-.content{flex:1;padding:32px;overflow-y:auto}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px}
-.card-sm{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.metric{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px}
-.metric-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;font-family:'Syne',sans-serif;margin-bottom:8px}
-.metric-value{font-family:'Syne',sans-serif;font-size:28px;font-weight:700}
+
+/* WA STATUS BAR */
+.wa-bar{display:flex;align-items:center;gap:10px;padding:10px 20px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:13px}
+.wa-bar-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.wa-bar-dot.off{background:var(--red)}
+.wa-bar-info{flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.wa-bar-num{color:var(--text2);font-size:12px}
+.wa-bar-badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;font-family:'Syne',sans-serif}
+.wa-bar-badge.on{background:var(--teal-dim);color:var(--teal)}
+.wa-bar-badge.off{background:var(--red-dim);color:var(--red)}
+
+/* ABAS */
+.tabs{display:flex;background:var(--bg);border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{display:flex;align-items:center;gap:6px;padding:12px 20px;font-size:13px;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;flex-shrink:0}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--teal);border-bottom-color:var(--teal)}
+.tab-btn svg{width:15px;height:15px}
+.tab-content{display:none;flex:1;overflow-y:auto}
+.tab-content.active{display:block}
+
+/* CONTENT */
+.content{padding:20px;max-width:1100px;margin:0 auto}
+.page-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:4px}
+.page-sub{color:var(--text2);font-size:13px;margin-bottom:20px}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px}
+.card-sm{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+
+/* METRICS */
+.metric{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
+.metric-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;font-family:'Syne',sans-serif;margin-bottom:6px}
+.metric-value{font-family:'Syne',sans-serif;font-size:22px;font-weight:700}
 .metric-value.green{color:var(--teal)}
 .metric-value.red{color:var(--red)}
 .metric-value.yellow{color:var(--yellow)}
-.metric-sub{font-size:12px;color:var(--text2);margin-top:4px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;cursor:pointer;transition:all 0.15s;border:none;text-decoration:none}
+.metric-sub{font-size:11px;color:var(--text2);margin-top:3px}
+
+/* KANBAN FIXO */
+.kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.kanban-col{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.kanban-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.kanban-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
+.kanban-count{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:2px 8px;font-size:11px;color:var(--text2)}
+.kanban-body{padding:12px;display:flex;flex-direction:column;gap:8px;min-height:80px}
+.kanban-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px}
+.kanban-card-title{font-size:13px;font-weight:500;margin-bottom:4px}
+.kanban-card-meta{font-size:11px;color:var(--text2)}
+.kanban-empty{font-size:12px;color:var(--text3);text-align:center;padding:20px 0}
+
+/* BOLETOS KANBAN */
+.boleto-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.boleto-info{flex:1}
+.boleto-nome{font-size:13px;font-weight:500;margin-bottom:2px}
+.boleto-meta{font-size:11px;color:var(--text2)}
+.boleto-val{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--yellow);white-space:nowrap}
+.boleto-pago{color:var(--teal)}
+.btn-pagar{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,212,160,0.2);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Syne',sans-serif;transition:all 0.15s}
+.btn-pagar:hover{background:var(--teal);color:var(--bg)}
+.btn-pagar.pago{background:var(--teal);color:var(--bg);cursor:default}
+
+/* TABELA */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 14px;font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid var(--border);font-weight:500;font-family:'Syne',sans-serif}
+td{padding:11px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg3)}
+.td-edit-btn{opacity:0;transition:opacity 0.15s;background:var(--bg4);border:1px solid var(--border2);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--text2);cursor:pointer}
+tr:hover .td-edit-btn{opacity:1}
+
+/* INLINE EDIT */
+.inline-input{background:var(--bg3);border:1px solid var(--teal);border-radius:6px;padding:4px 8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%}
+.inline-select{background:var(--bg3);border:1px solid var(--teal);border-radius:6px;padding:4px 8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
+
+/* BOTOES */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;cursor:pointer;transition:all 0.15s;border:none;text-decoration:none}
 .btn-primary{background:var(--teal);color:var(--bg);font-weight:600}
 .btn-primary:hover{background:var(--teal2)}
 .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2)}
 .btn-outline:hover{border-color:var(--teal);color:var(--teal)}
 .btn-danger{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,77,0.2)}
-.btn-danger:hover{background:rgba(255,77,77,0.2)}
-.btn-full{width:100%;padding:14px}
-.btn-lg{padding:14px 28px;font-size:16px;border-radius:10px}
-.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500}
+.btn-full{width:100%;padding:13px}
+.btn-lg{padding:13px 26px;font-size:15px;border-radius:10px}
+.btn-sm{padding:5px 12px;font-size:12px}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
 .badge-green{background:var(--teal-dim);color:var(--teal)}
 .badge-red{background:var(--red-dim);color:var(--red)}
 .badge-yellow{background:var(--yellow-dim);color:var(--yellow)}
-.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-th{text-align:left;padding:10px 16px;font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid var(--border);font-weight:500;font-family:'Syne',sans-serif}
-td{padding:12px 16px;font-size:14px;border-bottom:1px solid var(--border);vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:var(--bg3)}
-.td-edit{display:none}
-tr:hover .td-edit{display:inline-flex}
-.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-label{font-size:13px;color:var(--text2);font-weight:500}
-input,select,textarea{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border 0.15s;width:100%}
+.dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+
+/* FORMS */
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+label{font-size:12px;color:var(--text2);font-weight:500}
+input,select,textarea{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border 0.15s;width:100%}
 input:focus,select:focus,textarea:focus{border-color:var(--teal)}
 input::placeholder{color:var(--text3)}
-.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--bg);flex-direction:column;gap:0}
-.auth-box{width:100%;max-width:420px}
-.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:40px;font-family:'Syne',sans-serif;font-weight:700;font-size:20px}
-.auth-logo-icon{width:40px;height:40px;background:var(--teal);border-radius:12px;display:flex;align-items:center;justify-content:center}
-.auth-logo-icon svg{width:20px;height:20px;fill:var(--bg)}
+
+/* AUTH */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--bg);flex-direction:column}
+.auth-box{width:100%;max-width:400px}
+.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px;font-family:'Syne',sans-serif;font-weight:700;font-size:18px}
+.auth-logo-icon{width:36px;height:36px;background:var(--teal);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.auth-logo-icon svg{width:18px;height:18px;fill:var(--bg)}
 .auth-logo span{color:var(--teal)}
-.auth-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;margin-bottom:6px}
-.auth-sub{color:var(--text2);font-size:15px;margin-bottom:32px}
-.auth-footer{text-align:center;margin-top:20px;font-size:14px;color:var(--text2)}
+.auth-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;margin-bottom:4px}
+.auth-sub{color:var(--text2);font-size:13px;margin-bottom:24px}
+.auth-footer{text-align:center;margin-top:16px;font-size:13px;color:var(--text2)}
 .auth-footer a{color:var(--teal);cursor:pointer;text-decoration:none}
-.auth-footer a:hover{text-decoration:underline}
-.auth-copyright{text-align:center;margin-top:32px;font-size:12px;color:var(--text3)}
-.page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px}
-.page-sub{color:var(--text2);font-size:14px;margin-bottom:28px}
-.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:40px}
-.step{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
-.step-num{width:36px;height:36px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--text2);background:var(--bg);position:relative;z-index:1}
-.step.done .step-num{background:var(--teal);border-color:var(--teal);color:var(--bg)}
-.step.active .step-num{border-color:var(--teal);color:var(--teal)}
-.step-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.1em;font-family:'Syne',sans-serif}
-.step.active .step-label{color:var(--teal)}
-.step-line{width:80px;height:1px;background:var(--border2);margin-bottom:20px}
-.step.done .step-line{background:var(--teal)}
-.qr-box{background:white;border-radius:16px;padding:20px;display:inline-flex;margin:0 auto}
-.qr-box img{width:200px;height:200px}
-.qr-timer{display:flex;align-items:center;gap:6px;color:var(--yellow);font-size:13px;margin-top:12px;justify-content:center}
-.wa-status{display:flex;align-items:center;gap:12px;padding:16px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;margin-bottom:20px}
-.wa-icon{width:40px;height:40px;border-radius:50%;background:var(--teal-dim);display:flex;align-items:center;justify-content:center}
-.wa-icon svg{width:20px;height:20px;fill:var(--teal)}
-.toast{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid var(--teal);border-radius:10px;padding:14px 20px;font-size:14px;color:var(--text);z-index:9999;transform:translateY(100px);opacity:0;transition:all 0.3s;max-width:320px}
+.auth-copyright{text-align:center;margin-top:24px;font-size:11px;color:var(--text3)}
+
+/* CATEGORIAS */
+.cat-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.cat-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);transition:all 0.15s;font-family:'Syne',sans-serif}
+.cat-chip:hover{border-color:var(--teal);color:var(--teal)}
+.cat-chip.active{background:var(--teal-dim);border-color:var(--teal);color:var(--teal)}
+.cat-chip .cat-remove{opacity:0;font-size:14px;line-height:1;transition:opacity 0.15s}
+.cat-chip.active:hover .cat-remove{opacity:1}
+
+/* AVATAR */
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--teal-dim);border:1px solid var(--teal);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--teal);cursor:pointer;flex-shrink:0}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--bg3);border:1px solid var(--teal);border-radius:10px;padding:12px 18px;font-size:13px;color:var(--text);z-index:9999;transform:translateY(100px);opacity:0;transition:all 0.3s;max-width:300px}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.error{border-color:var(--red)}
-.footer{text-align:center;padding:20px;font-size:12px;color:var(--text3);border-top:1px solid var(--border);margin-top:auto}
-@media(max-width:768px){.sidebar{display:none}.grid-4{grid-template-columns:repeat(2,1fr)}.content{padding:16px}}
+
+/* STEPS */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:32px}
+.step{display:flex;flex-direction:column;align-items:center;gap:6px}
+.step-num{width:32px;height:32px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text2);background:var(--bg);position:relative;z-index:1}
+.step.done .step-num{background:var(--teal);border-color:var(--teal);color:var(--bg)}
+.step.active .step-num{border-color:var(--teal);color:var(--teal)}
+.step-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:0.1em;font-family:'Syne',sans-serif}
+.step.active .step-label{color:var(--teal)}
+.step-line{width:60px;height:1px;background:var(--border2);margin-bottom:18px}
+.step.done+.step-line,.step-line.done{background:var(--teal)}
+
+/* QR */
+.qr-box{background:white;border-radius:14px;padding:16px;display:inline-flex;margin:0 auto}
+.qr-box img{width:180px;height:180px}
+.qr-timer{display:flex;align-items:center;gap:6px;color:var(--yellow);font-size:12px;margin-top:10px;justify-content:center}
+
+/* FOOTER */
+.footer{text-align:center;padding:16px;font-size:11px;color:var(--text3);border-top:1px solid var(--border);margin-top:auto}
+
+/* SECTION LABEL */
+.section-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+  .kanban{grid-template-columns:1fr}
+  .content{padding:14px}
+  .tab-btn{padding:10px 14px;font-size:12px}
+}
+
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .spinning{animation:spin 1s linear infinite}
 .pulsing{animation:pulse 2s ease-in-out infinite}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .fade-in{animation:fadeIn 0.3s ease forwards}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;width:100%;max-width:440px}
+.modal-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:16px}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
 <div class="toast" id="toast"></div>
+
+<!-- MODAL EDITAR LANÇAMENTO -->
+<div class="modal-overlay" id="modal-edit">
+<div class="modal">
+  <div class="modal-title">Editar lançamento</div>
+  <input type="hidden" id="edit-id">
+  <div class="form-group"><label>Descrição</label><input type="text" id="edit-desc"></div>
+  <div class="form-group"><label>Valor (R$)</label><input type="number" id="edit-valor" step="0.01"></div>
+  <div class="form-group"><label>Data</label><input type="date" id="edit-data"></div>
+  <div class="form-group"><label>Categoria</label><select id="edit-cat"></select></div>
+  <div class="modal-actions">
+    <button class="btn btn-outline" style="flex:1" onclick="fecharModal('modal-edit')">Cancelar</button>
+    <button class="btn btn-danger" style="flex:1" onclick="deletarLancamento()">Excluir</button>
+    <button class="btn btn-primary" style="flex:1" onclick="salvarEdicao()">Salvar</button>
+  </div>
+</div>
+</div>
 
 <!-- LOGIN -->
 <div class="screen active" id="screen-login">
@@ -139,13 +243,19 @@ input::placeholder{color:var(--text3)}
     <div class="auth-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>
     Secretária de <span>Bolso</span>
   </div>
-  <div class="auth-sub">Bem-vindo à sua secretaria exclusiva!</div>
+  <div class="auth-title">Bem-vindo</div>
+  <div class="auth-sub">Entre na sua secretaria exclusiva</div>
   <div class="form-group"><label>E-mail</label><input type="email" id="login-email" placeholder="seu@email.com"></div>
-  <div class="form-group"><label>Senha</label><div style="position:relative"><input type="password" id="login-senha" placeholder="••••••••" style="width:100%;padding-right:40px"><span onclick="var i=document.getElementById('login-senha');i.type=i.type=='password'?'text':'password'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span></div></div>
-  <button class="btn btn-primary btn-full btn-lg" onclick="doLogin()" style="margin-top:8px">Entrar</button>
-  <div class="auth-footer">Não tem conta? <a onclick="goTo('screen-cadastro')">Criar conta grátis</a></div>
+  <div class="form-group"><label>Senha</label>
+    <div style="position:relative">
+      <input type="password" id="login-senha" placeholder="••••••••" style="padding-right:40px">
+      <span onclick="toggleSenha('login-senha')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span>
+    </div>
+  </div>
+  <button class="btn btn-primary btn-full btn-lg" onclick="doLogin()" style="margin-top:6px">Entrar</button>
+  <div class="auth-footer">Não tem conta? <a onclick="goTo('screen-cadastro')">Criar conta</a></div>
 </div>
-<div class="auth-copyright">© 2026 Secretária de Bolso. Todos os direitos reservados.</div>
+<div class="auth-copyright">© 2026 Secretária de Bolso</div>
 </div>
 </div>
 
@@ -158,39 +268,28 @@ input::placeholder{color:var(--text3)}
     Secretária de <span>Bolso</span>
   </div>
   <div class="auth-title">Criar conta</div>
-  <div class="auth-sub">// PASSO 1 DE 3 — Dados pessoais</div>
+  <div class="auth-sub">Passo 1 de 3 — Dados pessoais</div>
   <div class="form-group"><label>Nome completo</label><input type="text" id="cad-nome" placeholder="Seu nome"></div>
   <div class="form-group"><label>E-mail</label><input type="email" id="cad-email" placeholder="seu@email.com"></div>
-  <div class="form-group"><label>WhatsApp (com DDD)</label><div style="display:flex;gap:8px"><select id="cad-pais" style="width:110px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px;color:var(--text);font-size:13px">
-    <option value="+55">🇧🇷 +55</option>
-    <option value="+1">🇺🇸 +1</option>
-    <option value="+1">🇨🇦 +1</option>
-    <option value="+351">🇵🇹 +351</option>
-    <option value="+34">🇪🇸 +34</option>
-    <option value="+44">🇬🇧 +44</option>
-    <option value="+49">🇩🇪 +49</option>
-    <option value="+33">🇫🇷 +33</option>
-    <option value="+39">🇮🇹 +39</option>
-    <option value="+54">🇦🇷 +54</option>
-    <option value="+56">🇨🇱 +56</option>
-    <option value="+57">🇨🇴 +57</option>
-    <option value="+52">🇲🇽 +52</option>
-    <option value="+595">🇵🇾 +595</option>
-    <option value="+598">🇺🇾 +598</option>
-    <option value="+51">🇵🇪 +51</option>
-    <option value="+593">🇪🇨 +593</option>
-    <option value="+58">🇻🇪 +58</option>
-    <option value="+591">🇧🇴 +591</option>
-    <option value="+81">🇯🇵 +81</option>
-    <option value="+86">🇨🇳 +86</option>
-    <option value="+91">🇮🇳 +91</option>
-    <option value="+61">🇦🇺 +61</option>
-    <option value="+27">🇿🇦 +27</option>
-    <option value="+971">🇦🇪 +971</option>
-  </select><input type="tel" id="cad-telefone" placeholder="(44) 99999-9999" style="flex:1"></div></div>
-  <div class="form-group"><label>Senha</label><div style="position:relative"><input type="password" id="cad-senha" placeholder="Mínimo 8 caracteres" style="width:100%;padding-right:40px"><span onclick="var i=document.getElementById('cad-senha');i.type=i.type=='password'?'text':'password'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span></div></div>
-  <div class="form-group"><label>Confirmar senha</label><div style="position:relative"><input type="password" id="cad-senha2" placeholder="Repita a senha" style="width:100%;padding-right:40px"><span onclick="var i=document.getElementById('cad-senha2');i.type=i.type=='password'?'text':'password'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span></div></div>
-  <button class="btn btn-primary btn-full btn-lg" onclick="doCadastro()" style="margin-top:8px">Criar conta</button>
+  <div class="form-group"><label>WhatsApp (com DDD)</label>
+    <div style="display:flex;gap:8px">
+      <select id="cad-pais" style="width:100px"><option value="55">🇧🇷 +55</option><option value="1">🇺🇸 +1</option><option value="351">🇵🇹 +351</option></select>
+      <input type="tel" id="cad-telefone" placeholder="(44) 99999-9999" style="flex:1">
+    </div>
+  </div>
+  <div class="form-group"><label>Senha</label>
+    <div style="position:relative">
+      <input type="password" id="cad-senha" placeholder="Mínimo 8 caracteres" style="padding-right:40px">
+      <span onclick="toggleSenha('cad-senha')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span>
+    </div>
+  </div>
+  <div class="form-group"><label>Confirmar senha</label>
+    <div style="position:relative">
+      <input type="password" id="cad-senha2" placeholder="Repita a senha" style="padding-right:40px">
+      <span onclick="toggleSenha('cad-senha2')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span>
+    </div>
+  </div>
+  <button class="btn btn-primary btn-full btn-lg" onclick="doCadastro()" style="margin-top:6px">Criar conta</button>
   <div class="auth-footer"><a onclick="goTo('screen-login')">Já tem conta? Entrar</a></div>
 </div>
 </div>
@@ -200,10 +299,10 @@ input::placeholder{color:var(--text3)}
 <div class="screen" id="screen-qr">
 <div class="topbar">
   <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
-  <button class="btn btn-outline" onclick="goTo('screen-dashboard')" style="font-size:13px">← Voltar ao painel</button>
+  <button class="btn btn-outline btn-sm" onclick="goTo('screen-dashboard')">← Painel</button>
 </div>
-<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:32px">
-<div style="max-width:560px;width:100%">
+<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px">
+<div style="max-width:500px;width:100%">
   <div class="steps">
     <div class="step done"><div class="step-num">✓</div><div class="step-label">Conta</div></div>
     <div class="step-line done"></div>
@@ -212,39 +311,32 @@ input::placeholder{color:var(--text3)}
     <div class="step"><div class="step-num">3</div><div class="step-label">Pronto</div></div>
   </div>
   <div class="card fade-in" id="qr-step1">
-    <div style="color:var(--teal);font-size:12px;letter-spacing:0.1em;font-family:'Syne',sans-serif;margin-bottom:10px">// PASSO 2 DE 3</div>
-    <h2 style="font-size:26px;margin-bottom:8px">Vincular WhatsApp</h2>
-    <p style="color:var(--text2);margin-bottom:24px">Informe o número do WhatsApp que vai usar para registrar seus gastos e receitas.</p>
-    <div class="form-group"><label>Número do WhatsApp</label><div style="display:flex;gap:8px"><div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;color:var(--text2);font-size:14px;white-space:nowrap">BR +55</div><input type="tel" id="qr-numero" placeholder="(44) 99999-9999" style="flex:1"></div></div>
-    <div style="background:var(--teal-dim2);border:1px solid rgba(0,212,160,0.15);border-radius:8px;padding:12px 16px;font-size:13px;color:var(--text2);margin-bottom:20px">💡 Use o número do WhatsApp <strong style="color:var(--text)">que você vai usar para mandar os áudios</strong>.</div>
+    <div style="color:var(--teal);font-size:11px;letter-spacing:0.1em;font-family:'Syne',sans-serif;margin-bottom:8px">PASSO 2 DE 3</div>
+    <h2 style="font-size:22px;margin-bottom:6px">Vincular WhatsApp</h2>
+    <p style="color:var(--text2);margin-bottom:20px;font-size:13px">Informe o número do WhatsApp que vai usar para registrar seus gastos.</p>
+    <div class="form-group"><label>Número do WhatsApp</label>
+      <div style="display:flex;gap:8px">
+        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text2);font-size:13px;white-space:nowrap">BR +55</div>
+        <input type="tel" id="qr-numero" placeholder="(44) 99999-9999" style="flex:1">
+      </div>
+    </div>
     <button class="btn btn-primary btn-full" onclick="gerarQR()">Gerar QR Code →</button>
   </div>
   <div class="card fade-in" id="qr-step2" style="display:none;text-align:center">
-    <div style="color:var(--teal);font-size:12px;letter-spacing:0.1em;font-family:'Syne',sans-serif;margin-bottom:10px">// PASSO 2 DE 3</div>
-    <h2 style="font-size:26px;margin-bottom:8px">Escaneie o QR Code</h2>
-    <p style="color:var(--text2);margin-bottom:24px">Abra o WhatsApp no celular e aponte para o código abaixo.</p>
-    <div style="display:flex;justify-content:center;margin-bottom:16px"><div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://secretariadebolso.com.br/demo&bgcolor=ffffff&color=000000" alt="QR Code" id="qr-img"></div></div>
+    <div style="color:var(--teal);font-size:11px;letter-spacing:0.1em;font-family:'Syne',sans-serif;margin-bottom:8px">PASSO 2 DE 3</div>
+    <h2 style="font-size:22px;margin-bottom:6px">Escaneie o QR Code</h2>
+    <p style="color:var(--text2);margin-bottom:20px;font-size:13px">Abra o WhatsApp e aponte para o código abaixo.</p>
+    <div style="display:flex;justify-content:center;margin-bottom:12px"><div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://secretariadebolso.com.br&bgcolor=ffffff&color=000000" alt="QR"></div></div>
     <div class="qr-timer"><div class="dot pulsing" style="background:var(--yellow)"></div>Expira em <strong id="qr-countdown">2:00</strong></div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:20px;text-align:left">
-      <div style="font-size:13px;color:var(--text2);display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;gap:10px;align-items:flex-start"><span style="background:var(--teal);color:var(--bg);border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">1</span>Abra o <strong style="color:var(--text)">WhatsApp</strong> no celular</div>
-        <div style="display:flex;gap:10px;align-items:flex-start"><span style="background:var(--teal);color:var(--bg);border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</span>Toque em ⋮ Menu → <strong style="color:var(--text)">Aparelhos conectados</strong></div>
-        <div style="display:flex;gap:10px;align-items:flex-start"><span style="background:var(--teal);color:var(--bg);border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</span>Toque em <strong style="color:var(--text)">"Conectar um aparelho"</strong> e aponte para o QR Code</div>
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;margin-top:16px">
+    <div style="display:flex;gap:8px;margin-top:16px">
       <button class="btn btn-outline" style="flex:1" onclick="voltarStep1()">← Trocar número</button>
-      <button class="btn btn-primary" style="flex:1" onclick="simularConexao()">✓ Simular conexão (demo)</button>
+      <button class="btn btn-primary" style="flex:1" onclick="simularConexao()">✓ Conectado</button>
     </div>
   </div>
   <div class="card fade-in" id="qr-step3" style="display:none;text-align:center">
-    <div style="font-size:48px;margin-bottom:16px">🎉</div>
-    <h2 style="font-size:26px;margin-bottom:8px">WhatsApp conectado!</h2>
-    <p style="color:var(--text2);margin-bottom:28px">Agora é só mandar um áudio e a Secretária cuida do resto.</p>
-    <div class="grid-2" style="margin-bottom:24px;text-align:left">
-      <div class="card-sm"><div style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Número vinculado</div><div style="font-weight:600" id="qr-numero-final">+55 (44) 99999-9999</div></div>
-      <div class="card-sm"><div style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Status</div><div class="badge badge-green"><div class="dot"></div>Online</div></div>
-    </div>
+    <div style="font-size:40px;margin-bottom:12px">🎉</div>
+    <h2 style="font-size:22px;margin-bottom:6px">WhatsApp conectado!</h2>
+    <p style="color:var(--text2);margin-bottom:24px;font-size:13px">Agora é só mandar um áudio e a Secretária cuida do resto.</p>
     <button class="btn btn-primary btn-full btn-lg" onclick="goTo('screen-dashboard')">Ir para o painel →</button>
   </div>
 </div>
@@ -253,436 +345,292 @@ input::placeholder{color:var(--text3)}
 
 <!-- DASHBOARD -->
 <div class="screen" id="screen-dashboard">
-<div class="topbar">
-  <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
-  <div class="topbar-right">
-    <span style="font-size:13px;color:var(--text2)" id="topbar-name">Pedro</span>
-    <div class="avatar" id="topbar-avatar" onclick="goTo('screen-perfil')">P</div>
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:13px;color:var(--text2)" id="topbar-name"></span>
+      <div class="avatar" id="topbar-avatar" onclick="switchTab2('perfil')">P</div>
+    </div>
   </div>
-</div>
-<div class="layout">
-  <div class="sidebar">
-    <div class="nav-section">Menu</div>
-    <div class="nav-item active" onclick="navTo(this,'screen-dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Início</div>
-    <div class="nav-item" onclick="navTo(this,'screen-lancamentos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Lançamentos</div>
-    <div class="nav-item" onclick="navTo(this,'screen-agenda')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda</div>
-    <div class="nav-section">Conta</div>
-    <div class="nav-item" onclick="navTo(this,'screen-perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</div>
-    <div class="nav-item" onclick="doLogout()" style="margin-top:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>Sair</div>
+
+  <!-- WA STATUS -->
+  <div class="wa-bar" id="wa-bar">
+    <div class="wa-bar-dot" id="wa-dot"></div>
+    <div class="wa-bar-info">
+      <span style="font-weight:500;font-size:13px">WhatsApp</span>
+      <span class="wa-bar-num" id="wa-bar-num">—</span>
+      <span class="wa-bar-badge on" id="wa-bar-badge">Conectado</span>
+    </div>
+    <button class="btn btn-outline btn-sm" onclick="goTo('screen-qr')" style="font-size:11px;padding:4px 10px">Reconectar</button>
   </div>
+
+  <!-- ABAS -->
+  <div class="tabs">
+    <div class="tab-btn active" id="tab-financeiro" onclick="switchTab2('financeiro')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      Financeiro
+    </div>
+    <div class="tab-btn" id="tab-agenda" onclick="switchTab2('agenda')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Agenda
+    </div>
+    <div class="tab-btn" id="tab-boletos" onclick="switchTab2('boletos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Boletos
+    </div>
+    <div class="tab-btn" id="tab-perfil" onclick="switchTab2('perfil')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Perfil
+    </div>
+  </div>
+
+  <!-- ABA FINANCEIRO -->
+  <div class="tab-content active" id="content-financeiro">
   <div class="content fade-in">
-    <div class="page-title">Início</div>
-    <div class="page-sub" id="dash-mes">Junho de 2026</div>
 
-    <div class="wa-status" id="wa-status-bar">
-      <div class="wa-icon"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
-      <div style="flex:1"><div style="font-weight:500;font-size:14px">WhatsApp conectado</div><div style="font-size:12px;color:var(--text2)" id="wa-numero-display">—</div></div>
-      <div class="badge badge-green"><div class="dot"></div>Online</div>
-      <button class="btn btn-outline" style="font-size:13px;padding:6px 14px" onclick="goTo('screen-qr')">Reconectar</button>
-    </div>
-
-    <div class="card" style="margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-      <div style="flex:1;min-width:200px">
-        <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:14px;margin-bottom:4px">💼 Salário fixo mensal</div>
-        <div style="font-size:12px;color:var(--text2)">Incluído automaticamente no Total Receitas. Deixe em branco se não tiver.</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <input type="text" id="dash-salario" placeholder="R$ 0,00" style="width:160px;font-family:'Syne',sans-serif;font-weight:600;font-size:16px;text-align:right" oninput="recalcularComSalario()">
-        <button class="btn btn-primary" style="padding:10px 16px;font-size:13px" onclick="salvarSalarioDash()">Salvar</button>
-      </div>
-    </div>
-
+    <!-- METRICS -->
     <div class="grid-4" style="margin-bottom:20px">
-      <div class="metric"><div class="metric-label">Total receitas</div><div class="metric-value green" id="m-receitas">R$ —</div><div class="metric-sub">Este mês</div></div>
-      <div class="metric"><div class="metric-label">Total despesas</div><div class="metric-value red" id="m-despesas">R$ —</div><div class="metric-sub">Este mês</div></div>
-      <div class="metric"><div class="metric-label">Saldo do mês</div><div class="metric-value" id="m-saldo">R$ —</div><div class="metric-sub">Receitas − Despesas</div></div>
-      <div class="metric"><div class="metric-label">Lançamentos</div><div class="metric-value yellow" id="m-lancamentos">—</div><div class="metric-sub">Este mês</div></div>
-    </div>
-    <div class="grid-2">
-      <div class="card">
-        <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:15px;margin-bottom:20px">Despesas por categoria</div>
-        <div style="display:flex;flex-direction:column;gap:10px" id="cat-chart">
-          <div style="color:var(--text2);font-size:13px">Carregando...</div>
-        </div>
+      <div class="metric">
+        <div class="metric-label">Receitas</div>
+        <div class="metric-value green" id="m-receitas">R$ —</div>
+        <div class="metric-sub">Este mês</div>
       </div>
-      <div class="card" style="margin-bottom:16px"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div style="font-family:'Syne',sans-serif;font-weight:600;font-size:15px">📅 Hoje na agenda</div><div style="font-size:12px;color:var(--text2)" id="dash-data-hoje"></div></div><div id="dash-agenda-hoje"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-          <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:15px">Últimos lançamentos</div>
-          <button class="btn btn-outline" style="font-size:12px;padding:5px 12px" onclick="navTo(document.querySelector('.nav-item:nth-child(3)'),'screen-lancamentos')">Ver todos</button>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:12px" id="recentes-list">
-          <div style="color:var(--text2);font-size:13px">Carregando...</div>
-        </div>
+      <div class="metric">
+        <div class="metric-label">Despesas</div>
+        <div class="metric-value red" id="m-despesas">R$ —</div>
+        <div class="metric-sub">Este mês</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Saldo</div>
+        <div class="metric-value" id="m-saldo">R$ —</div>
+        <div class="metric-sub">Receitas − Despesas</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Lançamentos</div>
+        <div class="metric-value yellow" id="m-total">—</div>
+        <div class="metric-sub">Este mês</div>
       </div>
     </div>
-  </div>
-</div>
-<div class="footer">© 2026 Secretária de Bolso. Todos os direitos reservados.</div>
-</div>
 
-<!-- LANÇAMENTOS -->
-<div class="screen" id="screen-lancamentos">
-<div class="topbar">
-  <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
-  <div class="topbar-right"><span style="font-size:13px;color:var(--text2)" id="topbar-name2">Pedro</span><div class="avatar" onclick="goTo('screen-perfil')">P</div></div>
-</div>
-<div class="layout">
-  <div class="sidebar">
-    <div class="nav-section">Menu</div>
-    <div class="nav-item" onclick="navTo(this,'screen-dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Início</div>
-    <div class="nav-item active" onclick="navTo(this,'screen-lancamentos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Lançamentos</div>
-    <div class="nav-item" onclick="navTo(this,'screen-agenda')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda</div>
-    <div class="nav-section">Conta</div>
-    <div class="nav-item" onclick="navTo(this,'screen-perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</div>
-    <div class="nav-item" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>Sair</div>
-  </div>
-  <div class="content fade-in">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:28px">
-      <div><div class="page-title">Lançamentos</div><div style="color:var(--text2);font-size:14px" id="lanc-mes-label">Junho de 2026</div></div>
-      <div style="display:flex;gap:10px">
-        <select style="padding:8px 14px;width:auto" id="filtro-tipo" onchange="filtrarLancamentos()"><option value="">Todos</option><option value="despesa">Despesas</option><option value="receita">Receitas</option></select>
+    <!-- SALÁRIO -->
+    <div class="card" style="margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="flex:1;min-width:160px">
+        <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:13px;margin-bottom:2px">💼 Salário fixo mensal</div>
+        <div style="font-size:11px;color:var(--text2)">Incluído automaticamente nas receitas</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input type="text" id="dash-salario" placeholder="R$ 0,00" style="width:140px;font-family:'Syne',sans-serif;font-weight:600;font-size:14px;text-align:right" oninput="recalcularComSalario()">
+        <button class="btn btn-primary btn-sm" onclick="salvarSalarioDash()">Salvar</button>
       </div>
     </div>
-    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px">
-      <div class="tab active" id="tab-despesas" onclick="switchTab('despesas')" style="padding:10px 20px;cursor:pointer;font-size:14px;border-bottom:2px solid var(--teal);color:var(--teal);font-family:'Syne',sans-serif;font-weight:600">Despesas</div>
-      <div class="tab" id="tab-receitas" onclick="switchTab('receitas')" style="padding:10px 20px;cursor:pointer;font-size:14px;border-bottom:2px solid transparent;color:var(--text2)">Receitas (ganhos)</div>
-    </div>
-    <div id="tabela-despesas">
-    <div class="card" style="padding:0;overflow:hidden"><div class="table-wrap"><table>
-      <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th></tr></thead>
-      <tbody id="tbody-despesas"><tr><td colspan="4" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody>
-    </table></div></div>
-    </div>
-    <div id="tabela-receitas" style="display:none">
-    <div class="card" style="padding:0;overflow:hidden"><div class="table-wrap"><table>
-      <thead><tr><th>Data</th><th>Descrição</th><th>Origem</th><th>Valor</th></tr></thead>
-      <tbody id="tbody-receitas"><tr><td colspan="4" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody>
-    </table></div></div>
-    </div>
-  </div>
-</div>
-<div class="footer">© 2026 Secretária de Bolso. Todos os direitos reservados.</div>
-</div>
 
-<!-- AGENDA -->
-<div class="screen" id="screen-agenda">
-<div class="topbar">
-  <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
-  <div class="topbar-right"><div class="avatar" onclick="goTo('screen-perfil')">P</div></div>
-</div>
-<div class="layout">
-  <div class="sidebar">
-    <div class="nav-section">Menu</div>
-    <div class="nav-item" onclick="navTo(this,'screen-dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Início</div>
-    <div class="nav-item" onclick="navTo(this,'screen-lancamentos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Lançamentos</div>
-    <div class="nav-item active" onclick="navTo(this,'screen-agenda')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda</div>
-    <div class="nav-section">Conta</div>
-    <div class="nav-item" onclick="navTo(this,'screen-perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</div>
-    <div class="nav-item" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>Sair</div>
+    <div class="grid-2" style="margin-bottom:20px">
+      <!-- DESPESAS POR CATEGORIA -->
+      <div class="card">
+        <div class="section-label">Despesas por categoria</div>
+        <div id="cat-chart"><div style="color:var(--text2);font-size:13px">Carregando...</div></div>
+      </div>
+      <!-- LANÇAMENTOS RECENTES -->
+      <div class="card">
+        <div class="section-label">Últimos lançamentos</div>
+        <div id="recentes-list"><div style="color:var(--text2);font-size:13px">Carregando...</div></div>
+      </div>
+    </div>
+
+    <!-- LANÇAMENTOS TABELA -->
+    <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px">
+      <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div class="section-label" style="margin-bottom:0">Lançamentos</div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select style="padding:6px 10px;width:auto;font-size:12px" id="filtro-mes" onchange="carregarLancamentos()">
+            <option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option>
+            <option value="3">Abril</option><option value="4">Maio</option><option value="5" selected>Junho</option>
+            <option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option>
+            <option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option>
+          </select>
+          <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden">
+            <div id="ltab-despesas" onclick="switchLTab('despesas')" style="padding:5px 12px;font-size:12px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Despesas</div>
+            <div id="ltab-receitas" onclick="switchLTab('receitas')" style="padding:5px 12px;font-size:12px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Receitas</div>
+          </div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead>
+          <tbody id="tbody-lanc"><tr><td colspan="5" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CATEGORIAS -->
+    <div class="card">
+      <div class="section-label">
+        Minhas categorias
+        <span style="font-size:11px;color:var(--text2);text-transform:none;letter-spacing:0;font-weight:400">Ative as que usa</span>
+      </div>
+      <div class="cat-grid" id="cat-grid">
+        <div style="color:var(--text2);font-size:13px">Carregando...</div>
+      </div>
+    </div>
+
   </div>
+  </div>
+
+  <!-- ABA AGENDA -->
+  <div class="tab-content" id="content-agenda">
   <div class="content fade-in">
     <div class="page-title">Agenda</div>
-    <div class="page-sub">Compromissos do Google Calendar</div>
-    <div id="agenda-lista"><div style="color:var(--text2);font-size:14px">Carregando eventos...</div></div>
-  </div>
-</div>
-<div class="footer">© 2026 Secretária de Bolso. Todos os direitos reservados.</div>
-</div>
-
-<!-- PERFIL -->
-<div class="screen" id="screen-perfil">
-<div class="topbar">
-  <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
-  <div class="topbar-right"><div class="avatar" onclick="goTo('screen-perfil')">P</div></div>
-</div>
-<div class="layout">
-  <div class="sidebar">
-    <div class="nav-section">Menu</div>
-    <div class="nav-item" onclick="navTo(this,'screen-dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Início</div>
-    <div class="nav-item" onclick="navTo(this,'screen-lancamentos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Lançamentos</div>
-    <div class="nav-item" onclick="navTo(this,'screen-agenda')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda</div>
-    <div class="nav-section">Conta</div>
-    <div class="nav-item active" onclick="navTo(this,'screen-perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</div>
-    <div class="nav-item" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>Sair</div>
-  </div>
-  <div class="content fade-in">
-    <div class="page-title">Perfil</div>
-    <div class="page-sub">Gerencie suas informações e configurações</div>
-    <div class="grid-2" style="align-items:start">
-      <div style="display:flex;flex-direction:column;gap:16px">
-        <div class="card">
-          <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:15px;margin-bottom:20px">Dados pessoais</div>
-          <div class="form-group"><label>Nome completo</label><input type="text" id="perf-nome"></div>
-          <div class="form-group"><label>E-mail</label><input type="email" id="perf-email" disabled style="opacity:0.5;cursor:not-allowed"></div>
-          <div class="form-group"><label>Nova senha (deixe em branco para não alterar)</label><input type="password" placeholder="••••••••" id="perf-senha"></div>
-          <button class="btn btn-primary" onclick="salvarPerfil()">Salvar alterações</button>
-        </div>
+    <div class="page-sub" id="agenda-sub">Seus compromissos</div>
+    <div class="kanban" id="agenda-kanban">
+      <div class="kanban-col">
+        <div class="kanban-header"><div class="kanban-title" style="color:var(--teal)">Hoje</div><div class="kanban-count" id="cnt-hoje">0</div></div>
+        <div class="kanban-body" id="col-hoje"><div class="kanban-empty">Nenhum compromisso hoje</div></div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:16px">
-        <div class="card">
-          <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:15px;margin-bottom:16px">WhatsApp</div>
-          <div class="wa-status" style="margin-bottom:16px">
-            <div class="wa-icon"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
-            <div style="flex:1"><div style="font-weight:500;font-size:14px" id="perf-wa-numero">—</div><div class="badge badge-green" style="margin-top:4px"><div class="dot"></div>Conectado</div></div>
-          </div>
-          <button class="btn btn-outline btn-full" onclick="goTo('screen-qr')">Reconectar WhatsApp</button>
-        </div>
-        <div class="card">
-          <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:15px;margin-bottom:16px">Como usar</div>
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:18px">🎤</div><div><div style="font-size:14px;font-weight:500;margin-bottom:2px">Mande um áudio ou texto</div><div style="font-size:12px;color:var(--text2)">Ex: "mercado, cem reais, dia 7 de junho"</div></div></div>
-            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:18px">💸</div><div><div style="font-size:14px;font-weight:500;margin-bottom:2px">Registre despesas</div><div style="font-size:12px;color:var(--text2)">Ex: "gasolina, oitenta reais, dia 5"</div></div></div>
-            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:18px">💰</div><div><div style="font-size:14px;font-weight:500;margin-bottom:2px">Registre receitas</div><div style="font-size:12px;color:var(--text2)">Ex: "recebi da Paula, trezentos reais"</div></div></div>
-            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:18px">📅</div><div><div style="font-size:14px;font-weight:500;margin-bottom:2px">Agende compromissos</div><div style="font-size:12px;color:var(--text2)">Ex: "dentista dia 10 às 15 horas"</div></div></div>
-          </div>
-        </div>
+      <div class="kanban-col">
+        <div class="kanban-header"><div class="kanban-title">Esta semana</div><div class="kanban-count" id="cnt-semana">0</div></div>
+        <div class="kanban-body" id="col-semana"><div class="kanban-empty">Nenhum compromisso esta semana</div></div>
+      </div>
+      <div class="kanban-col">
+        <div class="kanban-header"><div class="kanban-title">Próximos</div><div class="kanban-count" id="cnt-proximos">0</div></div>
+        <div class="kanban-body" id="col-proximos"><div class="kanban-empty">Nenhum compromisso futuro</div></div>
       </div>
     </div>
   </div>
-</div>
-<div class="footer">© 2026 Secretária de Bolso. Todos os direitos reservados.</div>
+  </div>
+
+  <!-- ABA BOLETOS -->
+  <div class="tab-content" id="content-boletos">
+  <div class="content fade-in">
+    <div class="page-title">Boletos</div>
+    <div class="page-sub">Controle seus pagamentos</div>
+    <div class="kanban">
+      <div class="kanban-col">
+        <div class="kanban-header"><div class="kanban-title" style="color:var(--red)">Vencendo hoje</div><div class="kanban-count" id="cnt-bol-hoje">0</div></div>
+        <div class="kanban-body" id="col-bol-hoje"><div class="kanban-empty">Nenhum boleto vencendo hoje</div></div>
+      </div>
+      <div class="kanban-col">
+        <div class="kanban-header"><div class="kanban-title" style="color:var(--yellow)">A pagar</div><div class="kanban-count" id="cnt-bol-apagar">0</div></div>
+        <div class="kanban-body" id="col-bol-apagar"><div class="kanban-empty">Nenhum boleto pendente</div></div>
+      </div>
+      <div class="kanban-col">
+        <div class="kanban-header"><div class="kanban-title" style="color:var(--teal)">Pagos</div><div class="kanban-count" id="cnt-bol-pagos">0</div></div>
+        <div class="kanban-body" id="col-bol-pagos"><div class="kanban-empty">Nenhum boleto pago</div></div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ABA PERFIL -->
+  <div class="tab-content" id="content-perfil">
+  <div class="content fade-in">
+    <div class="page-title">Perfil</div>
+    <div class="page-sub">Suas informações e configurações</div>
+    <div class="grid-2" style="align-items:start">
+      <div class="card">
+        <div class="section-label">Dados pessoais</div>
+        <div class="form-group"><label>Nome completo</label><input type="text" id="perf-nome"></div>
+        <div class="form-group"><label>E-mail</label><input type="email" id="perf-email" disabled style="opacity:0.5;cursor:not-allowed"></div>
+        <div class="form-group"><label>Nova senha (deixe em branco para não alterar)</label><input type="password" placeholder="••••••••" id="perf-senha"></div>
+        <button class="btn btn-primary" onclick="salvarPerfil()">Salvar alterações</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="card">
+          <div class="section-label">WhatsApp</div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:14px">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--teal-dim);display:flex;align-items:center;justify-content:center">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--teal)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="font-weight:500;font-size:13px" id="perf-wa-numero">—</div>
+              <div class="badge badge-green" style="margin-top:4px"><div class="dot"></div>Conectado</div>
+            </div>
+          </div>
+          <button class="btn btn-outline btn-full btn-sm" onclick="goTo('screen-qr')">Reconectar WhatsApp</button>
+        </div>
+        <div class="card">
+          <div class="section-label">Como usar</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:16px">🎤</div><div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Mande um áudio ou texto</div><div style="font-size:11px;color:var(--text2)">Ex: "mercado, cem reais, dia 7"</div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:16px">💸</div><div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Registre despesas</div><div style="font-size:11px;color:var(--text2)">Ex: "gasolina, oitenta reais, dia 5"</div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:16px">💰</div><div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Registre receitas</div><div style="font-size:11px;color:var(--text2)">Ex: "recebi da Paula, trezentos reais"</div></div></div>
+            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:16px">📅</div><div><div style="font-size:13px;font-weight:500;margin-bottom:2px">Agende compromissos</div><div style="font-size:11px;color:var(--text2)">Ex: "dentista dia 10 às 15 horas"</div></div></div>
+          </div>
+        </div>
+        <button class="btn btn-danger btn-full btn-sm" onclick="doLogout()">Sair da conta</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="footer">© 2026 Secretária de Bolso</div>
 </div>
 
 <script>
 const SUPA_URL='https://krqlbdpuuamimbllddtj.supabase.co';
 const SUPA_KEY='sb_publishable_DWDJXwLW4zXqeApYiZOLGA_yt9pJj1e';
-const GCAL_KEY='AIzaSyB_Vg0bFuN-t2MdISdnp0GUK-V45UaxeQs';
-const GCAL_ID='secretariadebolso%40gmail.com';
 const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
+
 var currentUser={nome:'',email:'',id:''};
 var qrTimer=null;
 var qrSeconds=120;
 var totalReceitasSupa=0;
 var totalDespesasSupa=0;
+var currentLTab='despesas';
+var categoriasAtivas=[];
 
-function parseSalario(str){
-  if(!str)return 0;
-  return parseFloat(str.replace(/[R$\s.]/g,'').replace(',','.'))||0;
-}
+// CATEGORIAS PADRÃO COM CONTEXTO
+const CATS_PADRAO=[
+  'Alimentação — Casa','Alimentação — Trabalho',
+  'Restaurante — Lazer','Restaurante — Trabalho',
+  'Mercado','Farmácia — Saúde','Farmácia — Pet',
+  'Combustível','Transporte — Uber/Táxi','Transporte — Outros',
+  'Moradia — Aluguel','Moradia — Condomínio','Moradia — Manutenção',
+  'Saúde — Médico','Saúde — Dentista','Saúde — Academia',
+  'Educação','Vestuário','Lazer — Entretenimento',
+  'Viagem','Pet Shop','Assinaturas','Serviços',
+  'Boletos','Outros'
+];
 
-function recalcularComSalario(){
-  var sal=parseSalario(document.getElementById('dash-salario').value);
-  var totalRec=totalReceitasSupa+sal;
-  document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2);
-  var saldo=totalRec-totalDespesasSupa;
-  var elSaldo=document.getElementById('m-saldo');
-  elSaldo.textContent='R$ '+saldo.toFixed(2);
-  elSaldo.className='metric-value '+(saldo>=0?'green':'red');
-}
+function toggleSenha(id){var i=document.getElementById(id);i.type=i.type==='password'?'text':'password'}
 
-async function salvarSalarioDash(){
-  var val=parseSalario(document.getElementById('dash-salario').value);
-  await sb.from('clientes').update({salario_fixo:val}).eq('user_id',currentUser.id);
-  recalcularComSalario();
-  toast('Salário salvo!');
-}
-
-async function carregarDashboard(){
-  try{
-    // Carregar dados do cliente
-    var {data:cliente}=await sb.from('clientes').select('salario_fixo,whatsapp').eq('user_id',currentUser.id).single();
-    if(cliente){
-      if(cliente.salario_fixo){
-        document.getElementById('dash-salario').value='R$ '+parseFloat(cliente.salario_fixo).toFixed(2).replace('.',',');
-      }
-      if(cliente.whatsapp){
-        document.getElementById('wa-numero-display').textContent=cliente.whatsapp;
-      }
-    }
-
-    // Carregar lançamentos do Supabase
-    var {data:lancamentos,error}=await sb.from('lancamentos').select('*').order('created_at',{ascending:false});
-    if(error||!lancamentos)return;
-
-    var totalDesp=0;
-    var totalRec=0;
-    var tbodyD=document.getElementById('tbody-despesas');
-    var tbodyR=document.getElementById('tbody-receitas');
-    tbodyD.innerHTML='';
-    tbodyR.innerHTML='';
-    var recentes=[];
-    var categorias={};
-
-    lancamentos.forEach(l=>{
-      var val=parseFloat(l.valor)||0;
-      if(l.tipo==='despesa'){
-        totalDesp+=val;
-        categorias[l.categoria||'Outros']=(categorias[l.categoria||'Outros']||0)+val;
-        recentes.push({data:l.data||'—',desc:l.descricao||'—',val,tipo:'despesa'});
-        tbodyD.innerHTML+=`<tr><td>${l.data||'—'}</td><td>${l.descricao||'—'}</td><td><span class="badge badge-yellow">${l.categoria||'Outros'}</span></td><td style="color:var(--red);font-weight:600">R$ ${val.toFixed(2)}</td></tr>`;
-      } else if(l.tipo==='receita'){
-        totalRec+=val;
-        recentes.push({data:l.data||'—',desc:l.descricao||l.origem||'—',val,tipo:'receita'});
-        tbodyR.innerHTML+=`<tr><td>${l.data||'—'}</td><td>${l.descricao||'—'}</td><td>${l.origem||'—'}</td><td style="color:var(--teal);font-weight:600">R$ ${val.toFixed(2)}</td></tr>`;
-      }
-    });
-
-    totalDespesasSupa=totalDesp;
-    totalReceitasSupa=totalRec;
-
-    document.getElementById('m-despesas').textContent='R$ '+totalDesp.toFixed(2);
-    document.getElementById('m-lancamentos').textContent=lancamentos.filter(l=>l.tipo==='despesa'||l.tipo==='receita').length;
-
-    var sal=parseSalario(document.getElementById('dash-salario').value);
-    var totalRecComSal=totalRec+sal;
-    document.getElementById('m-receitas').textContent='R$ '+totalRecComSal.toFixed(2);
-    var saldo=totalRecComSal-totalDesp;
-    var elSaldo=document.getElementById('m-saldo');
-    elSaldo.textContent='R$ '+saldo.toFixed(2);
-    elSaldo.className='metric-value '+(saldo>=0?'green':'red');
-
-    // Últimos lançamentos
-    var rl=document.getElementById('recentes-list');
-    rl.innerHTML='';
-    if(recentes.length===0){
-      rl.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhum lançamento ainda.</div>';
-    } else {
-      recentes.slice(0,5).forEach(it=>{
-        rl.innerHTML+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div><div style="font-size:14px;font-weight:500">${it.desc}</div><div style="font-size:12px;color:var(--text2)">${it.data}</div></div><div style="color:${it.tipo==='receita'?'var(--teal)':'var(--red)'};font-weight:600">${it.tipo==='receita'?'+':'-'}R$ ${it.val.toFixed(2)}</div></div>`;
-      });
-    }
-
-    // Despesas por categoria
-    var catChart=document.getElementById('cat-chart');
-    var cats=Object.entries(categorias).sort((a,b)=>b[1]-a[1]);
-    if(cats.length===0){
-      catChart.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhuma despesa ainda.</div>';
-    } else {
-      var maxVal=cats[0][1];
-      catChart.innerHTML='';
-      cats.forEach(([cat,val],i)=>{
-        var pct=Math.round((val/maxVal)*100);
-        var op=Math.max(0.3,1-(i*0.15));
-        catChart.innerHTML+=`<div style="display:flex;align-items:center;gap:10px"><div style="font-size:13px;color:var(--text2);width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cat}</div><div style="flex:1;background:var(--bg3);border-radius:4px;height:8px"><div style="width:${pct}%;background:var(--teal);height:100%;border-radius:4px;opacity:${op}"></div></div><div style="font-size:13px;font-weight:500;width:80px;text-align:right">R$ ${val.toFixed(2)}</div></div>`;
-      });
-    }
-
-    if(tbodyD.innerHTML==='') tbodyD.innerHTML='<tr><td colspan="4" style="color:var(--text2);text-align:center">Nenhuma despesa registrada.</td></tr>';
-    if(tbodyR.innerHTML==='') tbodyR.innerHTML='<tr><td colspan="4" style="color:var(--text2);text-align:center">Nenhuma receita registrada.</td></tr>';
-
-  }catch(e){console.log('Erro ao carregar dashboard:',e)}
-}
-
-async function carregarPerfil(){
-  document.getElementById('perf-nome').value=currentUser.nome;
-  document.getElementById('perf-email').value=currentUser.email;
-  try{
-    var {data:cliente}=await sb.from('clientes').select('whatsapp').eq('user_id',currentUser.id).single();
-    if(cliente&&cliente.whatsapp){
-      document.getElementById('perf-wa-numero').textContent=cliente.whatsapp;
-    }
-  }catch(e){}
-}
-
-async function carregarAgendaHoje(){
-  var agora=new Date();
-  var inicio=new Date(agora);inicio.setHours(0,0,0,0);
-  var fim=new Date(agora);fim.setHours(23,59,59,999);
-  var url=`https://www.googleapis.com/calendar/v3/calendars/${GCAL_ID}/events?key=${GCAL_KEY}&timeMin=${inicio.toISOString()}&timeMax=${fim.toISOString()}&singleEvents=true&orderBy=startTime`;
-  var el=document.getElementById('dash-agenda-hoje');
-  var elData=document.getElementById('dash-data-hoje');
-  if(elData)elData.textContent=agora.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
-  try{
-    var res=await fetch(url);
-    var data=await res.json();
-    if(!data.items||!data.items.length){el.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhum evento hoje.</div>';return;}
-    var html='';
-    data.items.forEach(ev=>{
-      var hora=ev.start.dateTime?new Date(ev.start.dateTime).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'Dia todo';
-      var titulo=(ev.summary||'Sem título').replace(/\s*[-–]\s*R\$\s*[\d,.]+/g,'').replace(/\s+às\s+\d{1,2}:\d{2}/g,'').trim();
-      html+=`<div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border)"><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--teal);min-width:48px">${hora}</div><div style="font-size:14px">${titulo}</div></div>`;
-    });
-    el.innerHTML=html;
-  }catch(e){el.innerHTML='<div style="color:var(--text2);font-size:13px">Erro ao carregar.</div>';}
-}
-
-async function carregarAgenda(){
-  var agora=new Date();
-  var inicio=agora.toISOString();
-  var fim=new Date(agora.getTime()+30*24*60*60*1000).toISOString();
-  var url=`https://www.googleapis.com/calendar/v3/calendars/${GCAL_ID}/events?key=${GCAL_KEY}&timeMin=${inicio}&timeMax=${fim}&singleEvents=true&orderBy=startTime&maxResults=30`;
-  try{
-    var res=await fetch(url);
-    var data=await res.json();
-    if(data.error){document.getElementById('agenda-lista').innerHTML='<div style="color:var(--red);font-size:13px">Erro ao carregar agenda: '+data.error.message+'</div>';return;}
-    renderAgenda(data.items||[]);
-  }catch(e){document.getElementById('agenda-lista').innerHTML='<div style="color:var(--text2);font-size:13px">Não foi possível carregar os eventos.</div>';}
-}
-
-function renderAgenda(eventos){
-  var container=document.getElementById('agenda-lista');
-  if(!eventos.length){container.innerHTML='<div style="color:var(--text2);font-size:14px;padding:20px 0">Nenhum evento nos próximos 30 dias.</div>';return;}
-  var hoje=new Date();hoje.setHours(0,0,0,0);
-  var amanha=new Date(hoje);amanha.setDate(amanha.getDate()+1);
-  var grupos={hoje:[],amanha:[],proximos:[]};
-  eventos.forEach(ev=>{
-    var start=ev.start.dateTime||ev.start.date;
-    var d=new Date(start);
-    var dd=new Date(d);dd.setHours(0,0,0,0);
-    var hora=ev.start.dateTime?d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'Dia todo';
-    var dataFmt=dd.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
-    var item={titulo:(ev.summary||'Sem título').replace(/\s*[-–]\s*R\$\s*[\d,.]+/g,'').replace(/\s+às\s+\d{1,2}:\d{2}/g,'').trim(),hora,data:dataFmt};
-    if(dd.getTime()===hoje.getTime())grupos.hoje.push(item);
-    else if(dd.getTime()===amanha.getTime())grupos.amanha.push(item);
-    else grupos.proximos.push(item);
-  });
-  var nomeHoje=hoje.toLocaleDateString('pt-BR',{day:'numeric',month:'long'});
-  var nomeAmanha=amanha.toLocaleDateString('pt-BR',{day:'numeric',month:'long'});
-  function renderGrupo(label,cor,items){
-    if(!items.length)return'';
-    var s=`<div style="margin-bottom:28px"><div style="font-size:11px;color:${cor};text-transform:uppercase;letter-spacing:0.1em;font-family:'Syne',sans-serif;margin-bottom:12px">${label}</div><div style="display:flex;flex-direction:column;gap:8px">`;
-    items.forEach(it=>{
-      s+=`<div style="display:flex;gap:0;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;align-items:stretch">
-        <div style="display:flex;align-items:stretch;background:var(--bg3);border-right:1px solid var(--border)">
-          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 18px;min-width:80px;gap:3px;border-right:1px solid var(--border)">
-            <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-family:'Syne',sans-serif">Data</div>
-            <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text)">${it.data}</div>
-          </div>
-          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 18px;min-width:80px;gap:3px">
-            <div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;font-family:'Syne',sans-serif">Hora</div>
-            <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--teal)">${it.hora}</div>
-          </div>
-        </div>
-        <div style="width:3px;background:var(--teal);flex-shrink:0"></div>
-        <div style="padding:14px 20px;display:flex;align-items:center;flex:1">
-          <div style="font-weight:500;font-size:14px">${it.titulo}</div>
-        </div>
-      </div>`;
-    });
-    s+='</div></div>';
-    return s;
-  }
-  var html='';
-  html+=renderGrupo('Hoje — '+nomeHoje,'var(--teal)',grupos.hoje);
-  html+=renderGrupo('Amanhã — '+nomeAmanha,'var(--text2)',grupos.amanha);
-  html+=renderGrupo('Próximos dias','var(--text2)',grupos.proximos);
-  if(!html)html='<div style="color:var(--text2);font-size:14px;padding:20px 0">Nenhum evento nos próximos 30 dias.</div>';
-  container.innerHTML=html;
+function toast(msg,err){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast'+(err?' error':'');
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);
 }
 
 function goTo(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
-  if(id==='screen-agenda')carregarAgenda();
-  if(id==='screen-perfil')carregarPerfil();
 }
 
-function navTo(el,screen){
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  if(el)el.classList.add('active');
-  goTo(screen);
+function switchTab2(tab){
+  ['financeiro','agenda','boletos','perfil'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.remove('active');
+    document.getElementById('content-'+t).classList.remove('active');
+  });
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.getElementById('content-'+tab).classList.add('active');
+  if(tab==='agenda')carregarAgenda();
+  if(tab==='boletos')carregarBoletos();
+  if(tab==='perfil')carregarPerfil();
 }
 
-function toast(msg,err){
-  var t=document.getElementById('toast');
-  t.textContent=msg;
-  t.className='toast'+(err?' error':'');
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
+function switchLTab(tab){
+  currentLTab=tab;
+  document.getElementById('ltab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';
+  document.getElementById('ltab-despesas').style.background=tab==='despesas'?'var(--teal-dim)':'transparent';
+  document.getElementById('ltab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';
+  document.getElementById('ltab-receitas').style.background=tab==='receitas'?'var(--teal-dim)':'transparent';
+  carregarLancamentos();
 }
 
+function abrirModal(id){document.getElementById(id).classList.add('open')}
+function fecharModal(id){document.getElementById(id).classList.remove('open')}
+
+// LOGIN
 async function doLogin(){
   var email=document.getElementById('login-email').value;
   var senha=document.getElementById('login-senha').value;
@@ -692,16 +640,19 @@ async function doLogin(){
   var {data,error}=await sb.auth.signInWithPassword({email,password:senha});
   btn.textContent='Entrar';btn.disabled=false;
   if(error){toast(error.message==='Invalid login credentials'?'E-mail ou senha incorretos':error.message,true);return}
-  var nome=data.user.user_metadata?.nome||email.split('@')[0];
+  await iniciarSessao(data.user);
+}
+
+async function iniciarSessao(user){
+  var nome=user.user_metadata?.nome||user.email.split('@')[0];
   nome=nome.charAt(0).toUpperCase()+nome.slice(1);
-  currentUser={nome,email:data.user.email,id:data.user.id};
-  document.getElementById('topbar-name').textContent=nome;
-  document.getElementById('topbar-name2').textContent=nome;
-  document.getElementById('topbar-avatar').textContent=nome.charAt(0).toUpperCase();
+  var primeiroNome=nome.split(' ')[0];
+  currentUser={nome:primeiroNome,email:user.email,id:user.id};
+  document.getElementById('topbar-name').textContent=primeiroNome;
+  document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
   goTo('screen-dashboard');
-  toast('Bem-vindo, '+nome+'!');
-  carregarDashboard();
-  carregarAgendaHoje();
+  toast('Bem-vindo, '+primeiroNome+'!');
+  await Promise.all([carregarDashboard(),carregarWAStatus(),carregarCategorias()]);
 }
 
 async function doLogout(){
@@ -710,6 +661,7 @@ async function doLogout(){
   goTo('screen-login');
 }
 
+// CADASTRO
 async function doCadastro(){
   var nome=document.getElementById('cad-nome').value.trim();
   var email=document.getElementById('cad-email').value.trim();
@@ -722,26 +674,320 @@ async function doCadastro(){
   btn.textContent='Criando conta...';btn.disabled=true;
   var {data,error}=await sb.auth.signUp({email,password:s1,options:{data:{nome}}});
   btn.textContent='Criar conta';btn.disabled=false;
-  if(error){var msg=error.message==='User already registered'?'E-mail já cadastrado. Tente fazer login.':error.message==='Password should be at least 6 characters'?'A senha deve ter pelo menos 6 caracteres':error.message;toast(msg,true);return}
+  if(error){toast(error.message,true);return}
   var primeiroNome=nome.split(' ')[0];
   currentUser={nome:primeiroNome,email,id:data.user?.id||''};
   document.getElementById('topbar-name').textContent=primeiroNome;
-  document.getElementById('topbar-name2').textContent=primeiroNome;
   document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
-  if(data.user)await sb.from('clientes').insert({user_id:data.user.id,nome:primeiroNome,whatsapp:(document.getElementById('cad-pais').value||'+55')+document.getElementById('cad-telefone').value.replace(/\D/g,''),whatsapp_conectado:false});
+  var tel=document.getElementById('cad-pais').value+document.getElementById('cad-telefone').value.replace(/\D/g,'');
+  if(data.user){
+    await sb.from('clientes').insert({user_id:data.user.id,nome:primeiroNome,whatsapp:tel,whatsapp_conectado:false,evolution_instance:'teste-sb'});
+  }
   goTo('screen-qr');
   toast('Conta criada! Conecte seu WhatsApp.');
 }
 
+// WA STATUS
+async function carregarWAStatus(){
+  try{
+    var {data}=await sb.from('clientes').select('whatsapp,whatsapp_conectado').eq('user_id',currentUser.id).single();
+    if(data){
+      document.getElementById('wa-bar-num').textContent=data.whatsapp||'—';
+      var on=data.whatsapp_conectado;
+      document.getElementById('wa-dot').className='wa-bar-dot'+(on?'':' off');
+      document.getElementById('wa-bar-badge').textContent=on?'Conectado':'Desconectado';
+      document.getElementById('wa-bar-badge').className='wa-bar-badge '+(on?'on':'off');
+    }
+  }catch(e){}
+}
+
+// DASHBOARD
+function parseSalario(str){if(!str)return 0;return parseFloat(str.replace(/[R$\s.]/g,'').replace(',','.'))||0}
+
+function recalcularComSalario(){
+  var sal=parseSalario(document.getElementById('dash-salario').value);
+  var totalRec=totalReceitasSupa+sal;
+  document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2).replace('.',',');
+  var saldo=totalRec-totalDespesasSupa;
+  var el=document.getElementById('m-saldo');
+  el.textContent='R$ '+saldo.toFixed(2).replace('.',',');
+  el.className='metric-value '+(saldo>=0?'green':'red');
+}
+
+async function salvarSalarioDash(){
+  var val=parseSalario(document.getElementById('dash-salario').value);
+  await sb.from('clientes').update({salario_fixo:val}).eq('user_id',currentUser.id);
+  recalcularComSalario();toast('Salário salvo!');
+}
+
+async function carregarDashboard(){
+  try{
+    var {data:cliente}=await sb.from('clientes').select('salario_fixo,whatsapp').eq('user_id',currentUser.id).single();
+    if(cliente){
+      if(cliente.salario_fixo)document.getElementById('dash-salario').value='R$ '+parseFloat(cliente.salario_fixo).toFixed(2).replace('.',',');
+    }
+    var now=new Date();
+    var mesAtual=now.getMonth();
+    var anoAtual=now.getFullYear();
+    document.getElementById('filtro-mes').value=mesAtual;
+
+    var {data:lancs}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).order('data',{ascending:false});
+    if(!lancs)return;
+
+    var desp=0,rec=0,cats={},recentes=[];
+    lancs.forEach(l=>{
+      var val=parseFloat(l.valor)||0;
+      if(l.tipo==='despesa'){desp+=val;cats[l.categoria||'Outros']=(cats[l.categoria||'Outros']||0)+val;}
+      else if(l.tipo==='receita'){rec+=val;}
+      recentes.push(l);
+    });
+
+    totalDespesasSupa=desp;
+    totalReceitasSupa=rec;
+    document.getElementById('m-despesas').textContent='R$ '+desp.toFixed(2).replace('.',',');
+    document.getElementById('m-total').textContent=lancs.length;
+
+    var sal=parseSalario(document.getElementById('dash-salario').value);
+    var totalRec=rec+sal;
+    document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2).replace('.',',');
+    var saldo=totalRec-desp;
+    var el=document.getElementById('m-saldo');
+    el.textContent='R$ '+saldo.toFixed(2).replace('.',',');
+    el.className='metric-value '+(saldo>=0?'green':'red');
+
+    // RECENTES
+    var rl=document.getElementById('recentes-list');
+    rl.innerHTML='';
+    if(!recentes.length){rl.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhum lançamento ainda.</div>';return;}
+    recentes.slice(0,5).forEach(it=>{
+      var val=parseFloat(it.valor)||0;
+      var rec=it.tipo==='receita';
+      rl.innerHTML+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)">
+        <div><div style="font-size:13px;font-weight:500">${it.descricao||'—'}</div><div style="font-size:11px;color:var(--text2)">${formatData(it.data)}</div></div>
+        <div style="color:${rec?'var(--teal)':'var(--red)'};font-weight:600;font-size:13px">${rec?'+':'-'}R$ ${val.toFixed(2).replace('.',',')}</div>
+      </div>`;
+    });
+
+    // CATEGORIAS CHART
+    var catChart=document.getElementById('cat-chart');
+    var cs=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+    if(!cs.length){catChart.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhuma despesa ainda.</div>';}
+    else{
+      var maxV=cs[0][1];
+      catChart.innerHTML='';
+      cs.forEach(([cat,val],i)=>{
+        var pct=Math.round((val/maxV)*100);
+        catChart.innerHTML+=`<div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:12px;color:var(--text2);width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cat}</div>
+          <div style="flex:1;background:var(--bg3);border-radius:4px;height:6px"><div style="width:${pct}%;background:var(--teal);height:100%;border-radius:4px;opacity:${Math.max(0.3,1-i*0.12)}"></div></div>
+          <div style="font-size:12px;font-weight:500;width:70px;text-align:right">R$ ${val.toFixed(2).replace('.',',')}</div>
+        </div>`;
+      });
+    }
+
+    carregarLancamentos();
+  }catch(e){console.log(e)}
+}
+
+function formatData(d){
+  if(!d)return'—';
+  try{var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}catch(e){return d;}
+}
+
+async function carregarLancamentos(){
+  try{
+    var mes=parseInt(document.getElementById('filtro-mes').value);
+    var ano=new Date().getFullYear();
+    var dataIni=ano+'-'+(mes+1).toString().padStart(2,'0')+'-01';
+    var dataFim=ano+'-'+(mes+1).toString().padStart(2,'0')+'-31';
+    var tipo=currentLTab==='despesas'?'despesa':'receita';
+    var {data}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).eq('tipo',tipo).gte('data',dataIni).lte('data',dataFim).order('data',{ascending:false});
+    var tbody=document.getElementById('tbody-lanc');
+    tbody.innerHTML='';
+    if(!data||!data.length){tbody.innerHTML='<tr><td colspan="5" style="color:var(--text2);text-align:center;padding:20px">Nenhum lançamento neste mês.</td></tr>';return;}
+    data.forEach(l=>{
+      var val=parseFloat(l.valor)||0;
+      var cor=l.tipo==='receita'?'var(--teal)':'var(--red)';
+      tbody.innerHTML+=`<tr>
+        <td>${formatData(l.data)}</td>
+        <td>${l.descricao||'—'}</td>
+        <td><span class="badge badge-yellow" style="font-size:11px">${l.categoria||'Outros'}</span></td>
+        <td style="color:${cor};font-weight:600">R$ ${val.toFixed(2).replace('.',',')}</td>
+        <td><button class="td-edit-btn" onclick="abrirEdicao('${l.id}','${(l.descricao||'').replace(/'/g,"\\'")}',${val},'${l.data||''}','${l.categoria||''}')">Editar</button></td>
+      </tr>`;
+    });
+  }catch(e){console.log(e)}
+}
+
+function abrirEdicao(id,desc,val,data,cat){
+  document.getElementById('edit-id').value=id;
+  document.getElementById('edit-desc').value=desc;
+  document.getElementById('edit-valor').value=val;
+  document.getElementById('edit-data').value=data;
+  var sel=document.getElementById('edit-cat');
+  sel.innerHTML='';
+  CATS_PADRAO.forEach(c=>{
+    var op=document.createElement('option');
+    op.value=c;op.textContent=c;
+    if(c===cat)op.selected=true;
+    sel.appendChild(op);
+  });
+  abrirModal('modal-edit');
+}
+
+async function salvarEdicao(){
+  var id=document.getElementById('edit-id').value;
+  var desc=document.getElementById('edit-desc').value;
+  var val=parseFloat(document.getElementById('edit-valor').value);
+  var data=document.getElementById('edit-data').value;
+  var cat=document.getElementById('edit-cat').value;
+  await sb.from('lancamentos').update({descricao:desc,valor:val,data,categoria:cat}).eq('id',id);
+  fecharModal('modal-edit');
+  toast('Lançamento atualizado!');
+  carregarDashboard();
+}
+
+async function deletarLancamento(){
+  var id=document.getElementById('edit-id').value;
+  if(!confirm('Excluir este lançamento?'))return;
+  await sb.from('lancamentos').delete().eq('id',id);
+  fecharModal('modal-edit');
+  toast('Lançamento excluído!');
+  carregarDashboard();
+}
+
+// CATEGORIAS
+async function carregarCategorias(){
+  try{
+    var {data}=await sb.from('categorias').select('nome').eq('user_id',currentUser.id);
+    categoriasAtivas=(data||[]).map(c=>c.nome);
+    renderCategorias();
+  }catch(e){renderCategorias();}
+}
+
+function renderCategorias(){
+  var grid=document.getElementById('cat-grid');
+  grid.innerHTML='';
+  CATS_PADRAO.forEach(cat=>{
+    var ativo=categoriasAtivas.includes(cat);
+    var chip=document.createElement('div');
+    chip.className='cat-chip'+(ativo?' active':'');
+    chip.innerHTML=cat+(ativo?'<span class="cat-remove">✕</span>':'');
+    chip.onclick=()=>toggleCategoria(cat,chip);
+    grid.appendChild(chip);
+  });
+}
+
+async function toggleCategoria(cat,chip){
+  var ativo=chip.classList.contains('active');
+  if(ativo){
+    await sb.from('categorias').delete().eq('user_id',currentUser.id).eq('nome',cat);
+    categoriasAtivas=categoriasAtivas.filter(c=>c!==cat);
+  } else {
+    await sb.from('categorias').insert({user_id:currentUser.id,nome:cat});
+    categoriasAtivas.push(cat);
+  }
+  renderCategorias();
+}
+
+// AGENDA
+async function carregarAgenda(){
+  try{
+    var hoje=new Date();hoje.setHours(0,0,0,0);
+    var fimSemana=new Date(hoje);fimSemana.setDate(hoje.getDate()+7);
+    var hojeStr=hoje.toISOString().split('T')[0];
+    var {data}=await sb.from('agendamentos').select('*').eq('user_id',currentUser.id).gte('data',hojeStr).order('data').order('hora');
+    var colHoje=document.getElementById('col-hoje');
+    var colSem=document.getElementById('col-semana');
+    var colProx=document.getElementById('col-proximos');
+    colHoje.innerHTML='';colSem.innerHTML='';colProx.innerHTML='';
+    var cntH=0,cntS=0,cntP=0;
+    (data||[]).forEach(ag=>{
+      var d=new Date(ag.data+'T00:00:00');
+      var hora=ag.hora?ag.hora.substring(0,5):'';
+      var card=`<div class="kanban-card"><div class="kanban-card-title">${ag.descricao||'Compromisso'}</div><div class="kanban-card-meta">${formatData(ag.data)}${hora?' às '+hora:''}</div></div>`;
+      if(d.getTime()===hoje.getTime()){colHoje.innerHTML+=card;cntH++;}
+      else if(d<fimSemana){colSem.innerHTML+=card;cntS++;}
+      else{colProx.innerHTML+=card;cntP++;}
+    });
+    if(!cntH)colHoje.innerHTML='<div class="kanban-empty">Nenhum compromisso hoje</div>';
+    if(!cntS)colSem.innerHTML='<div class="kanban-empty">Nenhum compromisso esta semana</div>';
+    if(!cntP)colProx.innerHTML='<div class="kanban-empty">Nenhum compromisso futuro</div>';
+    document.getElementById('cnt-hoje').textContent=cntH;
+    document.getElementById('cnt-semana').textContent=cntS;
+    document.getElementById('cnt-proximos').textContent=cntP;
+  }catch(e){console.log(e)}
+}
+
+// BOLETOS
+async function carregarBoletos(){
+  try{
+    var hoje=new Date().toISOString().split('T')[0];
+    var {data}=await sb.from('Boletos').select('*').eq('user_id',currentUser.id).order('vencimento');
+    var colH=document.getElementById('col-bol-hoje');
+    var colA=document.getElementById('col-bol-apagar');
+    var colP=document.getElementById('col-bol-pagos');
+    colH.innerHTML='';colA.innerHTML='';colP.innerHTML='';
+    var cH=0,cA=0,cP=0;
+    (data||[]).forEach(b=>{
+      var val=parseFloat(b.valor)||0;
+      var venc=b.vencimento;
+      var card=`<div class="boleto-card">
+        <div class="boleto-info">
+          <div class="boleto-nome">${b.nome||'Boleto'}</div>
+          <div class="boleto-meta">Vence: ${formatData(venc)}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="boleto-val ${b.pago?'boleto-pago':''}">R$ ${val.toFixed(2).replace('.',',')}</div>
+          ${!b.pago?`<button class="btn-pagar" onclick="marcarPago('${b.id}',this)">Pagar</button>`:'<span class="badge badge-green">✓ Pago</span>'}
+        </div>
+      </div>`;
+      if(b.pago){colP.innerHTML+=card;cP++;}
+      else if(venc===hoje){colH.innerHTML+=card;cH++;}
+      else{colA.innerHTML+=card;cA++;}
+    });
+    if(!cH)colH.innerHTML='<div class="kanban-empty">Nenhum boleto vencendo hoje</div>';
+    if(!cA)colA.innerHTML='<div class="kanban-empty">Nenhum boleto pendente</div>';
+    if(!cP)colP.innerHTML='<div class="kanban-empty">Nenhum boleto pago</div>';
+    document.getElementById('cnt-bol-hoje').textContent=cH;
+    document.getElementById('cnt-bol-apagar').textContent=cA;
+    document.getElementById('cnt-bol-pagos').textContent=cP;
+  }catch(e){console.log(e)}
+}
+
+async function marcarPago(id,btn){
+  btn.textContent='✓';btn.className='btn-pagar pago';
+  await sb.from('Boletos').update({pago:true}).eq('id',id);
+  toast('Boleto marcado como pago!');
+  setTimeout(()=>carregarBoletos(),600);
+}
+
+// PERFIL
+async function carregarPerfil(){
+  document.getElementById('perf-nome').value=currentUser.nome;
+  document.getElementById('perf-email').value=currentUser.email;
+  try{
+    var {data}=await sb.from('clientes').select('whatsapp').eq('user_id',currentUser.id).single();
+    if(data)document.getElementById('perf-wa-numero').textContent=data.whatsapp||'—';
+  }catch(e){}
+}
+
+async function salvarPerfil(){
+  var nome=document.getElementById('perf-nome').value;
+  currentUser.nome=nome.split(' ')[0];
+  document.getElementById('topbar-name').textContent=currentUser.nome;
+  document.getElementById('topbar-avatar').textContent=currentUser.nome.charAt(0).toUpperCase();
+  toast('Perfil salvo!');
+}
+
+// QR
 async function gerarQR(){
   var num=document.getElementById('qr-numero').value.replace(/\D/g,'');
   if(num.length<10){toast('Número inválido',true);return}
   document.getElementById('qr-step1').style.display='none';
   document.getElementById('qr-step2').style.display='block';
-  document.getElementById('qr-numero-final').textContent='+55 ('+num.substring(0,2)+') '+num.substring(2,7)+'-'+num.substring(7);
-  document.getElementById('wa-numero-display').textContent='+55 ('+num.substring(0,2)+') '+num.substring(2,7)+'-'+num.substring(7);
   startQRTimer();
-  await sb.from('clientes').update({whatsapp:'+55'+num}).eq('user_id',currentUser.id);
+  await sb.from('clientes').update({whatsapp:'55'+num}).eq('user_id',currentUser.id);
 }
 
 function startQRTimer(){
@@ -749,10 +995,9 @@ function startQRTimer(){
   if(qrTimer)clearInterval(qrTimer);
   qrTimer=setInterval(()=>{
     qrSeconds--;
-    var m=Math.floor(qrSeconds/60);
-    var s=qrSeconds%60;
+    var m=Math.floor(qrSeconds/60),s=qrSeconds%60;
     document.getElementById('qr-countdown').textContent=m+':'+(s<10?'0':'')+s;
-    if(qrSeconds<=0){clearInterval(qrTimer);toast('QR Code expirado. Gere um novo.',true)}
+    if(qrSeconds<=0){clearInterval(qrTimer);toast('QR expirado. Gere um novo.',true)}
   },1000);
 }
 
@@ -766,31 +1011,17 @@ function simularConexao(){
   if(qrTimer)clearInterval(qrTimer);
   document.getElementById('qr-step2').style.display='none';
   document.getElementById('qr-step3').style.display='block';
-  toast('WhatsApp conectado com sucesso!');
+  toast('WhatsApp conectado!');
 }
 
-function switchTab(tab){
-  document.getElementById('tabela-despesas').style.display=tab==='despesas'?'block':'none';
-  document.getElementById('tabela-receitas').style.display=tab==='receitas'?'block':'none';
-  document.getElementById('tab-despesas').style.borderBottomColor=tab==='despesas'?'var(--teal)':'transparent';
-  document.getElementById('tab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';
-  document.getElementById('tab-receitas').style.borderBottomColor=tab==='receitas'?'var(--teal)':'transparent';
-  document.getElementById('tab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';
-}
+// AUTO LOGIN
+sb.auth.getSession().then(({data})=>{
+  if(data.session)iniciarSessao(data.session.user);
+});
 
-function filtrarLancamentos(){
-  var tipo=document.getElementById('filtro-tipo').value;
-  if(tipo==='receita')switchTab('receitas');
-  else switchTab('despesas');
-}
-
-function salvarPerfil(){
-  var nome=document.getElementById('perf-nome').value;
-  currentUser.nome=nome.split(' ')[0];
-  document.getElementById('topbar-name').textContent=currentUser.nome;
-  document.getElementById('topbar-name2').textContent=currentUser.nome;
-  document.getElementById('topbar-avatar').textContent=currentUser.nome.charAt(0).toUpperCase();
-  toast('Perfil salvo com sucesso!');
+// PWA SERVICE WORKER
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 </script>
 </body>
