@@ -44,13 +44,13 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 .wa-bar-badge.on{background:var(--teal-dim);color:var(--teal)}
 .wa-bar-badge.off{background:var(--red-dim);color:var(--red)}
 
-/* ABAS */
-.tabs{display:flex;background:var(--bg);border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab-btn{display:flex;align-items:center;gap:6px;padding:12px 20px;font-size:13px;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.15s;flex-shrink:0}
-.tab-btn:hover{color:var(--text)}
-.tab-btn.active{color:var(--teal);border-bottom-color:var(--teal)}
-.tab-btn svg{width:15px;height:15px}
+/* MENU VERTICAL */
+.tabs{display:flex;flex-direction:column;background:var(--bg2);border-bottom:1px solid var(--border)}
+.tab-btn{display:flex;align-items:center;gap:10px;padding:14px 20px;font-size:14px;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2);cursor:pointer;border-left:3px solid transparent;border-bottom:1px solid var(--border);transition:all 0.15s}
+.tab-btn:last-child{border-bottom:none}
+.tab-btn:hover{color:var(--text);background:var(--bg3)}
+.tab-btn.active{color:var(--teal);border-left-color:var(--teal);background:var(--teal-dim2)}
+.tab-btn svg{width:16px;height:16px;flex-shrink:0}
 .tab-content{display:none;flex:1;overflow-y:auto}
 .tab-content.active{display:block}
 
@@ -367,7 +367,7 @@ input::placeholder{color:var(--text3)}
     <button class="btn btn-outline btn-sm" onclick="goTo('screen-qr')" style="font-size:11px;padding:4px 10px">Reconectar</button>
   </div>
 
-  <!-- ABAS -->
+  <!-- MENU VERTICAL -->
   <div class="tabs">
     <div class="tab-btn active" id="tab-perfil" onclick="switchTab2('perfil')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -384,6 +384,14 @@ input::placeholder{color:var(--text3)}
     <div class="tab-btn" id="tab-boletos" onclick="switchTab2('boletos')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
       Boletos
+    </div>
+    <div class="tab-btn" id="tab-comousar" onclick="switchTab2('comousar')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Como usar
+    </div>
+    <div class="tab-btn" onclick="doLogout()" style="color:var(--red);margin-top:auto">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sair
     </div>
   </div>
 
@@ -580,16 +588,35 @@ input::placeholder{color:var(--text3)}
           </div>
           <button class="btn btn-outline btn-full btn-sm" onclick="goTo('screen-qr')">Reconectar WhatsApp</button>
         </div>
-        <div class="card">
-          <div class="section-label">Como usar</div>
-          <div style="display:flex;flex-direction:column;gap:12px">
-            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:18px">🎤</div><div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Registre um gasto</div><div style="font-size:11px;color:var(--text2)">Ex: "Uber, 25 reais, hoje"</div></div></div>
-            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:18px">💰</div><div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Registre uma receita</div><div style="font-size:11px;color:var(--text2)">Ex: "Recebi do cliente Pedro, 300 reais"</div></div></div>
-            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:18px">📅</div><div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Agende um compromisso</div><div style="font-size:11px;color:var(--text2)">Ex: "Reunião com fornecedor dia 20 às 10h"</div></div></div>
-            <div style="display:flex;gap:10px;align-items:flex-start"><div style="font-size:18px">🧾</div><div><div style="font-size:13px;font-weight:600;margin-bottom:2px">Cadastre um boleto</div><div style="font-size:11px;color:var(--text2)">Ex: "Boleto internet, 89 reais, vence dia 20"</div></div></div>
-          </div>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ABA COMO USAR -->
+  <div class="tab-content" id="content-comousar">
+  <div class="content fade-in">
+    <div class="page-title">Como usar</div>
+    <div class="page-sub">Tudo que você pode fazer pelo WhatsApp</div>
+    <div class="card" style="max-width:600px">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px">
+          <div style="font-size:28px;flex-shrink:0">🎤</div>
+          <div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Registre um gasto</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Uber, 25 reais, hoje"</div></div>
         </div>
-        <button class="btn btn-danger btn-full btn-sm" onclick="doLogout()">Sair da conta</button>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px">
+          <div style="font-size:28px;flex-shrink:0">💰</div>
+          <div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Registre uma receita</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Recebi do cliente Pedro, 300 reais"</div></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px">
+          <div style="font-size:28px;flex-shrink:0">📅</div>
+          <div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Agende um compromisso</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Reunião com fornecedor dia 20 às 10h"</div></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px">
+          <div style="font-size:28px;flex-shrink:0">🧾</div>
+          <div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Cadastre um boleto</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Boleto internet, 89 reais, vence dia 20"</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -639,7 +666,7 @@ function goTo(id){
 }
 
 function switchTab2(tab){
-  ['financeiro','agenda','boletos','perfil'].forEach(t=>{
+  ['financeiro','agenda','boletos','perfil','comousar'].forEach(t=>{
     document.getElementById('tab-'+t).classList.remove('active');
     document.getElementById('content-'+t).classList.remove('active');
   });
@@ -1031,9 +1058,25 @@ async function carregarBoletos(){
 }
 
 async function marcarPago(id,btn){
-  btn.textContent='✓';btn.className='btn-pagar pago';
+  btn.textContent='✓';btn.disabled=true;btn.className='btn-pagar pago';
+  // Busca dados do boleto
+  var {data:boleto}=await sb.from('Boletos').select('nome,valor').eq('id',id).single();
+  // Marca como pago
   await sb.from('Boletos').update({pago:true}).eq('id',id);
-  toast('Boleto marcado como pago!');
+  // Lança despesa automaticamente no financeiro
+  if(boleto){
+    var hoje=new Date().toISOString().split('T')[0];
+    await sb.from('lancamentos').insert({
+      user_id:currentUser.id,
+      tipo:'despesa',
+      descricao:'Boleto: '+(boleto.nome||'Boleto'),
+      valor:parseFloat(boleto.valor)||0,
+      data:hoje,
+      categoria:'Boletos',
+      origem:'painel'
+    });
+  }
+  toast('Boleto pago e lançado no financeiro!');
   setTimeout(()=>carregarBoletos(),600);
 }
 
