@@ -482,28 +482,21 @@ input::placeholder{color:var(--text3)}
   <div class="content fade-in">
     <div class="page-title">Agenda</div>
     <div class="page-sub" id="agenda-sub">Seus compromissos</div>
-    <div class="kanban" id="agenda-kanban">
-      <div class="kanban-col">
-        <div class="kanban-header">
-          <div><div class="kanban-title" style="color:var(--teal)">Hoje</div><div style="font-size:11px;color:var(--text2)" id="label-hoje"></div></div>
-          <div class="kanban-count" id="cnt-hoje">0</div>
-        </div>
-        <div class="kanban-body" id="col-hoje"><div class="kanban-empty">Nenhum compromisso hoje</div></div>
+    <!-- NAVEGADOR DIA A DIA -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <button onclick="agendaDia(-1)" class="btn btn-outline" style="padding:8px 16px;font-size:18px;line-height:1">←</button>
+      <div style="flex:1;text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px" id="agenda-dia-label"></div>
+        <div style="font-size:12px;color:var(--text2)" id="agenda-dia-sub"></div>
       </div>
-      <div class="kanban-col">
-        <div class="kanban-header">
-          <div><div class="kanban-title">Esta semana</div><div style="font-size:11px;color:var(--text2)" id="label-semana"></div></div>
-          <div class="kanban-count" id="cnt-semana">0</div>
-        </div>
-        <div class="kanban-body" id="col-semana"><div class="kanban-empty">Nenhum compromisso esta semana</div></div>
-      </div>
-      <div class="kanban-col">
-        <div class="kanban-header">
-          <div><div class="kanban-title">Próximos</div><div style="font-size:11px;color:var(--text2)" id="label-proximos"></div></div>
-          <div class="kanban-count" id="cnt-proximos">0</div>
-        </div>
-        <div class="kanban-body" id="col-proximos"><div class="kanban-empty">Nenhum compromisso futuro</div></div>
-      </div>
+      <button onclick="agendaDia(+1)" class="btn btn-outline" style="padding:8px 16px;font-size:18px;line-height:1">→</button>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="kanban-body" id="col-agenda-dia" style="min-height:120px"><div class="kanban-empty">Nenhum compromisso neste dia</div></div>
+    </div>
+    <div style="margin-top:20px">
+      <div class="section-label">Próximos compromissos</div>
+      <div id="col-agenda-proximos"><div style="color:var(--text2);font-size:13px">Carregando...</div></div>
     </div>
   </div>
   </div>
@@ -513,18 +506,29 @@ input::placeholder{color:var(--text3)}
   <div class="content fade-in">
     <div class="page-title">Boletos</div>
     <div class="page-sub">Controle seus pagamentos</div>
-    <div class="kanban">
-      <div class="kanban-col">
-        <div class="kanban-header"><div class="kanban-title" style="color:var(--red)">Vencidos e Hoje</div><div class="kanban-count" id="cnt-bol-hoje">0</div></div>
-        <div class="kanban-body" id="col-bol-hoje"><div class="kanban-empty">Nenhum boleto vencendo hoje</div></div>
+    <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-bottom:20px">
+      <!-- CARD VENCIDOS - esquerda -->
+      <div class="kanban-col" style="border-color:var(--red)">
+        <div class="kanban-header" style="background:var(--red-dim)">
+          <div><div class="kanban-title" style="color:var(--red)">⚠️ Vencidos</div><div style="font-size:11px;color:var(--text2)">Pague urgente</div></div>
+          <div class="kanban-count" id="cnt-bol-vencidos">0</div>
+        </div>
+        <div class="kanban-body" id="col-bol-vencidos"><div class="kanban-empty">Nenhum boleto vencido</div></div>
       </div>
-      <div class="kanban-col">
-        <div class="kanban-header"><div class="kanban-title" style="color:var(--yellow)">A pagar</div><div class="kanban-count" id="cnt-bol-apagar">0</div></div>
-        <div class="kanban-body" id="col-bol-apagar"><div class="kanban-empty">Nenhum boleto pendente</div></div>
-      </div>
-      <div class="kanban-col">
-        <div class="kanban-header"><div class="kanban-title" style="color:var(--teal)">Pagos</div><div class="kanban-count" id="cnt-bol-pagos">0</div></div>
-        <div class="kanban-body" id="col-bol-pagos"><div class="kanban-empty">Nenhum boleto pago</div></div>
+      <!-- 3 COLUNAS - direita -->
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="kanban-col">
+          <div class="kanban-header"><div class="kanban-title" style="color:var(--yellow)">Vence hoje</div><div class="kanban-count" id="cnt-bol-hoje">0</div></div>
+          <div class="kanban-body" id="col-bol-hoje"><div class="kanban-empty">Nenhum boleto vence hoje</div></div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-header"><div class="kanban-title">A pagar</div><div class="kanban-count" id="cnt-bol-apagar">0</div></div>
+          <div class="kanban-body" id="col-bol-apagar"><div class="kanban-empty">Nenhum boleto pendente</div></div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-header"><div class="kanban-title" style="color:var(--teal)">Pagos</div><div class="kanban-count" id="cnt-bol-pagos">0</div></div>
+          <div class="kanban-body" id="col-bol-pagos"><div class="kanban-empty">Nenhum boleto pago</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -902,38 +906,63 @@ async function toggleCategoria(cat,chip){
 }
 
 // AGENDA
+var agendaOffset=0;
+var agendaTodos=[];
+
 async function carregarAgenda(){
   try{
-    var hoje=new Date();hoje.setHours(0,0,0,0);
-    var fimSemana=new Date(hoje);fimSemana.setDate(hoje.getDate()+7);
-    var hojeStr=hoje.toISOString().split('T')[0];
-    var elLH=document.getElementById('label-hoje');
-    var elLS=document.getElementById('label-semana');
-    var elLP=document.getElementById('label-proximos');
-    if(elLH)elLH.textContent=hoje.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
-    if(elLS)elLS.textContent='até '+fimSemana.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
-    if(elLP)elLP.textContent='após '+fimSemana.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
+    agendaOffset=0;
+    var hojeStr=new Date().toISOString().split('T')[0];
     var {data}=await sb.from('agendamentos').select('*').eq('user_id',currentUser.id).gte('data',hojeStr).order('data').order('hora');
-    var colHoje=document.getElementById('col-hoje');
-    var colSem=document.getElementById('col-semana');
-    var colProx=document.getElementById('col-proximos');
-    colHoje.innerHTML='';colSem.innerHTML='';colProx.innerHTML='';
-    var cntH=0,cntS=0,cntP=0;
-    (data||[]).forEach(ag=>{
-      var d=new Date(ag.data+'T00:00:00');
-      var hora=ag.hora?ag.hora.substring(0,5):'';
-      var card=`<div class="kanban-card"><div class="kanban-card-title">${ag.descricao||'Compromisso'}</div><div class="kanban-card-meta">${formatData(ag.data)}${hora?' às '+hora:''}</div></div>`;
-      if(d.getTime()===hoje.getTime()){colHoje.innerHTML+=card;cntH++;}
-      else if(d<fimSemana){colSem.innerHTML+=card;cntS++;}
-      else{colProx.innerHTML+=card;cntP++;}
-    });
-    if(!cntH)colHoje.innerHTML='<div class="kanban-empty">Nenhum compromisso hoje</div>';
-    if(!cntS)colSem.innerHTML='<div class="kanban-empty">Nenhum compromisso esta semana</div>';
-    if(!cntP)colProx.innerHTML='<div class="kanban-empty">Nenhum compromisso futuro</div>';
-    document.getElementById('cnt-hoje').textContent=cntH;
-    document.getElementById('cnt-semana').textContent=cntS;
-    document.getElementById('cnt-proximos').textContent=cntP;
+    agendaTodos=data||[];
+    renderAgendaDia();
+    renderAgendaProximos();
   }catch(e){console.log(e)}
+}
+
+function renderAgendaDia(){
+  var dia=new Date();dia.setHours(0,0,0,0);
+  dia.setDate(dia.getDate()+agendaOffset);
+  var diaStr=dia.toISOString().split('T')[0];
+  var hoje=new Date();hoje.setHours(0,0,0,0);
+  var label='';
+  if(agendaOffset===0)label='Hoje';
+  else if(agendaOffset===1)label='Amanhã';
+  else if(agendaOffset===-1)label='Ontem';
+  else label=dia.toLocaleDateString('pt-BR',{weekday:'long'});
+  document.getElementById('agenda-dia-label').textContent=label+' — '+dia.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+  document.getElementById('agenda-dia-sub').textContent=agendaOffset===0?'📅 Sua agenda de hoje':'';
+  var col=document.getElementById('col-agenda-dia');
+  var items=agendaTodos.filter(ag=>ag.data===diaStr);
+  if(!items.length){col.innerHTML='<div class="kanban-empty">Nenhum compromisso neste dia</div>';return;}
+  col.innerHTML='';
+  items.forEach(ag=>{
+    var hora=ag.hora?ag.hora.substring(0,5):'';
+    col.innerHTML+=`<div class="kanban-card"><div style="display:flex;align-items:center;gap:10px"><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--teal);min-width:44px">${hora||'—'}</div><div><div class="kanban-card-title">${ag.descricao||'Compromisso'}</div></div></div></div>`;
+  });
+}
+
+function renderAgendaProximos(){
+  var hoje=new Date();hoje.setHours(0,0,0,0);
+  var hojeStr=hoje.toISOString().split('T')[0];
+  var proximos=agendaTodos.filter(ag=>ag.data>hojeStr).slice(0,10);
+  var col=document.getElementById('col-agenda-proximos');
+  if(!proximos.length){col.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhum compromisso futuro agendado.</div>';return;}
+  col.innerHTML='';
+  proximos.forEach(ag=>{
+    var hora=ag.hora?ag.hora.substring(0,5):'';
+    var d=new Date(ag.data+'T00:00:00');
+    col.innerHTML+=`<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text2);min-width:50px">${d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}</div>
+      <div style="font-size:13px;font-weight:500;flex:1">${ag.descricao||'Compromisso'}</div>
+      ${hora?`<div style="font-size:12px;color:var(--teal);font-weight:600">${hora}</div>`:''}
+    </div>`;
+  });
+}
+
+function agendaDia(delta){
+  agendaOffset+=delta;
+  renderAgendaDia();
 }
 
 // BOLETOS
@@ -941,31 +970,38 @@ async function carregarBoletos(){
   try{
     var hoje=new Date().toISOString().split('T')[0];
     var {data}=await sb.from('Boletos').select('*').eq('user_id',currentUser.id).order('vencimento');
+    var colV=document.getElementById('col-bol-vencidos');
     var colH=document.getElementById('col-bol-hoje');
     var colA=document.getElementById('col-bol-apagar');
     var colP=document.getElementById('col-bol-pagos');
-    colH.innerHTML='';colA.innerHTML='';colP.innerHTML='';
-    var cH=0,cA=0,cP=0;
+    colV.innerHTML='';colH.innerHTML='';colA.innerHTML='';colP.innerHTML='';
+    var cV=0,cH=0,cA=0,cP=0;
     (data||[]).forEach(b=>{
       var val=parseFloat(b.valor)||0;
       var venc=b.vencimento;
-      var card=`<div class="boleto-card">
+      var vencido=!b.pago&&venc<hoje;
+      var card=`<div class="boleto-card" style="${vencido?'border-color:rgba(255,77,77,0.3)':''}">
         <div class="boleto-info">
           <div class="boleto-nome">${b.nome||'Boleto'}</div>
-          <div class="boleto-meta">Vence: ${formatData(venc)}</div>
+          <div class="boleto-meta" style="${vencido?'color:var(--red)':''}">
+            ${vencido?'⚠️ Venceu em':'Vence:'} ${formatData(venc)}
+          </div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
-          <div class="boleto-val ${b.pago?'boleto-pago':''}">R$ ${val.toFixed(2).replace('.',',')}</div>
+          <div class="boleto-val ${b.pago?'boleto-pago':''}${vencido?' '+'':""}">R$ ${val.toFixed(2).replace('.',',')}</div>
           ${!b.pago?`<button class="btn-pagar" onclick="marcarPago('${b.id}',this)">Pagar</button>`:'<span class="badge badge-green">✓ Pago</span>'}
         </div>
       </div>`;
       if(b.pago){colP.innerHTML+=card;cP++;}
-      else if(venc<=hoje){colH.innerHTML+=card;cH++;}
+      else if(venc<hoje){colV.innerHTML+=card;cV++;}
+      else if(venc===hoje){colH.innerHTML+=card;cH++;}
       else{colA.innerHTML+=card;cA++;}
     });
-    if(!cH)colH.innerHTML='<div class="kanban-empty">Nenhum boleto vencendo hoje</div>';
+    if(!cV)colV.innerHTML='<div class="kanban-empty">Nenhum boleto vencido</div>';
+    if(!cH)colH.innerHTML='<div class="kanban-empty">Nenhum boleto hoje</div>';
     if(!cA)colA.innerHTML='<div class="kanban-empty">Nenhum boleto pendente</div>';
     if(!cP)colP.innerHTML='<div class="kanban-empty">Nenhum boleto pago</div>';
+    document.getElementById('cnt-bol-vencidos').textContent=cV;
     document.getElementById('cnt-bol-hoje').textContent=cH;
     document.getElementById('cnt-bol-apagar').textContent=cA;
     document.getElementById('cnt-bol-pagos').textContent=cP;
