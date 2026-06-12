@@ -587,33 +587,53 @@ input::placeholder{color:var(--text3)}
       </div>
     </div>
     <div class="kanban-4" id="kanban-boletos-wrap">
+      <!-- VENCIDOS -->
       <div class="kanban-col" style="border-color:rgba(255,77,77,0.3)">
-        <div class="kanban-header" style="background:var(--red-dim)">
-          <div class="kanban-title" style="color:var(--red)">⚠️ Vencidos</div>
-          <div class="kanban-count" id="cnt-bol-vencidos">0</div>
+        <div class="kanban-header" style="background:var(--red-dim);flex-direction:column;gap:8px;align-items:stretch">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="kanban-title" style="color:var(--red)">⚠️ Vencidos</div>
+            <div class="kanban-count" id="cnt-bol-vencidos">0</div>
+          </div>
+          <input type="text" id="busca-vencidos-nome" placeholder="Nome..." oninput="filtrarColuna('vencidos')" style="padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
+          <input type="date" id="busca-vencidos-data" onchange="filtrarColuna('vencidos')" style="padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
         </div>
         <div class="kanban-body" id="col-bol-vencidos"><div class="kanban-empty">Nenhum boleto vencido</div></div>
       </div>
+      <!-- VENCE HOJE -->
       <div class="kanban-col">
-        <div class="kanban-header">
-          <div class="kanban-title" style="color:var(--yellow)">Vence hoje</div>
-          <div class="kanban-count" id="cnt-bol-hoje">0</div>
+        <div class="kanban-header" style="flex-direction:column;gap:8px;align-items:stretch">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="kanban-title" style="color:var(--yellow)">Vence hoje</div>
+            <div class="kanban-count" id="cnt-bol-hoje">0</div>
+          </div>
+          <input type="text" id="busca-hoje-nome" placeholder="Nome..." oninput="filtrarColuna('hoje')" style="padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
+          <input type="date" id="busca-hoje-data" onchange="filtrarColuna('hoje')" style="padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
         </div>
         <div class="kanban-body" id="col-bol-hoje"><div class="kanban-empty">Nenhum boleto hoje</div></div>
       </div>
+      <!-- A PAGAR -->
       <div class="kanban-col">
-        <div class="kanban-header">
-          <div class="kanban-title">A pagar</div>
-          <div class="kanban-count" id="cnt-bol-apagar">0</div>
+        <div class="kanban-header" style="flex-direction:column;gap:8px;align-items:stretch">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="kanban-title">A pagar</div>
+            <div class="kanban-count" id="cnt-bol-apagar">0</div>
+          </div>
+          <input type="text" id="busca-apagar-nome" placeholder="Nome..." oninput="filtrarColuna('apagar')" style="padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
+          <input type="date" id="busca-apagar-data" onchange="filtrarColuna('apagar')" style="padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
         </div>
         <div class="kanban-body" id="col-bol-apagar"><div class="kanban-empty">Nenhum boleto pendente</div></div>
       </div>
+      <!-- PAGOS -->
       <div class="kanban-col">
-        <div class="kanban-header">
-          <div class="kanban-title" style="color:var(--teal)">Pagos</div>
-          <div class="kanban-count" id="cnt-bol-pagos">0</div>
+        <div class="kanban-header" style="flex-direction:column;gap:8px;align-items:stretch">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="kanban-title" style="color:var(--teal)">Pagos</div>
+            <div class="kanban-count" id="cnt-bol-pagos">0</div>
+          </div>
+          <input type="text" id="busca-pagos-nome" placeholder="Nome..." oninput="filtrarColuna('pagos')" style="padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
+          <input type="date" id="busca-pagos-data2" onchange="filtrarColuna('pagos')" style="padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
         </div>
-        <div class="kanban-body" id="col-bol-pagos" style="max-height:320px;overflow-y:auto"><div class="kanban-empty">Nenhum boleto pago</div></div>
+        <div class="kanban-body" id="col-bol-pagos" style="max-height:280px;overflow-y:auto"><div class="kanban-empty">Nenhum boleto pago</div></div>
       </div>
     </div>
     <!-- RESULTADO BUSCA GLOBAL -->
@@ -1185,6 +1205,67 @@ function agendaIrParaData(dataStr){
 
 var todosBoletosPagos=[];
 var todosBoletos=[];
+var todosBoletosPendentes=[];
+var boletosVencidos=[];
+var boletosHoje=[];
+
+function renderBoletoCard(b,vencido){
+  var val=parseFloat(b.valor)||0;
+  return `<div class="boleto-card" style="${vencido?'border-color:rgba(255,77,77,0.3)':''}">
+    <div class="boleto-info">
+      <div class="boleto-nome">${b.nome||'Boleto'}</div>
+      <div class="boleto-meta" style="${vencido?'color:var(--red)':''}">
+        ${vencido?'⚠️ Venceu em':'Vence:'} ${formatData(b.vencimento)}
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="boleto-val ${b.pago?'boleto-pago':''}">R$ ${val.toFixed(2).replace('.',',')}</div>
+      ${!b.pago?`<button class="btn-pagar" onclick="marcarPago('${b.id}',this)">Pagar</button>`:'<span class="badge badge-green">✓ Pago</span>'}
+    </div>
+  </div>`;
+}
+
+function filtrarColuna(col){
+  var configs={
+    vencidos:{nome:'busca-vencidos-nome',data:'busca-vencidos-data',body:'col-bol-vencidos',dados:boletosVencidos,vencido:true,empty:'Nenhum boleto vencido'},
+    hoje:{nome:'busca-hoje-nome',data:'busca-hoje-data',body:'col-bol-hoje',dados:boletosHoje,vencido:false,empty:'Nenhum boleto hoje'},
+    apagar:{nome:'busca-apagar-nome',data:'busca-apagar-data',body:'col-bol-apagar',dados:todosBoletosPendentes,vencido:false,empty:'Nenhum boleto pendente'},
+    pagos:{nome:'busca-pagos-nome',data:'busca-pagos-data2',body:'col-bol-pagos',dados:todosBoletosPagos,vencido:false,empty:'Nenhum boleto pago'}
+  };
+  var c=configs[col];if(!c)return;
+  var nome=(document.getElementById(c.nome).value||'').toLowerCase().trim();
+  var data=document.getElementById(c.data).value;
+  var filtrados=c.dados.filter(b=>{
+    var nomeOk=!nome||(b.nome||'').toLowerCase().includes(nome);
+    var dataOk=!data||b.vencimento===data;
+    return nomeOk&&dataOk;
+  });
+  var body=document.getElementById(c.body);
+  body.innerHTML='';
+  if(!filtrados.length){body.innerHTML=`<div class="kanban-empty">${c.empty}</div>`;return;}
+  filtrados.forEach(b=>body.innerHTML+=renderBoletoCard(b,c.vencido));
+}
+
+function filtrarAPagar(){
+  var dataFiltro=document.getElementById('filtro-apagar-data').value;
+  var col=document.getElementById('col-bol-apagar');
+  col.innerHTML='';
+  var filtrados=dataFiltro?todosBoletosPendentes.filter(b=>b.vencimento===dataFiltro):todosBoletosPendentes;
+  if(!filtrados.length){col.innerHTML='<div class="kanban-empty">'+(dataFiltro?'Nenhum boleto nesta data':'Nenhum boleto pendente')+'</div>';return;}
+  filtrados.forEach(b=>{
+    var val=parseFloat(b.valor)||0;
+    col.innerHTML+=`<div class="boleto-card">
+      <div class="boleto-info">
+        <div class="boleto-nome">${b.nome||'Boleto'}</div>
+        <div class="boleto-meta">Vence: ${formatData(b.vencimento)}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="boleto-val">R$ ${val.toFixed(2).replace('.',',')}</div>
+        <button class="btn-pagar" onclick="marcarPago('${b.id}',this)">Pagar</button>
+      </div>
+    </div>`;
+  });
+}
 
 function filtrarBoletosGlobal(){
   var busca=(document.getElementById('busca-boletos-global').value||'').toLowerCase().trim();
@@ -1280,7 +1361,9 @@ async function carregarBoletos(){
     var colH=document.getElementById('col-bol-hoje');
     var colA=document.getElementById('col-bol-apagar');
     var colP=document.getElementById('col-bol-pagos');
-    colV.innerHTML='';colH.innerHTML='';colA.innerHTML='';colP.innerHTML='';todosBoletosPagos=[];todosBoletos=[];
+    colV.innerHTML='';colH.innerHTML='';colA.innerHTML='';colP.innerHTML='';
+    todosBoletosPagos=[];todosBoletos=[];todosBoletosPendentes=[];boletosVencidos=[];boletosHoje=[];
+    ['busca-vencidos-nome','busca-vencidos-data','busca-hoje-nome','busca-hoje-data','busca-apagar-nome','busca-apagar-data','busca-pagos-nome','busca-pagos-data2'].forEach(id=>{var el=document.getElementById(id);if(el)el.value='';});
     var cV=0,cH=0,cA=0,cP=0;
     (data||[]).forEach(b=>{
       var val=parseFloat(b.valor)||0;
@@ -1299,9 +1382,9 @@ async function carregarBoletos(){
         </div>
       </div>`;
       todosBoletos.push(b);if(b.pago){colP.innerHTML+=card;cP++;todosBoletosPagos.push(b);}
-      else if(venc<hoje){colV.innerHTML+=card;cV++;}
-      else if(venc===hoje){colH.innerHTML+=card;cH++;}
-      else{colA.innerHTML+=card;cA++;}
+      else if(venc<hoje){colV.innerHTML+=card;cV++;boletosVencidos.push(b);}
+      else if(venc===hoje){colH.innerHTML+=card;cH++;boletosHoje.push(b);}
+      else{colA.innerHTML+=card;cA++;todosBoletosPendentes.push(b);}
     });
     if(!cV)colV.innerHTML='<div class="kanban-empty">Nenhum boleto vencido</div>';
     if(!cH)colH.innerHTML='<div class="kanban-empty">Nenhum boleto hoje</div>';
