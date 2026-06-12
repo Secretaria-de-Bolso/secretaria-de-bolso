@@ -216,10 +216,28 @@ input::placeholder{color:var(--text3)}
 .drawer .tab-btn.active{color:var(--teal);border-left-color:var(--teal);background:var(--teal-dim2)}
 .drawer .tab-btn.sair{margin-top:auto;color:var(--red);border-bottom:none}
 
+/* MOBILE BOTTOM NAV */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:64px;background:#fff;border-top:1px solid #e5e5e5;z-index:200;align-items:center;justify-content:space-around}
+.mobile-nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:8px 12px;border:none;background:none;color:#999;font-size:10px;font-family:'Syne',sans-serif;font-weight:600;transition:color 0.15s;min-width:56px}
+.mobile-nav-btn svg{width:22px;height:22px;stroke-width:1.8}
+.mobile-nav-btn.active{color:#00d4a0}
+.mobile-nav-btn span{font-size:10px}
+
 /* RESPONSIVE */
 @media(max-width:768px){
+  /* LIGHT MODE */
+  :root{
+    --bg:#f7f7f7;--bg2:#ffffff;--bg3:#f0f0f0;--bg4:#e8e8e8;
+    --border:#e5e5e5;--border2:#ddd;
+    --text:#111111;--text2:#666;--text3:#aaa;
+  }
+  body{padding-bottom:64px}
   .sidebar{display:none}
-  .hamburger{display:flex}
+  .hamburger{display:none}
+  .mobile-nav{display:flex}
+  .topbar{background:#fff;border-bottom:1px solid #e5e5e5;padding:10px 16px}
+  .wa-bar{background:#fff;border-bottom:1px solid #e5e5e5;padding:8px 16px}
+  .wa-bar-num{display:none}
   .grid-4{grid-template-columns:repeat(2,1fr)}
   .grid-3{grid-template-columns:1fr}
   .grid-2{grid-template-columns:1fr}
@@ -228,8 +246,12 @@ input::placeholder{color:var(--text3)}
   .kanban-4 .kanban-col{min-width:270px;flex-shrink:0}
   .content{padding:14px}
   .modal{padding:18px}
-  .wa-bar-num{display:none}
+  .drawer{background:#fff;border-right:1px solid #e5e5e5}
+  .drawer .tab-btn{color:#444;border-bottom:1px solid #eee}
+  .drawer .tab-btn.active{color:var(--teal);background:rgba(0,212,160,0.08)}
   .dashboard-layout{flex-direction:column}
+  /* Toast acima do nav */
+  .toast{bottom:80px}
 }
 
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -808,6 +830,30 @@ input::placeholder{color:var(--text3)}
     </div>
   </div>
   <div class="footer">© 2026 Secretária de Bolso</div>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="mobile-nav" id="mobile-nav">
+    <button class="mobile-nav-btn" id="mnav-financeiro" onclick="switchTab2('financeiro')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      <span>Financeiro</span>
+    </button>
+    <button class="mobile-nav-btn" id="mnav-agenda" onclick="switchTab2('agenda')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>Agenda</span>
+    </button>
+    <button class="mobile-nav-btn" id="mnav-boletos" onclick="switchTab2('boletos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>Boletos</span>
+    </button>
+    <button class="mobile-nav-btn" id="mnav-perfil" onclick="switchTab2('perfil')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Perfil</span>
+    </button>
+    <button class="mobile-nav-btn" id="mnav-mais" onclick="abrirDrawer()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+      <span>Mais</span>
+    </button>
+  </nav>
 </div>
 
 <script>
@@ -866,6 +912,13 @@ function switchTab2(tab){
   });
   document.getElementById('tab-'+tab).classList.add('active');
   document.getElementById('content-'+tab).classList.add('active');
+  // Sincroniza mobile nav
+  ['financeiro','agenda','boletos','perfil','mais'].forEach(t=>{
+    var el=document.getElementById('mnav-'+t);
+    if(el)el.classList.remove('active');
+  });
+  var mnav=document.getElementById('mnav-'+tab);
+  if(mnav)mnav.classList.add('active');
   if(tab==='agenda')carregarAgenda();
   if(tab==='boletos')carregarBoletos();
   if(tab==='perfil')carregarPerfil();
@@ -906,8 +959,8 @@ async function iniciarSessao(user){
   document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
   goTo('screen-dashboard');
   toast('Bem-vindo, '+primeiroNome+'!');
-  switchTab2('perfil');
-  await Promise.all([carregarWAStatus(),carregarCategorias(),carregarPerfil()]);
+  switchTab2('financeiro');
+  await Promise.all([carregarWAStatus(),carregarCategorias(),carregarDashboard()]);
 }
 
 async function doLogout(){
