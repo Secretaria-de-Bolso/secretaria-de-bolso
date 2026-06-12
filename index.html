@@ -29,31 +29,36 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 .screen.active{display:flex}
 
 /* TOPBAR */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:100;gap:12px}
-.logo{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;white-space:nowrap;color:var(--text)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #222;background:#0a0a0a;position:sticky;top:0;z-index:100;gap:12px}
+.logo{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;white-space:nowrap;color:#f0f0f0}
 .logo-icon{width:30px;height:30px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .logo-icon svg{width:16px;height:16px;fill:#fff}
 .logo span{color:var(--teal)}
 
 /* WA STATUS BAR */
-.wa-bar{display:flex;align-items:center;gap:10px;padding:10px 20px;background:var(--bg2);border-bottom:1px solid var(--border);font-size:13px}
+.wa-bar{display:flex;align-items:center;gap:10px;padding:10px 20px;background:#111;border-bottom:1px solid #222;font-size:13px;position:sticky;top:57px;z-index:99}
 .wa-bar-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0}
 .wa-bar-dot.off{background:var(--red)}
 .wa-bar-info{flex:1;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.wa-bar-num{color:var(--text2);font-size:12px}
+.wa-bar-num{color:#888;font-size:12px}
 .wa-bar-badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;font-family:'Syne',sans-serif}
-.wa-bar-badge.on{background:var(--teal-dim);color:var(--teal)}
-.wa-bar-badge.off{background:var(--red-dim);color:var(--red)}
+.wa-bar-badge.on{background:rgba(0,212,160,0.15);color:#00d4a0}
+.wa-bar-badge.off{background:rgba(255,77,77,0.15);color:#ff6b6b}
+.wa-bar .btn-outline{color:#888;border-color:#333}
+.wa-bar .btn-outline:hover{color:#00d4a0;border-color:#00d4a0}
 
 /* SIDEBAR LAYOUT */
 .dashboard-layout{display:flex;flex:1;min-height:0}
-.sidebar{width:220px;flex-shrink:0;background:var(--sidebar-bg);border-right:1px solid var(--sidebar-border);display:flex;flex-direction:column;position:sticky;top:0;height:calc(100vh - 88px);overflow-y:auto}
-.tab-btn{display:flex;align-items:center;gap:10px;padding:13px 20px;font-size:13px;font-family:'Syne',sans-serif;font-weight:600;color:var(--sidebar-text);cursor:pointer;border-left:3px solid transparent;border-bottom:1px solid var(--sidebar-border);transition:all 0.15s;width:100%}
+.sidebar{width:220px;flex-shrink:0;background:#0a0a0a;border-right:1px solid #222;display:flex;flex-direction:column;position:fixed;top:88px;left:0;height:calc(100vh - 88px);overflow-y:auto;z-index:90}
+.tab-btn{display:flex;align-items:center;gap:10px;padding:13px 20px;font-size:13px;font-family:'Syne',sans-serif;font-weight:600;color:#888;cursor:pointer;border-left:3px solid transparent;border-bottom:1px solid #1a1a1a;transition:all 0.15s;width:100%}
 .tab-btn:hover{color:#fff;background:rgba(255,255,255,0.05)}
 .tab-btn.active{color:#00d4a0;border-left-color:#00d4a0;background:rgba(0,212,160,0.08)}
 .tab-btn.sair{color:#ff6b6b;margin-top:auto;border-bottom:none}
 .tab-btn svg{width:16px;height:16px;flex-shrink:0}
-.main-content{flex:1;overflow-y:auto;min-width:0;background:var(--bg)}
+.main-content{flex:1;overflow-y:auto;min-width:0;background:var(--bg);margin-left:220px}
+
+/* FOOTER */
+.footer{text-align:center;padding:16px;font-size:11px;color:#555;border-top:1px solid #222;background:#0a0a0a;margin-top:auto}
 .tab-content{display:none}
 .tab-content.active{display:block}
 @media(max-width:768px){
@@ -231,8 +236,9 @@ input::placeholder{color:var(--text3)}
 /* RESPONSIVE */
 @media(max-width:768px){
   body{padding-bottom:64px}
-  .sidebar{display:none}
+  .sidebar{display:none!important}
   .hamburger{display:none}
+  .main-content{margin-left:0!important}
   .mobile-nav{display:flex;background:#0a0a0a;border-top:1px solid #222}
   .mobile-nav-btn{color:#666}
   .mobile-nav-btn.active{color:#00d4a0}
