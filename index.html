@@ -511,6 +511,7 @@ input::placeholder{color:var(--text3)}
           <tbody id="tbody-lanc"><tr><td colspan="5" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody>
         </table>
       </div>
+      <div id="lanc-paginacao"></div>
     </div>
 
     <!-- CATEGORIAS -->
@@ -547,6 +548,10 @@ input::placeholder{color:var(--text3)}
               <div style="font-size:11px;color:var(--text2)" id="agenda-nav-data"></div>
             </div>
             <button onclick="agendaNavDia(+1)" style="background:var(--teal-dim);border:1px solid var(--teal);border-radius:8px;padding:5px 12px;cursor:pointer;color:var(--teal);font-size:12px;font-weight:600;font-family:'Syne',sans-serif;transition:all 0.15s;flex-shrink:0" onmouseover="this.style.background='var(--teal)';this.style.color='var(--bg)'" onmouseout="this.style.background='var(--teal-dim)';this.style.color='var(--teal)'">Amanhã →</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <input type="date" id="agenda-data-picker" onchange="agendaIrParaData(this.value)" style="flex:1;padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
           </div>
         </div>
         <div class="kanban-body" id="col-hoje"><div class="kanban-empty">Nenhum compromisso neste dia</div></div>
@@ -591,9 +596,13 @@ input::placeholder{color:var(--text3)}
         <div class="kanban-body" id="col-bol-apagar"><div class="kanban-empty">Nenhum boleto pendente</div></div>
       </div>
       <div class="kanban-col">
-        <div class="kanban-header">
-          <div class="kanban-title" style="color:var(--teal)">Pagos</div>
-          <div class="kanban-count" id="cnt-bol-pagos">0</div>
+        <div class="kanban-header" style="flex-direction:column;gap:8px;align-items:stretch">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="kanban-title" style="color:var(--teal)">Pagos</div>
+            <div class="kanban-count" id="cnt-bol-pagos">0</div>
+          </div>
+          <input type="text" id="busca-pagos" placeholder="Buscar por nome..." oninput="filtrarPagos()" style="padding:5px 10px;font-size:12px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
+          <input type="date" id="busca-pagos-data" oninput="filtrarPagos()" style="padding:5px 10px;font-size:12px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
         </div>
         <div class="kanban-body" id="col-bol-pagos" style="max-height:280px;overflow-y:auto"><div class="kanban-empty">Nenhum boleto pago</div></div>
       </div>
@@ -1106,7 +1115,49 @@ function renderAgendaDia(){
 
 function agendaNavDia(delta){
   agendaOffset+=delta;
+  // Atualiza o date picker
+  var hoje=new Date();hoje.setHours(0,0,0,0);
+  var dia=new Date(hoje);dia.setDate(hoje.getDate()+agendaOffset);
+  var picker=document.getElementById('agenda-data-picker');
+  if(picker)picker.value=dia.toISOString().split('T')[0];
   renderAgendaDia();
+}
+
+function agendaIrParaData(dataStr){
+  if(!dataStr)return;
+  var hoje=new Date();hoje.setHours(0,0,0,0);
+  var alvo=new Date(dataStr+'T00:00:00');
+  var diff=Math.round((alvo-hoje)/(1000*60*60*24));
+  agendaOffset=diff;
+  renderAgendaDia();
+}
+
+var todosBoletosPagos=[];
+
+function filtrarPagos(){
+  var busca=(document.getElementById('busca-pagos').value||'').toLowerCase();
+  var dataFiltro=document.getElementById('busca-pagos-data').value;
+  var col=document.getElementById('col-bol-pagos');
+  col.innerHTML='';
+  var filtrados=todosBoletosPagos.filter(b=>{
+    var nomeOk=!busca||(b.nome||'').toLowerCase().includes(busca);
+    var dataOk=!dataFiltro||b.vencimento===dataFiltro;
+    return nomeOk&&dataOk;
+  });
+  if(!filtrados.length){col.innerHTML='<div class="kanban-empty">Nenhum boleto encontrado</div>';return;}
+  filtrados.forEach(b=>{
+    var val=parseFloat(b.valor)||0;
+    col.innerHTML+=`<div class="boleto-card">
+      <div class="boleto-info">
+        <div class="boleto-nome">${b.nome||'Boleto'}</div>
+        <div class="boleto-meta">Vence: ${formatData(b.vencimento)}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="boleto-val boleto-pago">R$ ${val.toFixed(2).replace('.',',')}</div>
+        <span class="badge badge-green">✓ Pago</span>
+      </div>
+    </div>`;
+  });
 }
 
 function abrirEdicaoAgenda(id,desc,data,hora){
@@ -1147,7 +1198,7 @@ async function carregarBoletos(){
     var colH=document.getElementById('col-bol-hoje');
     var colA=document.getElementById('col-bol-apagar');
     var colP=document.getElementById('col-bol-pagos');
-    colV.innerHTML='';colH.innerHTML='';colA.innerHTML='';colP.innerHTML='';
+    colV.innerHTML='';colH.innerHTML='';colA.innerHTML='';colP.innerHTML='';todosBoletosPagos=[];
     var cV=0,cH=0,cA=0,cP=0;
     (data||[]).forEach(b=>{
       var val=parseFloat(b.valor)||0;
@@ -1165,7 +1216,7 @@ async function carregarBoletos(){
           ${!b.pago?`<button class="btn-pagar" onclick="marcarPago('${b.id}',this)">Pagar</button>`:'<span class="badge badge-green">✓ Pago</span>'}
         </div>
       </div>`;
-      if(b.pago){colP.innerHTML+=card;cP++;}
+      if(b.pago){colP.innerHTML+=card;cP++;todosBoletosPagos.push(b);}
       else if(venc<hoje){colV.innerHTML+=card;cV++;}
       else if(venc===hoje){colH.innerHTML+=card;cH++;}
       else{colA.innerHTML+=card;cA++;}
