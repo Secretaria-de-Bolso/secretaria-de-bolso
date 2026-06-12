@@ -966,6 +966,10 @@ function formatData(d){
   try{var p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}catch(e){return d;}
 }
 
+var lancamentosData=[];
+var lancPagina=0;
+var LANC_POR_PAG=6;
+
 async function carregarLancamentos(){
   try{
     var mes=parseInt(document.getElementById('filtro-mes').value);
@@ -974,21 +978,49 @@ async function carregarLancamentos(){
     var dataFim=ano+'-'+(mes+1).toString().padStart(2,'0')+'-31';
     var tipo=currentLTab==='despesas'?'despesa':'receita';
     var {data}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).eq('tipo',tipo).gte('data',dataIni).lte('data',dataFim).order('data',{ascending:false});
-    var tbody=document.getElementById('tbody-lanc');
-    tbody.innerHTML='';
-    if(!data||!data.length){tbody.innerHTML='<tr><td colspan="5" style="color:var(--text2);text-align:center;padding:20px">Nenhum lançamento neste mês.</td></tr>';return;}
-    data.forEach(l=>{
-      var val=parseFloat(l.valor)||0;
-      var cor=l.tipo==='receita'?'var(--teal)':'var(--red)';
-      tbody.innerHTML+=`<tr>
-        <td>${formatData(l.data)}</td>
-        <td>${l.descricao||'—'}</td>
-        <td><span class="badge badge-yellow" style="font-size:11px">${l.categoria||'Outros'}</span></td>
-        <td style="color:${cor};font-weight:600">R$ ${val.toFixed(2).replace('.',',')}</td>
-        <td><button class="td-edit-btn" onclick="abrirEdicao('${l.id}','${(l.descricao||'').replace(/'/g,"\\'")}',${val},'${l.data||''}','${l.categoria||''}')">Editar</button></td>
-      </tr>`;
-    });
+    lancamentosData=data||[];
+    lancPagina=0;
+    renderLancamentos();
   }catch(e){console.log(e)}
+}
+
+function renderLancamentos(){
+  var tbody=document.getElementById('tbody-lanc');
+  var paginacao=document.getElementById('lanc-paginacao');
+  tbody.innerHTML='';
+  if(!lancamentosData.length){
+    tbody.innerHTML='<tr><td colspan="5" style="color:var(--text2);text-align:center;padding:20px">Nenhum lançamento neste mês.</td></tr>';
+    if(paginacao)paginacao.innerHTML='';
+    return;
+  }
+  var inicio=lancPagina*LANC_POR_PAG;
+  var pagina=lancamentosData.slice(inicio,inicio+LANC_POR_PAG);
+  pagina.forEach(l=>{
+    var val=parseFloat(l.valor)||0;
+    var cor=l.tipo==='receita'?'var(--teal)':'var(--red)';
+    tbody.innerHTML+=`<tr>
+      <td>${formatData(l.data)}</td>
+      <td>${l.descricao||'—'}</td>
+      <td><span class="badge badge-yellow" style="font-size:11px">${l.categoria||'Outros'}</span></td>
+      <td style="color:${cor};font-weight:600">R$ ${val.toFixed(2).replace('.',',')}</td>
+      <td><button class="td-edit-btn" onclick="abrirEdicao('${l.id}','${(l.descricao||'').replace(/'/g,"\\'")}',${val},'${l.data||''}','${l.categoria||''}')">Editar</button></td>
+    </tr>`;
+  });
+  var total=lancamentosData.length;
+  var maxPag=Math.ceil(total/LANC_POR_PAG);
+  if(paginacao){
+    if(maxPag>1){
+      paginacao.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border)">
+        <span style="font-size:12px;color:var(--text2)">${inicio+1}–${Math.min(inicio+LANC_POR_PAG,total)} de ${total}</span>
+        <div style="display:flex;gap:6px">
+          <button class="td-edit-btn" ${lancPagina===0?'disabled style="opacity:0.3"':''} onclick="lancPagina=Math.max(0,lancPagina-1);renderLancamentos()">← Anterior</button>
+          <button class="td-edit-btn" ${lancPagina>=maxPag-1?'disabled style="opacity:0.3"':''} onclick="lancPagina=Math.min(${maxPag-1},lancPagina+1);renderLancamentos()">Próximo →</button>
+        </div>
+      </div>`;
+    }else{
+      paginacao.innerHTML='';
+    }
+  }
 }
 
 function abrirEdicao(id,desc,val,data,cat){
