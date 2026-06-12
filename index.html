@@ -42,8 +42,8 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 .wa-bar-info{flex:1;display:flex;align-items:center;gap:8px}
 .wa-bar-num{color:#888;font-size:12px}
 .wa-bar-badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;font-family:'Syne',sans-serif}
-.wa-bar-badge.on{background:rgba(0,212,160,0.15);color:#00d4a0}
-.wa-bar-badge.off{background:rgba(255,107,107,0.15);color:#ff6b6b}
+.wa-bar-badge.on{background:#00d4a0;color:#000;font-weight:700}
+.wa-bar-badge.off{background:#ff6b6b;color:#000;font-weight:700}
 
 /* SIDEBAR LAYOUT */
 .dashboard-layout{display:flex;flex:1;min-height:0;margin-top:56px}
@@ -239,10 +239,34 @@ input::placeholder{color:var(--text3)}
   .hamburger{display:none}
   .main-content{margin-left:0!important}
   .dashboard-layout{margin-top:0}
+  /* No mobile esconde o WA inline do topbar e mostra a WA bar separada abaixo */
   .topbar #wa-bar{display:none!important}
-  /* WA bar mobile separada abaixo do topbar fixo */
-  .wa-bar{display:flex;position:fixed;top:56px;left:0;right:0;z-index:98;background:#111;border-bottom:1px solid #222;padding:8px 14px}
-  body{padding-top:calc(56px + 40px)}
+  .wa-bar{display:flex!important;position:relative;top:auto;background:#111;border-bottom:1px solid #222;padding:8px 14px}
+  .wa-bar-num{display:block;color:#aaa}
+  /* Badge mais legível no mobile */
+  .wa-bar-badge.on{background:#00d4a0;color:#000;font-weight:700}
+  .mobile-nav{display:flex;background:#0a0a0a;border-top:1px solid #222}
+  .mobile-nav-btn{color:#555}
+  .mobile-nav-btn.active{color:#00d4a0}
+  .topbar{background:#0a0a0a;border-bottom:1px solid #222}
+  .scroll-hint{display:flex;font-size:14px;font-weight:500;color:#888;margin-bottom:12px}
+  .kanban-4{display:flex;flex-direction:row;overflow-x:auto;gap:12px;padding-bottom:10px;-webkit-overflow-scrolling:touch;margin-bottom:4px;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .kanban-4::-webkit-scrollbar{display:none}
+  .kanban-4 .kanban-col{min-width:85vw;flex-shrink:0;scroll-snap-align:start}
+  .kanban-4 .kanban-header input{display:none!important}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:1fr}
+  .grid-2{grid-template-columns:1fr}
+  .kanban{grid-template-columns:1fr}
+  .content{padding:14px}
+  .modal{padding:18px}
+  .dashboard-layout{flex-direction:column}
+  .toast{bottom:80px}
+  .drawer{background:#0a0a0a;border-right:1px solid #222}
+  .drawer .tab-btn{color:#888;border-bottom:1px solid #222}
+  .drawer .tab-btn.active{color:#00d4a0;background:rgba(0,212,160,0.08)}
+  .drawer-header-title{color:#00d4a0}
+  .drawer-close{color:#666}
   .mobile-nav{display:flex;background:#0a0a0a;border-top:1px solid #222}
   .mobile-nav-btn{color:#666}
   .mobile-nav-btn.active{color:#00d4a0}
