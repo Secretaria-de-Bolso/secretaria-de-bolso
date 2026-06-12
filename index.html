@@ -220,8 +220,12 @@ input::placeholder{color:var(--text3)}
 .mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:64px;background:#fff;border-top:1px solid #e5e5e5;z-index:200;align-items:center;justify-content:space-around}
 .mobile-nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:8px 12px;border:none;background:none;color:#999;font-size:10px;font-family:'Syne',sans-serif;font-weight:600;transition:color 0.15s;min-width:56px}
 .mobile-nav-btn svg{width:22px;height:22px;stroke-width:1.8}
-.mobile-nav-btn.active{color:#00b389}
+.mobile-nav-btn.active{color:#009e78}
 .mobile-nav-btn span{font-size:10px}
+
+/* DICA SCROLL BOLETOS - só mobile */
+.scroll-hint{display:none;text-align:center;font-size:12px;color:#999;margin-bottom:10px;gap:6px;align-items:center;justify-content:center}
+.scroll-hint::before,.scroll-hint::after{content:'';display:block;width:20px;height:1px;background:#ccc}
 
 /* RESPONSIVE */
 @media(max-width:768px){
@@ -240,14 +244,17 @@ input::placeholder{color:var(--text3)}
   .hamburger{display:none}
   .mobile-nav{display:flex}
   .topbar{background:#fff;border-bottom:1px solid #e0e0e0;padding:10px 16px}
-  /* WA bar mais legível */
   .wa-bar{background:#fff;border-bottom:1px solid #e0e0e0;padding:8px 16px}
   .wa-bar-badge.on{background:rgba(0,158,120,0.12);color:#007d60;font-weight:700}
   .wa-bar-dot{background:#009e78}
   .wa-bar-num{color:#444;display:block;font-size:12px}
-  /* Boletos: empilha verticalmente no mobile */
-  .kanban-4{display:flex;flex-direction:column;gap:16px;overflow:visible;padding-bottom:0;margin-bottom:20px}
-  .kanban-4 .kanban-col{min-width:unset;width:100%;flex-shrink:unset}
+  /* Boletos: scroll horizontal com snap, colunas limpas */
+  .scroll-hint{display:flex}
+  .kanban-4{display:flex;flex-direction:row;overflow-x:auto;gap:12px;padding-bottom:10px;-webkit-overflow-scrolling:touch;margin-bottom:4px;scroll-snap-type:x mandatory;scrollbar-width:none}
+  .kanban-4::-webkit-scrollbar{display:none}
+  .kanban-4 .kanban-col{min-width:85vw;flex-shrink:0;scroll-snap-align:start}
+  /* Esconder buscas individuais no mobile — busca global resolve */
+  .kanban-4 .kanban-header input{display:none!important}
   /* Outros grids */
   .grid-4{grid-template-columns:repeat(2,1fr)}
   .grid-3{grid-template-columns:1fr}
@@ -256,12 +263,9 @@ input::placeholder{color:var(--text3)}
   .content{padding:14px}
   .modal{padding:18px}
   .dashboard-layout{flex-direction:column}
-  /* Toast acima do nav */
   .toast{bottom:80px}
-  /* Cards mais limpos */
   .card{box-shadow:0 1px 4px rgba(0,0,0,0.06);border:1px solid #e8e8e8}
   .metric{box-shadow:0 1px 4px rgba(0,0,0,0.06);border:1px solid #e8e8e8}
-  /* Drawer claro */
   .drawer{background:#fff;border-right:1px solid #e0e0e0}
   .drawer .tab-btn{color:#333;border-bottom:1px solid #eee}
   .drawer .tab-btn.active{color:#009e78;background:rgba(0,158,120,0.08)}
@@ -649,6 +653,7 @@ input::placeholder{color:var(--text3)}
         <span id="busca-boletos-limpar" onclick="document.getElementById('busca-boletos-global').value='';filtrarBoletosGlobal()" style="cursor:pointer;color:var(--text2);font-size:18px;display:none">✕</span>
       </div>
     </div>
+    <div class="scroll-hint">deslize para ver mais colunas →</div>
     <div class="kanban-4" id="kanban-boletos-wrap">
       <!-- VENCIDOS -->
       <div class="kanban-col" style="border-color:rgba(255,77,77,0.3)">
