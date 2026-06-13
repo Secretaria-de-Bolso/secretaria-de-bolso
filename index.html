@@ -27,15 +27,11 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 .screen{display:none;min-height:100vh;flex-direction:column}
 .screen.active{display:flex}
-
-/* TOPBAR */
 .topbar{display:flex;align-items:center;padding:0 20px;border-bottom:1px solid #222;background:#0a0a0a;position:fixed;top:0;left:0;right:0;z-index:100;height:56px;gap:8px}
 .logo{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:16px;white-space:nowrap;color:#f0f0f0}
 .logo-icon{width:28px;height:28px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .logo-icon svg{width:14px;height:14px;fill:#fff}
 .logo span{color:#00d4a0}
-
-/* WA BAR MOBILE */
 .wa-bar-mobile{display:none;align-items:center;gap:10px;padding:8px 16px;background:#111;border-bottom:1px solid #222;font-size:13px}
 .wa-bar-dot{width:8px;height:8px;border-radius:50%;background:#00d4a0;flex-shrink:0}
 .wa-bar-dot.off{background:#ff6b6b}
@@ -43,8 +39,6 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 .wa-bar-badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;font-family:'Syne',sans-serif}
 .wa-bar-badge.on{background:#00d4a0;color:#000}
 .wa-bar-badge.off{background:#ff6b6b;color:#000}
-
-/* SIDEBAR */
 .dashboard-layout{display:flex;flex:1;min-height:0;margin-top:56px}
 .sidebar{width:220px;flex-shrink:0;background:#0a0a0a;border-right:1px solid #222;display:flex;flex-direction:column;position:fixed;top:56px;left:0;height:calc(100vh - 56px);overflow-y:auto;z-index:90}
 .tab-btn{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:13px;font-family:'Syne',sans-serif;font-weight:600;color:#aaa;cursor:pointer;border-left:3px solid transparent;border-bottom:1px solid #161616;transition:all 0.15s;width:100%}
@@ -54,13 +48,9 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 .tab-btn svg{width:18px;height:18px;flex-shrink:0;opacity:0.8}
 .tab-btn.active svg{opacity:1}
 .main-content{flex:1;overflow-y:auto;min-width:0;background:var(--bg);margin-left:220px}
-
-/* FOOTER */
 .footer{text-align:center;padding:16px;font-size:11px;color:#555;border-top:1px solid #222;background:#0a0a0a;margin-top:auto}
 .tab-content{display:none}
 .tab-content.active{display:block}
-
-/* AUTH — FUNDO PRETO */
 .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#0a0a0a;flex-direction:column}
 .auth-box{width:100%;max-width:400px;background:#161616;border:1px solid #2a2a2a;border-radius:16px;padding:32px}
 .auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px;font-family:'Syne',sans-serif;font-weight:700;font-size:18px;color:#f0f0f0}
@@ -75,20 +65,14 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 #screen-login input,#screen-login select,#screen-cadastro input,#screen-cadastro select{background:#0f0f0f;border:1px solid #2a2a2a;color:#f0f0f0}
 #screen-login input::placeholder,#screen-cadastro input::placeholder{color:#444}
 #screen-login label,#screen-cadastro label{color:#888}
-
-/* CONTENT */
 .content{padding:20px;max-width:1100px;margin:0 auto}
 .page-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:4px}
 .page-sub{color:var(--text2);font-size:13px;margin-bottom:20px}
-
-/* CARDS */
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:0 1px 6px rgba(0,0,0,0.06)}
 .card-sm{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px}
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-
-/* METRICS */
 .metric{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;box-shadow:0 1px 6px rgba(0,0,0,0.06)}
 .metric-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;font-family:'Syne',sans-serif;margin-bottom:6px}
 .metric-value{font-family:'DM Sans',sans-serif;font-size:22px;font-weight:700}
@@ -96,8 +80,6 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 .metric-value.red{color:var(--red)}
 .metric-value.yellow{color:var(--yellow)}
 .metric-sub{font-size:11px;color:var(--text2);margin-top:3px}
-
-/* KANBAN */
 .kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
 .kanban-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 .kanban-col{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden}
@@ -109,8 +91,6 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 .kanban-card-title{font-size:13px;font-weight:500;margin-bottom:4px}
 .kanban-card-meta{font-size:11px;color:var(--text2)}
 .kanban-empty{font-size:12px;color:var(--text3);text-align:center;padding:20px 0}
-
-/* BOLETOS */
 .boleto-card{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .boleto-info{flex:1}
 .boleto-nome{font-size:13px;font-weight:500;margin-bottom:2px}
@@ -120,8 +100,6 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 .btn-pagar{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,212,160,0.2);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'Syne',sans-serif;transition:all 0.15s}
 .btn-pagar:hover{background:var(--teal);color:var(--bg)}
 .btn-pagar.pago{background:var(--teal);color:var(--bg);cursor:default}
-
-/* TABELA */
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
 th{text-align:left;padding:10px 14px;font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:0.08em;border-bottom:1px solid var(--border);font-weight:500;font-family:'Syne',sans-serif}
@@ -130,12 +108,8 @@ tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg3)}
 .td-edit-btn{background:var(--bg4);border:1px solid var(--border2);border-radius:6px;padding:3px 10px;font-size:11px;color:var(--teal);cursor:pointer;font-weight:600;font-family:'Syne',sans-serif;transition:all 0.15s}
 .td-edit-btn:hover{background:var(--teal-dim);border-color:var(--teal)}
-
-/* INLINE EDIT */
 .inline-input{background:var(--bg3);border:1px solid var(--teal);border-radius:6px;padding:4px 8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%}
 .inline-select{background:var(--bg3);border:1px solid var(--teal);border-radius:6px;padding:4px 8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
-
-/* BOTOES */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;cursor:pointer;transition:all 0.15s;border:none;text-decoration:none}
 .btn-primary{background:var(--teal);color:#fff;font-weight:600}
 .btn-primary:hover{background:var(--teal2)}
@@ -145,38 +119,26 @@ tr:hover td{background:var(--bg3)}
 .btn-full{width:100%;padding:13px}
 .btn-lg{padding:13px 26px;font-size:15px;border-radius:10px}
 .btn-sm{padding:5px 12px;font-size:12px}
-
-/* BADGE */
 .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
 .badge-green{background:var(--teal-dim);color:var(--teal)}
 .badge-red{background:var(--red-dim);color:var(--red)}
 .badge-yellow{background:var(--yellow-dim);color:var(--yellow)}
 .dot{width:5px;height:5px;border-radius:50%;background:currentColor}
-
-/* FORMS */
 .form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
 label{font-size:12px;color:var(--text2);font-weight:500}
 input,select,textarea{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border 0.15s;width:100%}
 input:focus,select:focus,textarea:focus{border-color:var(--teal)}
 input::placeholder{color:var(--text3)}
-
-/* CATEGORIAS */
 .cat-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .cat-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);transition:all 0.15s;font-family:'Syne',sans-serif}
 .cat-chip:hover{border-color:var(--teal);color:var(--teal)}
 .cat-chip.active{background:var(--teal-dim);border-color:var(--teal);color:var(--teal)}
 .cat-chip .cat-remove{opacity:0;font-size:14px;line-height:1;transition:opacity 0.15s}
 .cat-chip.active:hover .cat-remove{opacity:1}
-
-/* AVATAR */
 .avatar{width:32px;height:32px;border-radius:50%;background:rgba(0,212,160,0.1);border:1px solid #00d4a0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:#00d4a0;cursor:pointer;flex-shrink:0}
-
-/* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;background:#1a1a1a;border:1px solid var(--teal);border-radius:10px;padding:12px 18px;font-size:13px;color:#f0f0f0;z-index:9999;transform:translateY(100px);opacity:0;transition:all 0.3s;max-width:300px}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.error{border-color:var(--red)}
-
-/* STEPS */
 .steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:32px}
 .step{display:flex;flex-direction:column;align-items:center;gap:6px}
 .step-num{width:32px;height:32px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text2);background:var(--bg);position:relative;z-index:1}
@@ -186,16 +148,10 @@ input::placeholder{color:var(--text3)}
 .step.active .step-label{color:var(--teal)}
 .step-line{width:60px;height:1px;background:var(--border2);margin-bottom:18px}
 .step.done+.step-line,.step-line.done{background:var(--teal)}
-
-/* QR */
 .qr-box{background:white;border-radius:14px;padding:16px;display:inline-flex;margin:0 auto}
 .qr-box img{width:180px;height:180px}
 .qr-timer{display:flex;align-items:center;gap:6px;color:var(--yellow);font-size:12px;margin-top:10px;justify-content:center}
-
-/* SECTION LABEL */
 .section-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
-
-/* DRAWER */
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
 .hamburger span{display:block;width:22px;height:2px;background:#ccc;border-radius:2px;transition:all 0.2s}
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:300}
@@ -209,35 +165,25 @@ input::placeholder{color:var(--text3)}
 .drawer .tab-btn svg{width:18px;height:18px;flex-shrink:0}
 .drawer .tab-btn.active{color:#00d4a0;border-left-color:#00d4a0;background:rgba(0,212,160,0.08)}
 .drawer .tab-btn.sair{margin-top:auto;color:#ff6b6b;border-bottom:none}
-
-/* MOBILE BOTTOM NAV */
 .mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:64px;background:#0a0a0a;border-top:1px solid #222;z-index:200;align-items:center;justify-content:space-around}
 .mobile-nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:8px 12px;border:none;background:none;color:#ffffff;font-size:11px;font-family:'Syne',sans-serif;font-weight:600;transition:color 0.15s;min-width:56px}
 .mobile-nav-btn svg{width:22px;height:22px;stroke-width:1.8;stroke:#888;transition:stroke 0.15s}
 .mobile-nav-btn.active{color:#00d4a0}
 .mobile-nav-btn.active svg{stroke:#00d4a0}
 .mobile-nav-btn span{font-size:11px}
-
-/* DICA SCROLL — maior e mais visível */
 .scroll-hint{display:none;text-align:center;font-size:17px;font-weight:700;color:#111;margin-bottom:14px;gap:8px;align-items:center;justify-content:center;letter-spacing:0.01em}
 .scroll-hint::before,.scroll-hint::after{content:'';display:block;width:24px;height:2px;background:#bbb;border-radius:2px}
-
-/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;width:100%;max-width:440px}
 .modal-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:16px}
 .modal-actions{display:flex;gap:10px;margin-top:20px}
-
-/* TABLET */
 @media(min-width:769px) and (max-width:1024px){
   .sidebar{width:180px}
   .main-content{margin-left:180px}
   .tab-btn{padding:12px 16px;font-size:12px}
   .grid-4{grid-template-columns:repeat(2,1fr)}
 }
-
-/* MOBILE */
 @media(max-width:768px){
   body{padding-bottom:64px;padding-top:56px}
   .sidebar{display:none!important}
@@ -265,7 +211,6 @@ input::placeholder{color:var(--text3)}
   .drawer .tab-btn.active{color:#00d4a0;background:rgba(0,212,160,0.08)}
   .avatar{border-color:#00d4a0;color:#00d4a0}
 }
-
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -276,10 +221,7 @@ input::placeholder{color:var(--text3)}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-
 <div class="toast" id="toast"></div>
-
-<!-- MODAL EDITAR LANÇAMENTO -->
 <div class="modal-overlay" id="modal-edit">
 <div class="modal">
   <div class="modal-title">Editar lançamento</div>
@@ -295,8 +237,6 @@ input::placeholder{color:var(--text3)}
   </div>
 </div>
 </div>
-
-<!-- MODAL CONFIRMAÇÃO -->
 <div class="modal-overlay" id="modal-confirm">
 <div class="modal" style="max-width:360px;text-align:center">
   <div style="font-size:36px;margin-bottom:12px">⚠️</div>
@@ -308,8 +248,6 @@ input::placeholder{color:var(--text3)}
   </div>
 </div>
 </div>
-
-<!-- MODAL EDITAR AGENDAMENTO -->
 <div class="modal-overlay" id="modal-agenda-edit">
 <div class="modal">
   <div class="modal-title">Editar compromisso</div>
@@ -324,15 +262,11 @@ input::placeholder{color:var(--text3)}
   </div>
 </div>
 </div>
-
 <!-- LOGIN -->
 <div class="screen active" id="screen-login">
 <div class="auth-wrap">
 <div class="auth-box fade-in">
-  <div class="auth-logo">
-    <div class="auth-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>
-    Secretária de <span>Bolso</span>
-  </div>
+  <div class="auth-logo"><div class="auth-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
   <div class="auth-title">Bem-vindo</div>
   <div class="auth-sub">Entre na sua secretaria exclusiva</div>
   <div class="form-group"><label>E-mail</label><input type="email" id="login-email" placeholder="seu@email.com" onkeydown="if(event.key==='Enter')doLogin()"></div>
@@ -348,15 +282,11 @@ input::placeholder{color:var(--text3)}
 <div class="auth-copyright">© 2026 Secretária de Bolso</div>
 </div>
 </div>
-
 <!-- CADASTRO -->
 <div class="screen" id="screen-cadastro">
 <div class="auth-wrap">
 <div class="auth-box fade-in">
-  <div class="auth-logo">
-    <div class="auth-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>
-    Secretária de <span>Bolso</span>
-  </div>
+  <div class="auth-logo"><div class="auth-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
   <div class="auth-title">Criar conta</div>
   <div class="auth-sub">Passo 1 de 3 — Dados pessoais</div>
   <div class="form-group"><label>Nome completo</label><input type="text" id="cad-nome" placeholder="Seu nome"></div>
@@ -384,7 +314,6 @@ input::placeholder{color:var(--text3)}
 </div>
 </div>
 </div>
-
 <!-- QR -->
 <div class="screen" id="screen-qr">
 <div class="topbar">
@@ -432,10 +361,8 @@ input::placeholder{color:var(--text3)}
 </div>
 </div>
 </div>
-
 <!-- DASHBOARD -->
 <div class="screen" id="screen-dashboard">
-  <!-- TOPBAR -->
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:12px">
       <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
@@ -452,39 +379,22 @@ input::placeholder{color:var(--text3)}
       <div class="avatar" id="topbar-avatar" onclick="switchTab2('perfil')">P</div>
     </div>
   </div>
-
-  <!-- WA BAR MOBILE -->
   <div class="wa-bar-mobile" id="wa-bar-mobile">
     <div class="wa-bar-dot" id="wa-dot-mob"></div>
     <span class="wa-bar-num" id="wa-num-mob">—</span>
     <span class="wa-bar-badge on" id="wa-badge-mob">Conectado</span>
     <button class="btn btn-outline btn-sm" onclick="goTo('screen-qr')" style="font-size:11px;padding:3px 10px;margin-left:auto">Reconectar</button>
   </div>
-
   <div class="dashboard-layout">
   <div class="sidebar">
-    <div class="tab-btn" id="tab-perfil" onclick="switchTab2('perfil')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil
-    </div>
-    <div class="tab-btn" id="tab-financeiro" onclick="switchTab2('financeiro')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Financeiro
-    </div>
-    <div class="tab-btn" id="tab-agenda" onclick="switchTab2('agenda')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda
-    </div>
-    <div class="tab-btn" id="tab-boletos" onclick="switchTab2('boletos')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Boletos
-    </div>
-    <div class="tab-btn" id="tab-comousar" onclick="switchTab2('comousar')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Como usar
-    </div>
-    <div class="tab-btn sair" onclick="doLogout()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair
-    </div>
+    <div class="tab-btn" id="tab-perfil" onclick="switchTab2('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</div>
+    <div class="tab-btn" id="tab-financeiro" onclick="switchTab2('financeiro')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Financeiro</div>
+    <div class="tab-btn" id="tab-agenda" onclick="switchTab2('agenda')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda</div>
+    <div class="tab-btn" id="tab-boletos" onclick="switchTab2('boletos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Boletos</div>
+    <div class="tab-btn" id="tab-comousar" onclick="switchTab2('comousar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Como usar</div>
+    <div class="tab-btn sair" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair</div>
   </div>
   <div class="main-content">
-
-  <!-- ABA FINANCEIRO -->
   <div class="tab-content" id="content-financeiro">
   <div class="content fade-in">
     <div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
@@ -523,12 +433,7 @@ input::placeholder{color:var(--text3)}
           </div>
         </div>
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead>
-          <tbody id="tbody-lanc"><tr><td colspan="5" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody>
-        </table>
-      </div>
+      <div class="table-wrap"><table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead><tbody id="tbody-lanc"><tr><td colspan="5" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody></table></div>
       <div id="lanc-paginacao"></div>
     </div>
     <div class="card">
@@ -537,8 +442,6 @@ input::placeholder{color:var(--text3)}
     </div>
   </div>
   </div>
-
-  <!-- ABA AGENDA -->
   <div class="tab-content" id="content-agenda">
   <div class="content fade-in">
     <div class="page-title">Agenda</div>
@@ -546,16 +449,10 @@ input::placeholder{color:var(--text3)}
     <div class="grid-2">
       <div class="kanban-col">
         <div class="kanban-header" style="flex-direction:column;gap:8px;align-items:stretch">
-          <div style="display:flex;align-items:center;justify-content:space-between">
-            <div class="kanban-title" style="color:var(--teal)">Agenda</div>
-            <div class="kanban-count" id="cnt-hoje">0</div>
-          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between"><div class="kanban-title" style="color:var(--teal)">Agenda</div><div class="kanban-count" id="cnt-hoje">0</div></div>
           <div style="display:flex;align-items:center;gap:8px">
             <button onclick="agendaNavDia(-1)" style="background:var(--teal-dim);border:1px solid var(--teal);border-radius:8px;padding:5px 12px;cursor:pointer;color:var(--teal);font-size:12px;font-weight:600;font-family:'Syne',sans-serif;transition:all 0.15s;flex-shrink:0" onmouseover="this.style.background='var(--teal)';this.style.color='#fff'" onmouseout="this.style.background='var(--teal-dim)';this.style.color='var(--teal)'">← Ontem</button>
-            <div style="flex:1;text-align:center">
-              <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text)" id="agenda-nav-label">Hoje</div>
-              <div style="font-size:11px;color:var(--text2)" id="agenda-nav-data"></div>
-            </div>
+            <div style="flex:1;text-align:center"><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text)" id="agenda-nav-label">Hoje</div><div style="font-size:11px;color:var(--text2)" id="agenda-nav-data"></div></div>
             <button onclick="agendaNavDia(+1)" style="background:var(--teal-dim);border:1px solid var(--teal);border-radius:8px;padding:5px 12px;cursor:pointer;color:var(--teal);font-size:12px;font-weight:600;font-family:'Syne',sans-serif;transition:all 0.15s;flex-shrink:0" onmouseover="this.style.background='var(--teal)';this.style.color='#fff'" onmouseout="this.style.background='var(--teal-dim)';this.style.color='var(--teal)'">Amanhã →</button>
           </div>
           <div style="margin-top:6px">
@@ -566,23 +463,16 @@ input::placeholder{color:var(--text3)}
         <div class="kanban-body" id="col-hoje"><div class="kanban-empty">Nenhum compromisso neste dia</div></div>
       </div>
       <div class="kanban-col">
-        <div class="kanban-header">
-          <div><div class="kanban-title">Esta semana</div><div style="font-size:11px;color:var(--text2)" id="label-semana"></div></div>
-          <div class="kanban-count" id="cnt-semana">0</div>
-        </div>
+        <div class="kanban-header"><div><div class="kanban-title">Esta semana</div><div style="font-size:11px;color:var(--text2)" id="label-semana"></div></div><div class="kanban-count" id="cnt-semana">0</div></div>
         <div class="kanban-body" id="col-semana"><div class="kanban-empty">Nenhum compromisso esta semana</div></div>
       </div>
     </div>
   </div>
   </div>
-
-  <!-- ABA BOLETOS -->
   <div class="tab-content" id="content-boletos">
   <div class="content fade-in">
     <div style="margin-bottom:20px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-        <div><div class="page-title">Boletos</div><div class="page-sub" style="margin-bottom:0">Controle seus pagamentos</div></div>
-      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><div><div class="page-title">Boletos</div><div class="page-sub" style="margin-bottom:0">Controle seus pagamentos</div></div></div>
       <div style="display:flex;align-items:center;gap:12px;background:var(--bg2);border:2px solid var(--border2);border-radius:12px;padding:12px 18px" onclick="document.getElementById('busca-boletos-global').focus()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" id="busca-boletos-global" placeholder="🔍  Buscar boleto por nome em todas as colunas..." oninput="filtrarBoletosGlobal()" style="border:none;background:transparent;color:var(--text);font-size:15px;outline:none;flex:1;padding:0;font-family:'DM Sans',sans-serif">
@@ -624,14 +514,9 @@ input::placeholder{color:var(--text3)}
         <div class="kanban-body" id="col-bol-pagos" style="max-height:280px;overflow-y:auto"><div class="kanban-empty">Nenhum boleto pago</div></div>
       </div>
     </div>
-    <div id="resultado-busca-boletos" style="display:none;margin-top:16px">
-      <div class="section-label">Resultados da busca</div>
-      <div id="lista-busca-boletos" style="display:flex;flex-direction:column;gap:8px"></div>
-    </div>
+    <div id="resultado-busca-boletos" style="display:none;margin-top:16px"><div class="section-label">Resultados da busca</div><div id="lista-busca-boletos" style="display:flex;flex-direction:column;gap:8px"></div></div>
   </div>
   </div>
-
-  <!-- ABA PERFIL -->
   <div class="tab-content" id="content-perfil">
   <div class="content fade-in">
     <div class="page-title">Perfil</div>
@@ -656,18 +541,8 @@ input::placeholder{color:var(--text3)}
           <div class="form-group"><label>Nome completo</label><input type="text" id="perf-nome" placeholder="Seu nome completo"></div>
           <div class="form-group"><label>E-mail</label><input type="email" id="perf-email" disabled style="opacity:0.5;cursor:not-allowed"></div>
           <div class="form-group"><label>Profissão / Negócio</label><input type="text" id="perf-profissao" placeholder="Ex: Autônomo, Loja, Restaurante..."></div>
-          <div class="form-group"><label>Nova senha</label>
-            <div style="position:relative">
-              <input type="password" id="perf-senha" placeholder="Deixe em branco para não alterar" style="padding-right:40px">
-              <span onclick="toggleSenha('perf-senha')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span>
-            </div>
-          </div>
-          <div class="form-group"><label>Confirmar nova senha</label>
-            <div style="position:relative">
-              <input type="password" id="perf-senha2" placeholder="Repita a nova senha" style="padding-right:40px">
-              <span onclick="toggleSenha('perf-senha2')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span>
-            </div>
-          </div>
+          <div class="form-group"><label>Nova senha</label><div style="position:relative"><input type="password" id="perf-senha" placeholder="Deixe em branco para não alterar" style="padding-right:40px"><span onclick="toggleSenha('perf-senha')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span></div></div>
+          <div class="form-group"><label>Confirmar nova senha</label><div style="position:relative"><input type="password" id="perf-senha2" placeholder="Repita a nova senha" style="padding-right:40px"><span onclick="toggleSenha('perf-senha2')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span></div></div>
           <button class="btn btn-primary btn-full" onclick="salvarPerfil()">Salvar alterações</button>
         </div>
       </div>
@@ -675,13 +550,8 @@ input::placeholder{color:var(--text3)}
         <div class="card">
           <div class="section-label">WhatsApp</div>
           <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:14px">
-            <div style="width:36px;height:36px;border-radius:50%;background:var(--teal-dim);display:flex;align-items:center;justify-content:center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--teal)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </div>
-            <div style="flex:1">
-              <div style="font-weight:500;font-size:13px" id="perf-wa-numero">—</div>
-              <div class="badge badge-green" style="margin-top:4px"><div class="dot"></div>Conectado</div>
-            </div>
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--teal-dim);display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--teal)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+            <div style="flex:1"><div style="font-weight:500;font-size:13px" id="perf-wa-numero">—</div><div class="badge badge-green" style="margin-top:4px"><div class="dot"></div>Conectado</div></div>
           </div>
           <button class="btn btn-outline btn-full btn-sm" onclick="goTo('screen-qr')">Reconectar WhatsApp</button>
         </div>
@@ -701,44 +571,25 @@ input::placeholder{color:var(--text3)}
     </div>
   </div>
   </div>
-
-  <!-- ABA COMO USAR -->
   <div class="tab-content" id="content-comousar">
   <div class="content fade-in">
     <div class="page-title">Como usar</div>
     <div class="page-sub">Tudo que você pode fazer pelo WhatsApp</div>
     <div class="card" style="max-width:600px">
       <div style="display:flex;flex-direction:column;gap:20px">
-        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px">
-          <div style="font-size:28px;flex-shrink:0">🎤</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Registre um gasto</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Uber, 25 reais, hoje"</div></div>
-        </div>
-        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px">
-          <div style="font-size:28px;flex-shrink:0">💰</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Registre uma receita</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Recebi do cliente Pedro, 300 reais"</div></div>
-        </div>
-        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px">
-          <div style="font-size:28px;flex-shrink:0">📅</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Agende um compromisso</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Reunião com fornecedor dia 20 às 10h"</div></div>
-        </div>
-        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px">
-          <div style="font-size:28px;flex-shrink:0">🧾</div>
-          <div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Cadastre um boleto</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Boleto internet, 89 reais, vence dia 20"</div></div>
-        </div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px"><div style="font-size:28px;flex-shrink:0">🎤</div><div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Registre um gasto</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Uber, 25 reais, hoje"</div></div></div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px"><div style="font-size:28px;flex-shrink:0">💰</div><div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Registre uma receita</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Recebi do cliente Pedro, 300 reais"</div></div></div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px"><div style="font-size:28px;flex-shrink:0">📅</div><div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Agende um compromisso</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Reunião com fornecedor dia 20 às 10h"</div></div></div>
+        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px"><div style="font-size:28px;flex-shrink:0">🧾</div><div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Cadastre um boleto</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Boleto internet, 89 reais, vence dia 20"</div></div></div>
       </div>
     </div>
   </div>
   </div>
-
   </div>
   </div>
-
   <div class="drawer-overlay" id="drawer-overlay" onclick="fecharDrawer()"></div>
   <div class="drawer" id="drawer">
-    <div class="drawer-header">
-      <span class="drawer-header-title">Menu</span>
-      <button class="drawer-close" onclick="fecharDrawer()">✕</button>
-    </div>
+    <div class="drawer-header"><span class="drawer-header-title">Menu</span><button class="drawer-close" onclick="fecharDrawer()">✕</button></div>
     <div class="tab-btn" onclick="switchTab2('perfil');fecharDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</div>
     <div class="tab-btn" onclick="switchTab2('financeiro');fecharDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Financeiro</div>
     <div class="tab-btn" onclick="switchTab2('agenda');fecharDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda</div>
@@ -746,28 +597,16 @@ input::placeholder{color:var(--text3)}
     <div class="tab-btn" onclick="switchTab2('comousar');fecharDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Como usar</div>
     <div class="tab-btn sair" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair</div>
   </div>
-
   <div class="footer">© 2026 Secretária de Bolso</div>
-
+  <!-- MOBILE NAV — "Mais" substituído por "Como usar" -->
   <nav class="mobile-nav" id="mobile-nav">
-    <button class="mobile-nav-btn active" id="mnav-financeiro" onclick="switchTab2('financeiro')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Financeiro</span>
-    </button>
-    <button class="mobile-nav-btn" id="mnav-agenda" onclick="switchTab2('agenda')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Agenda</span>
-    </button>
-    <button class="mobile-nav-btn" id="mnav-boletos" onclick="switchTab2('boletos')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Boletos</span>
-    </button>
-    <button class="mobile-nav-btn" id="mnav-perfil" onclick="switchTab2('perfil')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span>
-    </button>
-    <button class="mobile-nav-btn" id="mnav-mais" onclick="abrirDrawer()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg><span>Mais</span>
-    </button>
+    <button class="mobile-nav-btn active" id="mnav-financeiro" onclick="switchTab2('financeiro')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Financeiro</span></button>
+    <button class="mobile-nav-btn" id="mnav-agenda" onclick="switchTab2('agenda')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Agenda</span></button>
+    <button class="mobile-nav-btn" id="mnav-boletos" onclick="switchTab2('boletos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Boletos</span></button>
+    <button class="mobile-nav-btn" id="mnav-perfil" onclick="switchTab2('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></button>
+    <button class="mobile-nav-btn" id="mnav-comousar" onclick="switchTab2('comousar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Como usar</span></button>
   </nav>
 </div>
-
 <script>
 const SUPA_URL='https://krqlbdpuuamimbllddtj.supabase.co';
 const SUPA_KEY='sb_publishable_DWDJXwLW4zXqeApYiZOLGA_yt9pJj1e';
@@ -785,7 +624,7 @@ function fecharModal(id){document.getElementById(id).classList.remove('open')}
 function switchTab2(tab){
   ['financeiro','agenda','boletos','perfil','comousar'].forEach(t=>{document.getElementById('tab-'+t).classList.remove('active');document.getElementById('content-'+t).classList.remove('active')});
   document.getElementById('tab-'+tab).classList.add('active');document.getElementById('content-'+tab).classList.add('active');
-  ['financeiro','agenda','boletos','perfil','mais'].forEach(t=>{var el=document.getElementById('mnav-'+t);if(el)el.classList.remove('active')});
+  ['financeiro','agenda','boletos','perfil','comousar'].forEach(t=>{var el=document.getElementById('mnav-'+t);if(el)el.classList.remove('active')});
   var mnav=document.getElementById('mnav-'+tab);if(mnav)mnav.classList.add('active');
   if(tab==='agenda')carregarAgenda();if(tab==='boletos')carregarBoletos();if(tab==='perfil')carregarPerfil();if(tab==='financeiro')carregarDashboard();
 }
