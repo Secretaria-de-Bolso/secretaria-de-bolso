@@ -171,13 +171,20 @@ input::placeholder{color:var(--text3)}
 .mobile-nav-btn.active{color:#00d4a0}
 .mobile-nav-btn.active svg{stroke:#00d4a0}
 .mobile-nav-btn span{font-size:11px}
-.scroll-hint{display:none;text-align:center;font-size:17px;font-weight:700;color:#111;margin-bottom:14px;gap:8px;align-items:center;justify-content:center;letter-spacing:0.01em}
-.scroll-hint::before,.scroll-hint::after{content:'';display:block;width:24px;height:2px;background:#bbb;border-radius:2px}
+
+/* TABS BOLETOS MOBILE */
+.boleto-tabs{display:none;gap:0;margin-bottom:16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.boleto-tab-btn{flex:1;padding:10px 4px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;text-align:center;cursor:pointer;color:var(--text2);border:none;background:transparent;transition:all 0.15s;border-right:1px solid var(--border)}
+.boleto-tab-btn:last-child{border-right:none}
+.boleto-tab-btn.active{background:var(--teal);color:#fff}
+.boleto-tab-btn .tab-count{display:block;font-size:15px;font-weight:700;margin-bottom:1px}
+
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;width:100%;max-width:440px}
 .modal-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:16px}
 .modal-actions{display:flex;gap:10px;margin-top:20px}
+
 @media(min-width:769px) and (max-width:1024px){
   .sidebar{width:180px}
   .main-content{margin-left:180px}
@@ -192,15 +199,16 @@ input::placeholder{color:var(--text3)}
   #wa-bar-desktop{display:none!important}
   .wa-bar-mobile{display:flex!important}
   .mobile-nav{display:flex!important}
-  .scroll-hint{display:flex}
   .topbar{background:#0a0a0a;border-bottom:1px solid #222;padding:10px 16px}
   .topbar .logo{color:#f0f0f0}
   .topbar .logo span{color:#00d4a0}
   .toast{bottom:80px}
-  .kanban-4{display:flex;flex-direction:row;overflow-x:auto;gap:12px;padding-bottom:10px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;scrollbar-width:none}
-  .kanban-4::-webkit-scrollbar{display:none}
-  .kanban-4 .kanban-col{min-width:85vw;flex-shrink:0;scroll-snap-align:start}
+  /* No mobile: kanban-4 vira coluna única, tabs controlam qual mostrar */
+  .kanban-4{display:flex;flex-direction:column;gap:0}
+  .kanban-4 .kanban-col{display:none;border-radius:12px}
+  .kanban-4 .kanban-col.bol-ativo{display:block}
   .kanban-4 .kanban-header input{display:none!important}
+  .boleto-tabs{display:flex}
   .grid-4{grid-template-columns:repeat(2,1fr)}
   .grid-3{grid-template-columns:1fr}
   .grid-2{grid-template-columns:1fr}
@@ -471,17 +479,31 @@ input::placeholder{color:var(--text3)}
   </div>
   <div class="tab-content" id="content-boletos">
   <div class="content fade-in">
-    <div style="margin-bottom:20px">
+    <div style="margin-bottom:16px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><div><div class="page-title">Boletos</div><div class="page-sub" style="margin-bottom:0">Controle seus pagamentos</div></div></div>
       <div style="display:flex;align-items:center;gap:12px;background:var(--bg2);border:2px solid var(--border2);border-radius:12px;padding:12px 18px" onclick="document.getElementById('busca-boletos-global').focus()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="busca-boletos-global" placeholder="🔍  Buscar boleto por nome em todas as colunas..." oninput="filtrarBoletosGlobal()" style="border:none;background:transparent;color:var(--text);font-size:15px;outline:none;flex:1;padding:0;font-family:'DM Sans',sans-serif">
+        <input type="text" id="busca-boletos-global" placeholder="Buscar boleto por nome..." oninput="filtrarBoletosGlobal()" style="border:none;background:transparent;color:var(--text);font-size:15px;outline:none;flex:1;padding:0;font-family:'DM Sans',sans-serif">
         <span id="busca-boletos-limpar" onclick="document.getElementById('busca-boletos-global').value='';filtrarBoletosGlobal()" style="cursor:pointer;color:var(--text2);font-size:18px;display:none">✕</span>
       </div>
     </div>
-    <div class="scroll-hint">👉 deslize para ver mais colunas</div>
+    <!-- TABS MOBILE — só aparece no mobile -->
+    <div class="boleto-tabs" id="boleto-tabs">
+      <button class="boleto-tab-btn active" id="btab-vencidos" onclick="switchBoletoTab('vencidos')">
+        <span class="tab-count" id="btab-cnt-vencidos">0</span>Vencidos
+      </button>
+      <button class="boleto-tab-btn" id="btab-hoje" onclick="switchBoletoTab('hoje')">
+        <span class="tab-count" id="btab-cnt-hoje">0</span>Hoje
+      </button>
+      <button class="boleto-tab-btn" id="btab-apagar" onclick="switchBoletoTab('apagar')">
+        <span class="tab-count" id="btab-cnt-apagar">0</span>A pagar
+      </button>
+      <button class="boleto-tab-btn" id="btab-pagos" onclick="switchBoletoTab('pagos')">
+        <span class="tab-count" id="btab-cnt-pagos">0</span>Pagos
+      </button>
+    </div>
     <div class="kanban-4" id="kanban-boletos-wrap">
-      <div class="kanban-col" style="border-color:rgba(255,77,77,0.3)">
+      <div class="kanban-col bol-ativo" id="col-wrap-vencidos" style="border-color:rgba(255,77,77,0.3)">
         <div class="kanban-header" style="background:var(--red-dim);flex-direction:column;gap:8px;align-items:stretch">
           <div style="display:flex;align-items:center;justify-content:space-between"><div class="kanban-title" style="color:var(--red)">⚠️ Vencidos</div><div class="kanban-count" id="cnt-bol-vencidos">0</div></div>
           <input type="text" id="busca-vencidos-nome" placeholder="Nome..." oninput="filtrarColuna('vencidos')" style="padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
@@ -489,7 +511,7 @@ input::placeholder{color:var(--text3)}
         </div>
         <div class="kanban-body" id="col-bol-vencidos"><div class="kanban-empty">Nenhum boleto vencido</div></div>
       </div>
-      <div class="kanban-col">
+      <div class="kanban-col" id="col-wrap-hoje">
         <div class="kanban-header" style="flex-direction:column;gap:8px;align-items:stretch">
           <div style="display:flex;align-items:center;justify-content:space-between"><div class="kanban-title" style="color:var(--yellow)">Vence hoje</div><div class="kanban-count" id="cnt-bol-hoje">0</div></div>
           <input type="text" id="busca-hoje-nome" placeholder="Nome..." oninput="filtrarColuna('hoje')" style="padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
@@ -497,7 +519,7 @@ input::placeholder{color:var(--text3)}
         </div>
         <div class="kanban-body" id="col-bol-hoje"><div class="kanban-empty">Nenhum boleto hoje</div></div>
       </div>
-      <div class="kanban-col">
+      <div class="kanban-col" id="col-wrap-apagar">
         <div class="kanban-header" style="flex-direction:column;gap:8px;align-items:stretch">
           <div style="display:flex;align-items:center;justify-content:space-between"><div class="kanban-title">A pagar</div><div class="kanban-count" id="cnt-bol-apagar">0</div></div>
           <input type="text" id="busca-apagar-nome" placeholder="Nome..." oninput="filtrarColuna('apagar')" style="padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
@@ -505,7 +527,7 @@ input::placeholder{color:var(--text3)}
         </div>
         <div class="kanban-body" id="col-bol-apagar"><div class="kanban-empty">Nenhum boleto pendente</div></div>
       </div>
-      <div class="kanban-col">
+      <div class="kanban-col" id="col-wrap-pagos">
         <div class="kanban-header" style="flex-direction:column;gap:8px;align-items:stretch">
           <div style="display:flex;align-items:center;justify-content:space-between"><div class="kanban-title" style="color:var(--teal)">Pagos</div><div class="kanban-count" id="cnt-bol-pagos">0</div></div>
           <input type="text" id="busca-pagos-nome" placeholder="Nome..." oninput="filtrarColuna('pagos')" style="padding:4px 8px;font-size:11px;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text)">
@@ -598,7 +620,6 @@ input::placeholder{color:var(--text3)}
     <div class="tab-btn sair" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair</div>
   </div>
   <div class="footer">© 2026 Secretária de Bolso</div>
-  <!-- MOBILE NAV — "Mais" substituído por "Como usar" -->
   <nav class="mobile-nav" id="mobile-nav">
     <button class="mobile-nav-btn active" id="mnav-financeiro" onclick="switchTab2('financeiro')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Financeiro</span></button>
     <button class="mobile-nav-btn" id="mnav-agenda" onclick="switchTab2('agenda')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Agenda</span></button>
@@ -621,6 +642,17 @@ function fecharDrawer(){document.getElementById('drawer').classList.remove('open
 function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
 function abrirModal(id){document.getElementById(id).classList.add('open')}
 function fecharModal(id){document.getElementById(id).classList.remove('open')}
+
+// TABS BOLETOS MOBILE
+function switchBoletoTab(tab){
+  ['vencidos','hoje','apagar','pagos'].forEach(t=>{
+    document.getElementById('btab-'+t).classList.remove('active');
+    document.getElementById('col-wrap-'+t).classList.remove('bol-ativo');
+  });
+  document.getElementById('btab-'+tab).classList.add('active');
+  document.getElementById('col-wrap-'+tab).classList.add('bol-ativo');
+}
+
 function switchTab2(tab){
   ['financeiro','agenda','boletos','perfil','comousar'].forEach(t=>{document.getElementById('tab-'+t).classList.remove('active');document.getElementById('content-'+t).classList.remove('active')});
   document.getElementById('tab-'+tab).classList.add('active');document.getElementById('content-'+tab).classList.add('active');
@@ -789,7 +821,13 @@ async function carregarBoletos(){
     colV.innerHTML='';colH.innerHTML='';colA.innerHTML='';colP.innerHTML='';todosBoletosPagos=[];todosBoletos=[];todosBoletosPendentes=[];boletosVencidos=[];boletosHoje=[];var cV=0,cH=0,cA=0,cP=0;
     (data||[]).forEach(b=>{var venc=b.vencimento,vencido=!b.pago&&venc<hoje,card=renderBoletoCard(b,vencido);todosBoletos.push(b);if(b.pago){colP.innerHTML+=card;cP++;todosBoletosPagos.push(b);}else if(venc<hoje){colV.innerHTML+=card;cV++;boletosVencidos.push(b);}else if(venc===hoje){colH.innerHTML+=card;cH++;boletosHoje.push(b);}else{colA.innerHTML+=card;cA++;todosBoletosPendentes.push(b);}});
     if(!cV)colV.innerHTML='<div class="kanban-empty">Nenhum boleto vencido</div>';if(!cH)colH.innerHTML='<div class="kanban-empty">Nenhum boleto hoje</div>';if(!cA)colA.innerHTML='<div class="kanban-empty">Nenhum boleto pendente</div>';if(!cP)colP.innerHTML='<div class="kanban-empty">Nenhum boleto pago</div>';
+    // Atualiza contadores desktop
     document.getElementById('cnt-bol-vencidos').textContent=cV;document.getElementById('cnt-bol-hoje').textContent=cH;document.getElementById('cnt-bol-apagar').textContent=cA;document.getElementById('cnt-bol-pagos').textContent=cP;
+    // Atualiza contadores nas tabs mobile
+    document.getElementById('btab-cnt-vencidos').textContent=cV;document.getElementById('btab-cnt-hoje').textContent=cH;document.getElementById('btab-cnt-apagar').textContent=cA;document.getElementById('btab-cnt-pagos').textContent=cP;
+    // No mobile, abre vencidos por padrão se tiver, senão hoje, senão a pagar
+    var tabInicial=cV>0?'vencidos':cH>0?'hoje':cA>0?'apagar':'pagos';
+    switchBoletoTab(tabInicial);
   }catch(e){console.log(e)}
 }
 async function marcarPago(id,btn){
