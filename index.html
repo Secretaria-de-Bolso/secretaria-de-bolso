@@ -108,8 +108,6 @@ tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg3)}
 .td-edit-btn{background:var(--bg4);border:1px solid var(--border2);border-radius:6px;padding:3px 10px;font-size:11px;color:var(--teal);cursor:pointer;font-weight:600;font-family:'Syne',sans-serif;transition:all 0.15s}
 .td-edit-btn:hover{background:var(--teal-dim);border-color:var(--teal)}
-.inline-input{background:var(--bg3);border:1px solid var(--teal);border-radius:6px;padding:4px 8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%}
-.inline-select{background:var(--bg3);border:1px solid var(--teal);border-radius:6px;padding:4px 8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;cursor:pointer;transition:all 0.15s;border:none;text-decoration:none}
 .btn-primary{background:var(--teal);color:#fff;font-weight:600}
 .btn-primary:hover{background:var(--teal2)}
@@ -152,8 +150,6 @@ input::placeholder{color:var(--text3)}
 .qr-box img{width:180px;height:180px}
 .qr-timer{display:flex;align-items:center;gap:6px;color:var(--yellow);font-size:12px;margin-top:10px;justify-content:center}
 .section-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text2);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
-.hamburger span{display:block;width:22px;height:2px;background:#ccc;border-radius:2px;transition:all 0.2s}
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:300}
 .drawer-overlay.open{display:block}
 .drawer{position:fixed;top:0;left:-280px;width:260px;height:100vh;background:#0a0a0a;border-right:1px solid #222;z-index:301;transition:left 0.25s ease;display:flex;flex-direction:column;padding-top:60px;overflow-y:auto}
@@ -171,32 +167,29 @@ input::placeholder{color:var(--text3)}
 .mobile-nav-btn.active{color:#00d4a0}
 .mobile-nav-btn.active svg{stroke:#00d4a0}
 .mobile-nav-btn span{font-size:11px}
-/* REGISTRAR — estilo conversa */
-.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 56px - 64px);background:#111;overflow:hidden}
-.chat-tipo-bar{display:flex;gap:0;background:#0a0a0a;border-bottom:1px solid #222;padding:0}
-.chat-tipo-btn{flex:1;padding:10px 4px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;text-align:center;cursor:pointer;color:#555;border:none;background:transparent;transition:all 0.15s;border-bottom:2px solid transparent}
-.chat-tipo-btn.active{color:#00d4a0;border-bottom-color:#00d4a0}
-.chat-msgs{flex:1;overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:10px;background:#111}
-.chat-msg{display:flex;flex-direction:column;max-width:78%}
+
+/* CHAT REGISTRAR */
+#content-registrar{height:calc(100vh - 56px - 64px);display:none;flex-direction:column;overflow:hidden;background:#ece5dd}
+#content-registrar.active{display:flex}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px 12px 8px;display:flex;flex-direction:column;gap:8px}
+.chat-msg{display:flex;flex-direction:column;max-width:80%}
 .chat-msg.enviado{align-self:flex-end;align-items:flex-end}
 .chat-msg.recebido{align-self:flex-start;align-items:flex-start}
-.chat-bubble{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;position:relative}
-.chat-msg.enviado .chat-bubble{background:#005c4b;color:#e9ffed;border-radius:12px 12px 2px 12px}
-.chat-msg.recebido .chat-bubble{background:#1f2c34;color:#e9edef;border-radius:12px 12px 12px 2px}
-.chat-bubble.processando{color:#8696a0;font-style:italic}
-.chat-time{font-size:10px;color:#8696a0;margin-top:3px;padding:0 4px}
-.chat-audio-bubble{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:#005c4b;border-radius:12px 12px 2px 12px}
-.chat-audio-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.chat-audio-waves{flex:1;height:20px;display:flex;align-items:center;gap:2px}
-.chat-audio-wave{width:3px;border-radius:2px;background:#4caf94}
-.chat-input-bar{background:#1f2c34;border-top:1px solid #2a3942;padding:10px 12px;display:flex;align-items:flex-end;gap:10px}
-.chat-input-bar textarea{flex:1;background:#2a3942;border:none;border-radius:20px;padding:10px 16px;color:#e9edef;font-family:'DM Sans',sans-serif;font-size:14px;resize:none;outline:none;min-height:20px;max-height:100px;line-height:1.4}
-.chat-input-bar textarea::placeholder{color:#8696a0}
-.chat-send-btn{width:44px;height:44px;border-radius:50%;border:none;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background 0.2s}
-.chat-send-btn:active{background:var(--teal2)}
-.chat-mic-btn{width:44px;height:44px;border-radius:50%;border:none;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.2s}
+.chat-bubble{padding:8px 12px;border-radius:8px;font-size:14px;line-height:1.5;box-shadow:0 1px 2px rgba(0,0,0,0.15)}
+.chat-msg.enviado .chat-bubble{background:#dcf8c6;color:#111;border-radius:8px 8px 0 8px}
+.chat-msg.recebido .chat-bubble{background:#fff;color:#111;border-radius:8px 8px 8px 0}
+.chat-time{font-size:10px;color:#999;margin-top:2px;padding:0 2px}
+.chat-confirm-btns{display:flex;gap:8px;margin-top:8px}
+.btn-confirmar{background:var(--teal);color:#fff;border:none;border-radius:20px;padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif}
+.btn-cancelar{background:#fff;color:#cc3333;border:1px solid #cc3333;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif}
+.chat-input-bar{background:#f0f0f0;border-top:1px solid #ddd;padding:8px 12px;display:flex;align-items:flex-end;gap:8px;flex-shrink:0}
+.chat-input-bar textarea{flex:1;background:#fff;border:none;border-radius:20px;padding:10px 16px;color:#111;font-family:'DM Sans',sans-serif;font-size:14px;resize:none;outline:none;min-height:20px;max-height:100px;line-height:1.4;box-shadow:0 1px 2px rgba(0,0,0,0.1)}
+.chat-input-bar textarea::placeholder{color:#aaa}
+.chat-send-btn{width:42px;height:42px;border-radius:50%;border:none;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.chat-mic-btn{width:42px;height:42px;border-radius:50%;border:none;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 .chat-mic-btn.gravando{background:#cc3333;animation:pulse-mic 1s infinite}
 @keyframes pulse-mic{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+
 /* TABS BOLETOS MOBILE */
 .boleto-tabs{display:none;gap:0;margin-bottom:16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .boleto-tab-btn{flex:1;padding:10px 4px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;text-align:center;cursor:pointer;color:var(--text2);border:none;background:transparent;transition:all 0.15s;border-right:1px solid var(--border)}
@@ -208,45 +201,33 @@ input::placeholder{color:var(--text3)}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;width:100%;max-width:440px}
 .modal-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:16px}
 .modal-actions{display:flex;gap:10px;margin-top:20px}
+
 @media(min-width:769px) and (max-width:1024px){
-  .sidebar{width:180px}
-  .main-content{margin-left:180px}
-  .tab-btn{padding:12px 16px;font-size:12px}
-  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .sidebar{width:180px}.main-content{margin-left:180px}.tab-btn{padding:12px 16px;font-size:12px}.grid-4{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:768px){
   body{padding-bottom:64px;padding-top:56px}
-  .sidebar{display:none!important}
-  .main-content{margin-left:0!important}
+  .sidebar{display:none!important}.main-content{margin-left:0!important}
   .dashboard-layout{margin-top:0;flex-direction:column}
-  #wa-bar-desktop{display:none!important}
-  .wa-bar-mobile{display:flex!important}
-  .mobile-nav{display:flex!important}
+  #wa-bar-desktop{display:none!important}.wa-bar-mobile{display:flex!important}.mobile-nav{display:flex!important}
   .topbar{background:#0a0a0a;border-bottom:1px solid #222;padding:10px 16px}
-  .topbar .logo{color:#f0f0f0}
-  .topbar .logo span{color:#00d4a0}
+  .topbar .logo{color:#f0f0f0}.topbar .logo span{color:#00d4a0}
   .toast{bottom:80px}
+  #content-registrar{height:calc(100vh - 56px - 64px)}
   .kanban-4{display:flex;flex-direction:column;gap:0}
   .kanban-4 .kanban-col{display:none;border-radius:12px}
   .kanban-4 .kanban-col.bol-ativo{display:block}
   .kanban-4 .kanban-header input{display:none!important}
   .boleto-tabs{display:flex}
-  .grid-4{grid-template-columns:repeat(2,1fr)}
-  .grid-3{grid-template-columns:1fr}
-  .grid-2{grid-template-columns:1fr}
-  .kanban{grid-template-columns:1fr}
-  .content{padding:14px}
-  .modal{padding:18px}
-  .drawer .tab-btn{color:#888;border-bottom:1px solid #222}
-  .drawer .tab-btn.active{color:#00d4a0;background:rgba(0,212,160,0.08)}
+  .grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}.kanban{grid-template-columns:1fr}
+  .content{padding:14px}.modal{padding:18px}
+  .drawer .tab-btn{color:#888;border-bottom:1px solid #222}.drawer .tab-btn.active{color:#00d4a0;background:rgba(0,212,160,0.08)}
   .avatar{border-color:#00d4a0;color:#00d4a0}
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.spinning{animation:spin 1s linear infinite}
-.pulsing{animation:pulse 2s ease-in-out infinite}
-.fade-in{animation:fadeIn 0.3s ease forwards}
+.spinning{animation:spin 1s linear infinite}.pulsing{animation:pulse 2s ease-in-out infinite}.fade-in{animation:fadeIn 0.3s ease forwards}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -271,7 +252,7 @@ input::placeholder{color:var(--text3)}
 <div class="modal" style="max-width:360px;text-align:center">
   <div style="font-size:36px;margin-bottom:12px">⚠️</div>
   <div class="modal-title" style="text-align:center" id="confirm-title">Confirmar exclusão</div>
-  <div style="font-size:13px;color:var(--text2);margin-bottom:20px" id="confirm-msg">Tem certeza que deseja excluir?</div>
+  <div style="font-size:13px;color:var(--text2);margin-bottom:20px" id="confirm-msg"></div>
   <div class="modal-actions" style="justify-content:center">
     <button class="btn btn-outline" style="flex:1" onclick="fecharModal('modal-confirm')">Cancelar</button>
     <button class="btn btn-danger" style="flex:1" id="confirm-btn">Excluir</button>
@@ -292,6 +273,7 @@ input::placeholder{color:var(--text3)}
   </div>
 </div>
 </div>
+
 <!-- LOGIN -->
 <div class="screen active" id="screen-login">
 <div class="auth-wrap">
@@ -312,13 +294,14 @@ input::placeholder{color:var(--text3)}
 <div class="auth-copyright">© 2026 Secretária de Bolso</div>
 </div>
 </div>
+
 <!-- CADASTRO -->
 <div class="screen" id="screen-cadastro">
 <div class="auth-wrap">
 <div class="auth-box fade-in">
   <div class="auth-logo"><div class="auth-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
   <div class="auth-title">Criar conta</div>
-  <div class="auth-sub">Passo 1 de 3 — Dados pessoais</div>
+  <div class="auth-sub">Dados pessoais</div>
   <div class="form-group"><label>Nome completo</label><input type="text" id="cad-nome" placeholder="Seu nome"></div>
   <div class="form-group"><label>E-mail</label><input type="email" id="cad-email" placeholder="seu@email.com"></div>
   <div class="form-group"><label>WhatsApp (com DDD)</label>
@@ -344,53 +327,7 @@ input::placeholder{color:var(--text3)}
 </div>
 </div>
 </div>
-<!-- QR -->
-<div class="screen" id="screen-qr">
-<div class="topbar">
-  <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
-  <button class="btn btn-outline btn-sm" onclick="goTo('screen-dashboard')">← Painel</button>
-</div>
-<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px;margin-top:56px">
-<div style="max-width:500px;width:100%">
-  <div class="steps">
-    <div class="step done"><div class="step-num">✓</div><div class="step-label">Conta</div></div>
-    <div class="step-line done"></div>
-    <div class="step active"><div class="step-num">2</div><div class="step-label">WhatsApp</div></div>
-    <div class="step-line"></div>
-    <div class="step"><div class="step-num">3</div><div class="step-label">Pronto</div></div>
-  </div>
-  <div class="card fade-in" id="qr-step1">
-    <div style="color:var(--teal);font-size:11px;letter-spacing:0.1em;font-family:'Syne',sans-serif;margin-bottom:8px">PASSO 2 DE 3</div>
-    <h2 style="font-size:22px;margin-bottom:6px">Vincular WhatsApp</h2>
-    <p style="color:var(--text2);margin-bottom:20px;font-size:13px">Informe o número do WhatsApp que vai usar para registrar seus gastos.</p>
-    <div class="form-group"><label>Número do WhatsApp</label>
-      <div style="display:flex;gap:8px">
-        <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text2);font-size:13px;white-space:nowrap">BR +55</div>
-        <input type="tel" id="qr-numero" placeholder="(44) 99999-9999" style="flex:1">
-      </div>
-    </div>
-    <button class="btn btn-primary btn-full" onclick="gerarQR()">Gerar QR Code →</button>
-  </div>
-  <div class="card fade-in" id="qr-step2" style="display:none;text-align:center">
-    <div style="color:var(--teal);font-size:11px;letter-spacing:0.1em;font-family:'Syne',sans-serif;margin-bottom:8px">PASSO 2 DE 3</div>
-    <h2 style="font-size:22px;margin-bottom:6px">Escaneie o QR Code</h2>
-    <p style="color:var(--text2);margin-bottom:20px;font-size:13px">Abra o WhatsApp e aponte para o código abaixo.</p>
-    <div style="display:flex;justify-content:center;margin-bottom:12px"><div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://secretariadebolso.com.br&bgcolor=ffffff&color=000000" alt="QR"></div></div>
-    <div class="qr-timer"><div class="dot pulsing" style="background:var(--yellow)"></div>Expira em <strong id="qr-countdown">2:00</strong></div>
-    <div style="display:flex;gap:8px;margin-top:16px">
-      <button class="btn btn-outline" style="flex:1" onclick="voltarStep1()">← Trocar número</button>
-      <button class="btn btn-primary" style="flex:1" onclick="simularConexao()">✓ Conectado</button>
-    </div>
-  </div>
-  <div class="card fade-in" id="qr-step3" style="display:none;text-align:center">
-    <div style="font-size:40px;margin-bottom:12px">🎉</div>
-    <h2 style="font-size:22px;margin-bottom:6px">WhatsApp conectado!</h2>
-    <p style="color:var(--text2);margin-bottom:24px;font-size:13px">Agora é só mandar um áudio e a Secretária cuida do resto.</p>
-    <button class="btn btn-primary btn-full btn-lg" onclick="goTo('screen-dashboard')">Ir para o painel →</button>
-  </div>
-</div>
-</div>
-</div>
+
 <!-- DASHBOARD -->
 <div class="screen" id="screen-dashboard">
   <div class="topbar">
@@ -402,7 +339,6 @@ input::placeholder{color:var(--text3)}
       <span style="font-size:12px;color:#888">WhatsApp</span>
       <span style="font-size:12px;color:#666" id="wa-num-desk">—</span>
       <span class="wa-bar-badge on" id="wa-badge-desk">Conectado</span>
-      <button class="btn btn-outline btn-sm" onclick="goTo('screen-qr')" style="font-size:11px;padding:3px 10px;margin-left:4px">Reconectar</button>
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin-right:16px">
       <span style="font-size:13px;color:#888" id="topbar-name"></span>
@@ -413,7 +349,6 @@ input::placeholder{color:var(--text3)}
     <div class="wa-bar-dot" id="wa-dot-mob"></div>
     <span class="wa-bar-num" id="wa-num-mob">—</span>
     <span class="wa-bar-badge on" id="wa-badge-mob">Conectado</span>
-    <button class="btn btn-outline btn-sm" onclick="goTo('screen-qr')" style="font-size:11px;padding:3px 10px;margin-left:auto">Reconectar</button>
   </div>
   <div class="dashboard-layout">
   <div class="sidebar">
@@ -425,18 +360,12 @@ input::placeholder{color:var(--text3)}
     <div class="tab-btn sair" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair</div>
   </div>
   <div class="main-content">
+
   <!-- REGISTRAR -->
   <div class="tab-content" id="content-registrar">
-  <div class="chat-wrap">
-    <div class="chat-tipo-bar">
-      <button class="chat-tipo-btn active" id="ctipo-despesa" onclick="setChatTipo('despesa')">💸 Despesa</button>
-      <button class="chat-tipo-btn" id="ctipo-receita" onclick="setChatTipo('receita')">💰 Receita</button>
-      <button class="chat-tipo-btn" id="ctipo-agendamento" onclick="setChatTipo('agendamento')">📅 Agenda</button>
-      <button class="chat-tipo-btn" id="ctipo-boleto" onclick="setChatTipo('boleto')">🧾 Boleto</button>
-    </div>
     <div class="chat-msgs" id="chat-msgs">
       <div class="chat-msg recebido">
-        <div class="chat-bubble">Olá! 👋 Pode me dizer o que quer registrar. Mande áudio ou texto!</div>
+        <div class="chat-bubble">Olá! 👋 Me diga o que quer registrar. Pode mandar áudio ou digitar aqui.</div>
         <div class="chat-time">Secretária de Bolso</div>
       </div>
     </div>
@@ -445,14 +374,15 @@ input::placeholder{color:var(--text3)}
         oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';atualizarBtnChat()"
         onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarChatTexto()}"></textarea>
       <button class="chat-send-btn" id="chat-send-btn" onclick="enviarChatTexto()" style="display:none">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
       <button class="chat-mic-btn" id="chat-mic-btn" onclick="toggleChatGravacao()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       </button>
     </div>
   </div>
-  </div>
+
+  <!-- FINANCEIRO -->
   <div class="tab-content" id="content-financeiro">
   <div class="content fade-in">
     <div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
@@ -500,6 +430,8 @@ input::placeholder{color:var(--text3)}
     </div>
   </div>
   </div>
+
+  <!-- AGENDA -->
   <div class="tab-content" id="content-agenda">
   <div class="content fade-in">
     <div class="page-title">Agenda</div>
@@ -509,14 +441,11 @@ input::placeholder{color:var(--text3)}
         <div class="kanban-header" style="flex-direction:column;gap:8px;align-items:stretch">
           <div style="display:flex;align-items:center;justify-content:space-between"><div class="kanban-title" style="color:var(--teal)">Agenda</div><div class="kanban-count" id="cnt-hoje">0</div></div>
           <div style="display:flex;align-items:center;gap:8px">
-            <button onclick="agendaNavDia(-1)" style="background:var(--teal-dim);border:1px solid var(--teal);border-radius:8px;padding:5px 12px;cursor:pointer;color:var(--teal);font-size:12px;font-weight:600;font-family:'Syne',sans-serif;transition:all 0.15s;flex-shrink:0" onmouseover="this.style.background='var(--teal)';this.style.color='#fff'" onmouseout="this.style.background='var(--teal-dim)';this.style.color='var(--teal)'">← Ontem</button>
+            <button onclick="agendaNavDia(-1)" style="background:var(--teal-dim);border:1px solid var(--teal);border-radius:8px;padding:5px 12px;cursor:pointer;color:var(--teal);font-size:12px;font-weight:600;font-family:'Syne',sans-serif;flex-shrink:0">← Ontem</button>
             <div style="flex:1;text-align:center"><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text)" id="agenda-nav-label">Hoje</div><div style="font-size:11px;color:var(--text2)" id="agenda-nav-data"></div></div>
-            <button onclick="agendaNavDia(+1)" style="background:var(--teal-dim);border:1px solid var(--teal);border-radius:8px;padding:5px 12px;cursor:pointer;color:var(--teal);font-size:12px;font-weight:600;font-family:'Syne',sans-serif;transition:all 0.15s;flex-shrink:0" onmouseover="this.style.background='var(--teal)';this.style.color='#fff'" onmouseout="this.style.background='var(--teal-dim)';this.style.color='var(--teal)'">Amanhã →</button>
+            <button onclick="agendaNavDia(+1)" style="background:var(--teal-dim);border:1px solid var(--teal);border-radius:8px;padding:5px 12px;cursor:pointer;color:var(--teal);font-size:12px;font-weight:600;font-family:'Syne',sans-serif;flex-shrink:0">Amanhã →</button>
           </div>
-          <div style="margin-top:6px">
-            <div style="font-size:12px;color:var(--teal);font-weight:600;margin-bottom:6px">📅 Digite uma data para ir direto ao dia desejado</div>
-            <input type="date" id="agenda-data-picker" onchange="agendaIrParaData(this.value)" style="width:100%;padding:4px 8px;font-size:11px">
-          </div>
+          <input type="date" id="agenda-data-picker" onchange="agendaIrParaData(this.value)" style="width:100%;padding:4px 8px;font-size:11px">
         </div>
         <div class="kanban-body" id="col-hoje"><div class="kanban-empty">Nenhum compromisso neste dia</div></div>
       </div>
@@ -527,11 +456,13 @@ input::placeholder{color:var(--text3)}
     </div>
   </div>
   </div>
+
+  <!-- BOLETOS -->
   <div class="tab-content" id="content-boletos">
   <div class="content fade-in">
     <div style="margin-bottom:16px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px"><div><div class="page-title">Boletos</div><div class="page-sub" style="margin-bottom:0">Controle seus pagamentos</div></div></div>
-      <div style="display:flex;align-items:center;gap:12px;background:var(--bg2);border:2px solid var(--border2);border-radius:12px;padding:12px 18px" onclick="document.getElementById('busca-boletos-global').focus()">
+      <div style="display:flex;align-items:center;gap:12px;background:var(--bg2);border:2px solid var(--border2);border-radius:12px;padding:12px 18px">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" id="busca-boletos-global" placeholder="Buscar boleto por nome..." oninput="filtrarBoletosGlobal()" style="border:none;background:transparent;color:var(--text);font-size:15px;outline:none;flex:1;padding:0;font-family:'DM Sans',sans-serif">
         <span id="busca-boletos-limpar" onclick="document.getElementById('busca-boletos-global').value='';filtrarBoletosGlobal()" style="cursor:pointer;color:var(--text2);font-size:18px;display:none">✕</span>
@@ -580,6 +511,8 @@ input::placeholder{color:var(--text3)}
     <div id="resultado-busca-boletos" style="display:none;margin-top:16px"><div class="section-label">Resultados da busca</div><div id="lista-busca-boletos" style="display:flex;flex-direction:column;gap:8px"></div></div>
   </div>
   </div>
+
+  <!-- PERFIL -->
   <div class="tab-content" id="content-perfil">
   <div class="content fade-in">
     <div class="page-title">Perfil</div>
@@ -591,9 +524,6 @@ input::placeholder{color:var(--text3)}
             <div id="perf-foto-wrap" style="width:80px;height:80px;border-radius:50%;background:var(--teal-dim);border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;margin:0 auto;overflow:hidden;cursor:pointer" onclick="document.getElementById('perf-foto-input').click()">
               <img id="perf-foto-img" src="" style="width:100%;height:100%;object-fit:cover;display:none">
               <div id="perf-foto-inicial" style="font-family:'Syne',sans-serif;font-weight:700;font-size:28px;color:var(--teal)">P</div>
-            </div>
-            <div style="position:absolute;bottom:0;right:0;width:24px;height:24px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="document.getElementById('perf-foto-input').click()">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
             </div>
           </div>
           <input type="file" id="perf-foto-input" accept="image/*" style="display:none" onchange="previewFoto(this)">
@@ -608,14 +538,13 @@ input::placeholder{color:var(--text3)}
           <div class="form-group"><label>Confirmar nova senha</label><div style="position:relative"><input type="password" id="perf-senha2" placeholder="Repita a nova senha" style="padding-right:40px"><span onclick="toggleSenha('perf-senha2')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span></div></div>
           <button class="btn btn-primary btn-full" onclick="salvarPerfil()">Salvar alterações</button>
         </div>
-        <!-- COMO USAR DENTRO DO PERFIL -->
         <div class="card">
           <div class="section-label">Como usar</div>
-          <div style="display:flex;flex-direction:column;gap:12px">
-            <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg3);border-radius:10px"><div style="font-size:22px;flex-shrink:0">💸</div><div><div style="font-size:13px;font-weight:700;margin-bottom:2px;font-family:'Syne',sans-serif">Despesa</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Mercado, 85 reais, dia 18"</div></div></div>
-            <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg3);border-radius:10px"><div style="font-size:22px;flex-shrink:0">💰</div><div><div style="font-size:13px;font-weight:700;margin-bottom:2px;font-family:'Syne',sans-serif">Receita</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Recebi do Pedro, 300 reais"</div></div></div>
-            <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg3);border-radius:10px"><div style="font-size:22px;flex-shrink:0">📅</div><div><div style="font-size:13px;font-weight:700;margin-bottom:2px;font-family:'Syne',sans-serif">Agenda</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Dentista amanhã às 14h"</div></div></div>
-            <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg3);border-radius:10px"><div style="font-size:22px;flex-shrink:0">🧾</div><div><div style="font-size:13px;font-weight:700;margin-bottom:2px;font-family:'Syne',sans-serif">Boleto</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Boleto internet, 89 reais, vence dia 20"</div></div></div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:10px;background:var(--bg3);border-radius:8px"><div style="font-size:20px;flex-shrink:0">💸</div><div><div style="font-size:13px;font-weight:600;font-family:'Syne',sans-serif">Despesa</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Mercado, 85 reais, dia 18"</div></div></div>
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:10px;background:var(--bg3);border-radius:8px"><div style="font-size:20px;flex-shrink:0">💰</div><div><div style="font-size:13px;font-weight:600;font-family:'Syne',sans-serif">Receita</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Recebi do Pedro, 300 reais"</div></div></div>
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:10px;background:var(--bg3);border-radius:8px"><div style="font-size:20px;flex-shrink:0">📅</div><div><div style="font-size:13px;font-weight:600;font-family:'Syne',sans-serif">Agenda</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Dentista amanhã às 14h"</div></div></div>
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:10px;background:var(--bg3);border-radius:8px"><div style="font-size:20px;flex-shrink:0">🧾</div><div><div style="font-size:13px;font-weight:600;font-family:'Syne',sans-serif">Boleto</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Boleto internet, 89 reais, vence dia 20"</div></div></div>
           </div>
         </div>
       </div>
@@ -623,10 +552,8 @@ input::placeholder{color:var(--text3)}
         <div class="card">
           <div class="section-label">WhatsApp</div>
           <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:14px">
-            <div style="width:36px;height:36px;border-radius:50%;background:var(--teal-dim);display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--teal)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
             <div style="flex:1"><div style="font-weight:500;font-size:13px" id="perf-wa-numero">—</div><div class="badge badge-green" style="margin-top:4px"><div class="dot"></div>Conectado</div></div>
           </div>
-          <button class="btn btn-outline btn-full btn-sm" onclick="goTo('screen-qr')">Reconectar WhatsApp</button>
         </div>
         <div class="card">
           <div class="section-label">Plano atual</div>
@@ -644,6 +571,7 @@ input::placeholder{color:var(--text3)}
     </div>
   </div>
   </div>
+
   </div>
   </div>
   <div class="drawer-overlay" id="drawer-overlay" onclick="fecharDrawer()"></div>
@@ -665,69 +593,126 @@ input::placeholder{color:var(--text3)}
     <button class="mobile-nav-btn" id="mnav-perfil" onclick="switchTab2('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></button>
   </nav>
 </div>
+
 <script>
 const SUPA_URL='https://krqlbdpuuamimbllddtj.supabase.co';
 const SUPA_KEY='sb_publishable_DWDJXwLW4zXqeApYiZOLGA_yt9pJj1e';
-const WEBHOOKS={despesa:'https://n8n.secretariadebolso.com/webhook/despesas',receita:'https://n8n.secretariadebolso.com/webhook/receitas',agendamento:'https://n8n.secretariadebolso.com/webhook/agendamentos',boleto:'https://n8n.secretariadebolso.com/webhook/boletos'};
+const WEBHOOK_REGISTRAR='https://n8n.secretariadebolso.com/webhook/registrar';
 const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
 var currentUser={nome:'',email:'',id:''};
 var qrTimer=null,qrSeconds=120,totalReceitasSupa=0,totalDespesasSupa=0,currentLTab='despesas',categoriasAtivas=[];
-var chatTipo='despesa',chatGravando=false,chatMediaRecorder=null,chatAudioChunks=[];
+var chatGravando=false,chatMediaRecorder=null,chatAudioChunks=[];
+var pendingConfirm=null;
 const CATS_PADRAO=['Alimentação — Casa','Alimentação — Trabalho','Restaurante — Lazer','Restaurante — Trabalho','Mercado','Farmácia — Saúde','Farmácia — Pet','Combustível','Transporte — Uber/Táxi','Transporte — Outros','Moradia — Aluguel','Moradia — Condomínio','Moradia — Manutenção','Saúde — Médico','Saúde — Dentista','Saúde — Academia','Educação','Vestuário','Lazer — Entretenimento','Viagem','Pet Shop','Assinaturas','Serviços','Boletos','Outros'];
+
 function toggleSenha(id){var i=document.getElementById(id);i.type=i.type==='password'?'text':'password'}
 function toast(msg,err){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' error':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
-function abrirDrawer(){document.getElementById('drawer').classList.add('open');document.getElementById('drawer-overlay').classList.add('open')}
 function fecharDrawer(){document.getElementById('drawer').classList.remove('open');document.getElementById('drawer-overlay').classList.remove('open')}
 function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
 function abrirModal(id){document.getElementById(id).classList.add('open')}
 function fecharModal(id){document.getElementById(id).classList.remove('open')}
 function switchBoletoTab(tab){['vencidos','hoje','apagar','pagos'].forEach(t=>{document.getElementById('btab-'+t).classList.remove('active');document.getElementById('col-wrap-'+t).classList.remove('bol-ativo')});document.getElementById('btab-'+tab).classList.add('active');document.getElementById('col-wrap-'+tab).classList.add('bol-ativo')}
+
 function switchTab2(tab){
-  ['financeiro','agenda','boletos','perfil','registrar'].forEach(t=>{var tb=document.getElementById('tab-'+t);if(tb)tb.classList.remove('active');var ct=document.getElementById('content-'+t);if(ct)ct.classList.remove('active')});
+  ['financeiro','agenda','boletos','perfil','registrar'].forEach(t=>{
+    var tb=document.getElementById('tab-'+t);if(tb)tb.classList.remove('active');
+    var ct=document.getElementById('content-'+t);if(ct)ct.classList.remove('active');
+  });
   var el=document.getElementById('tab-'+tab);if(el)el.classList.add('active');
   var ct=document.getElementById('content-'+tab);if(ct)ct.classList.add('active');
   ['financeiro','agenda','boletos','perfil','registrar'].forEach(t=>{var el=document.getElementById('mnav-'+t);if(el)el.classList.remove('active')});
   var mnav=document.getElementById('mnav-'+tab);if(mnav)mnav.classList.add('active');
-  if(tab==='agenda')carregarAgenda();if(tab==='boletos')carregarBoletos();if(tab==='perfil')carregarPerfil();if(tab==='financeiro')carregarDashboard();
+  if(tab==='agenda')carregarAgenda();
+  if(tab==='boletos')carregarBoletos();
+  if(tab==='perfil')carregarPerfil();
+  if(tab==='financeiro')carregarDashboard();
 }
 function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-despesas').style.background=tab==='despesas'?'var(--teal-dim)':'transparent';document.getElementById('ltab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-receitas').style.background=tab==='receitas'?'var(--teal-dim)':'transparent';carregarLancamentos()}
 
-// CHAT REGISTRAR
-function setChatTipo(tipo){
-  chatTipo=tipo;
-  ['despesa','receita','agendamento','boleto'].forEach(t=>document.getElementById('ctipo-'+t).classList.remove('active'));
-  document.getElementById('ctipo-'+tipo).classList.add('active');
-}
+/* ── CHAT ── */
 function atualizarBtnChat(){
   var txt=document.getElementById('chat-texto').value.trim();
   document.getElementById('chat-send-btn').style.display=txt?'flex':'none';
   document.getElementById('chat-mic-btn').style.display=txt?'none':'flex';
 }
-function adicionarMsgChat(texto,tipo){
+
+function adicionarMsg(html,tipo){
   var msgs=document.getElementById('chat-msgs');
   var hora=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   var div=document.createElement('div');div.className='chat-msg '+tipo;
-  div.innerHTML=`<div class="chat-bubble">${texto}</div><div class="chat-time">${hora}</div>`;
+  div.innerHTML=`<div class="chat-bubble">${html}</div><div class="chat-time">${hora}</div>`;
   msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
   return div;
 }
+
 async function enviarChatTexto(){
   var texto=document.getElementById('chat-texto').value.trim();
   if(!texto)return;
-  adicionarMsgChat(texto,'enviado');
+  adicionarMsg(texto,'enviado');
   document.getElementById('chat-texto').value='';
   document.getElementById('chat-texto').style.height='auto';
   atualizarBtnChat();
-  var msgResp=adicionarMsgChat('<span style="color:#8696a0;font-style:italic">⏳ Processando...</span>','recebido');
+  await processarEnvio({texto});
+}
+
+async function processarEnvio(payload){
+  var msgResp=adicionarMsg('<span style="color:#aaa;font-style:italic">⏳ Processando...</span>','recebido');
   try{
-    var res=await fetch(WEBHOOKS[chatTipo],{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:currentUser.id,texto,tipo:chatTipo})});
+    var fd=new FormData();
+    fd.append('user_id',currentUser.id);
+    if(payload.texto)fd.append('texto',payload.texto);
+    if(payload.audio)fd.append('audio',payload.audio,'audio.webm');
+
+    var res=await fetch(WEBHOOK_REGISTRAR,{method:'POST',body:fd});
+    var data=await res.json().catch(()=>({}));
+
+    if(data.confirmar){
+      // N8N retornou dados para confirmação
+      pendingConfirm=data;
+      var tipoEmoji={despesa:'💸',receita:'💰',agendamento:'📅',boleto:'🧾'}[data.tipo]||'📋';
+      var html=`${tipoEmoji} <strong>Confirme o registro:</strong><br>
+        <small style="color:#555">Tipo:</small> ${data.tipo||'—'}<br>
+        <small style="color:#555">Descrição:</small> ${data.descricao||'—'}<br>
+        ${data.valor?`<small style="color:#555">Valor:</small> R$ ${parseFloat(data.valor).toFixed(2).replace('.',',')}` :''}<br>
+        ${data.data?`<small style="color:#555">Data:</small> ${data.data}`:''}`;
+      msgResp.querySelector('.chat-bubble').innerHTML=html;
+      var btns=document.createElement('div');btns.className='chat-confirm-btns';
+      btns.innerHTML=`<button class="btn-confirmar" onclick="confirmarRegistro(this)">✅ Confirmar</button><button class="btn-cancelar" onclick="cancelarRegistro(this)">✕ Cancelar</button>`;
+      msgResp.appendChild(btns);
+    } else {
+      msgResp.querySelector('.chat-bubble').innerHTML=data.mensagem||'✅ Registrado com sucesso!';
+    }
+  }catch(e){
+    msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao enviar. Tente novamente.';
+  }
+  document.getElementById('chat-msgs').scrollTop=document.getElementById('chat-msgs').scrollHeight;
+}
+
+async function confirmarRegistro(btn){
+  btn.closest('.chat-confirm-btns').remove();
+  var msgResp=adicionarMsg('<span style="color:#aaa;font-style:italic">⏳ Salvando...</span>','recebido');
+  try{
+    // Envia confirmação para o N8N salvar no Supabase
+    var res=await fetch(WEBHOOK_REGISTRAR+'/confirmar',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({...pendingConfirm,user_id:currentUser.id,confirmado:true})
+    });
     var data=await res.json().catch(()=>({}));
     msgResp.querySelector('.chat-bubble').innerHTML=data.mensagem||'✅ Registrado com sucesso!';
-  }catch(e){msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao enviar. Tente novamente.';}
+    pendingConfirm=null;
+  }catch(e){
+    msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao salvar. Tente novamente.';
+  }
 }
-async function toggleChatGravacao(){
-  if(!chatGravando)await iniciarChatGravacao();else pararChatGravacao();
+
+function cancelarRegistro(btn){
+  btn.closest('.chat-confirm-btns').remove();
+  adicionarMsg('Tudo bem! O que mais posso registrar? 😊','recebido');
+  pendingConfirm=null;
 }
+
+async function toggleChatGravacao(){if(!chatGravando)await iniciarChatGravacao();else pararChatGravacao()}
 async function iniciarChatGravacao(){
   try{
     var stream=await navigator.mediaDevices.getUserMedia({audio:true});
@@ -737,31 +722,23 @@ async function iniciarChatGravacao(){
     chatMediaRecorder.onstop=async()=>{
       var blob=new Blob(chatAudioChunks,{type:'audio/webm'});
       stream.getTracks().forEach(t=>t.stop());
-      await enviarChatAudio(blob);
+      adicionarMsg('🎤 Áudio enviado','enviado');
+      await processarEnvio({audio:blob});
     };
     chatMediaRecorder.start();chatGravando=true;
     var btn=document.getElementById('chat-mic-btn');btn.classList.add('gravando');
-    btn.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
-  }catch(e){toast('Permita acesso ao microfone',true);}
+    btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+  }catch(e){toast('Permita acesso ao microfone',true)}
 }
 function pararChatGravacao(){
   if(chatMediaRecorder&&chatGravando){
     chatMediaRecorder.stop();chatGravando=false;
     var btn=document.getElementById('chat-mic-btn');btn.classList.remove('gravando');
-    btn.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>';
+    btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>';
   }
 }
-async function enviarChatAudio(blob){
-  var msgEnv=adicionarMsgChat('🎤 Áudio enviado','enviado');
-  var msgResp=adicionarMsgChat('<span style="color:#8696a0;font-style:italic">⏳ Transcrevendo...</span>','recebido');
-  try{
-    var fd=new FormData();fd.append('audio',blob,'audio.webm');fd.append('user_id',currentUser.id);fd.append('tipo',chatTipo);
-    var res=await fetch(WEBHOOKS[chatTipo],{method:'POST',body:fd});
-    var data=await res.json().catch(()=>({}));
-    msgResp.querySelector('.chat-bubble').innerHTML=data.mensagem||'✅ Registrado com sucesso!';
-  }catch(e){msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao enviar. Tente novamente.';}
-}
 
+/* ── AUTH ── */
 async function doLogin(){
   var email=document.getElementById('login-email').value,senha=document.getElementById('login-senha').value;
   if(!email||!senha){toast('Preencha e-mail e senha',true);return}
@@ -789,7 +766,7 @@ async function doCadastro(){
   document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
   var tel=document.getElementById('cad-pais').value+document.getElementById('cad-telefone').value.replace(/\D/g,'');
   if(data.user){await sb.from('clientes').insert({user_id:data.user.id,nome:primeiroNome,whatsapp:tel,whatsapp_conectado:false,evolution_instance:'teste-sb'})}
-  goTo('screen-qr');toast('Conta criada! Conecte seu WhatsApp.');
+  toast('Conta criada com sucesso!');switchTab2('financeiro');goTo('screen-dashboard');
 }
 async function carregarWAStatus(){
   try{
@@ -913,10 +890,7 @@ async function salvarPerfil(){
   try{var updates={data:{nome}};if(senha)updates.password=senha;await sb.auth.updateUser(updates);await sb.from('clientes').update({nome:nome.split(' ')[0],...(profissao?{profissao}:{})}).eq('user_id',currentUser.id);var primeiroNome=nome.split(' ')[0];currentUser.nome=primeiroNome;document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();document.getElementById('perf-foto-inicial').textContent=primeiroNome.charAt(0).toUpperCase();if(senha){document.getElementById('perf-senha').value='';document.getElementById('perf-senha2').value='';}toast('Perfil salvo com sucesso!');}catch(e){toast('Erro ao salvar: '+e.message,true)}
   btn.textContent='Salvar alterações';btn.disabled=false;
 }
-async function gerarQR(){var num=document.getElementById('qr-numero').value.replace(/\D/g,'');if(num.length<10){toast('Número inválido',true);return}document.getElementById('qr-step1').style.display='none';document.getElementById('qr-step2').style.display='block';startQRTimer();await sb.from('clientes').update({whatsapp:'55'+num}).eq('user_id',currentUser.id)}
-function startQRTimer(){qrSeconds=120;if(qrTimer)clearInterval(qrTimer);qrTimer=setInterval(()=>{qrSeconds--;var m=Math.floor(qrSeconds/60),s=qrSeconds%60;document.getElementById('qr-countdown').textContent=m+':'+(s<10?'0':'')+s;if(qrSeconds<=0){clearInterval(qrTimer);toast('QR expirado. Gere um novo.',true)}},1000)}
-function voltarStep1(){document.getElementById('qr-step1').style.display='block';document.getElementById('qr-step2').style.display='none';if(qrTimer)clearInterval(qrTimer)}
-function simularConexao(){if(qrTimer)clearInterval(qrTimer);document.getElementById('qr-step2').style.display='none';document.getElementById('qr-step3').style.display='block';toast('WhatsApp conectado!')}
+
 sb.auth.getSession().then(({data})=>{if(data.session)iniciarSessao(data.session.user)});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 </script>
