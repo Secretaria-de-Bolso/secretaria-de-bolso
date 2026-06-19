@@ -351,7 +351,7 @@ input::placeholder{color:var(--text3)}
       <div class="avatar" id="topbar-avatar" onclick="switchTab2('perfil')">P</div>
     </div>
   </div>
-  <div id="sub-topbar" style="display:none;align-items:center;gap:8px;padding:6px 16px;background:#0a0a0a;border-bottom:1px solid #222;position:fixed;top:56px;left:0;right:0;z-index:99;height:36px">
+  <div id="sub-topbar" style="display:none;align-items:center;gap:8px;padding:6px 16px;background:#111;border-bottom:1px solid #222;position:fixed;top:56px;left:0;right:0;z-index:99;height:36px">
     <div id="wa-dot-sub" style="width:7px;height:7px;border-radius:50%;background:#00d4a0;flex-shrink:0"></div>
     <span style="font-size:12px;color:#aaa" id="wa-num-sub">—</span>
     <span id="wa-badge-sub" style="padding:1px 7px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;background:#00d4a0;color:#000">Conectado</span>
@@ -637,11 +637,7 @@ function switchTab2(tab){
   var wabar=document.getElementById('wa-bar-mobile');
   if(wabar)wabar.style.display='none';
   var sub=document.getElementById('sub-topbar');
-  var reg=document.getElementById('content-registrar');
-  if(window.innerWidth<=768){
-    if(sub)sub.style.display=tab==='registrar'?'none':'flex';
-    if(reg)reg.style.top=tab==='registrar'?'56px':'92px';
-  }
+  if(sub)sub.style.display='flex';
   if(tab==='agenda')carregarAgenda();
   if(tab==='boletos')carregarBoletos();
   if(tab==='perfil')carregarPerfil();
@@ -716,7 +712,7 @@ async function iniciarSessao(user){
   var nome=user.user_metadata?.nome||user.email.split('@')[0];nome=nome.charAt(0).toUpperCase()+nome.slice(1);
   var primeiroNome=nome.split(' ')[0];currentUser={nome:primeiroNome,email:user.email,id:user.id};
   document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
-  goTo('screen-dashboard');toast('Bem-vindo, '+primeiroNome+'!');switchTab2('registrar');if(window.innerWidth<=768){var sub=document.getElementById('sub-topbar');if(sub)sub.style.display='none';}
+  goTo('screen-dashboard');toast('Bem-vindo, '+primeiroNome+'!');if(window.innerWidth<=768){var sub=document.getElementById('sub-topbar');if(sub)sub.style.display='flex';}switchTab2('registrar');
   await Promise.all([carregarWAStatus(),carregarCategorias()]);
 }
 async function doLogout(){await sb.auth.signOut();currentUser={nome:'',email:'',id:''};goTo('screen-login')}
