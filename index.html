@@ -171,20 +171,43 @@ input::placeholder{color:var(--text3)}
 .mobile-nav-btn.active{color:#00d4a0}
 .mobile-nav-btn.active svg{stroke:#00d4a0}
 .mobile-nav-btn span{font-size:11px}
-
+/* REGISTRAR — estilo conversa */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 56px - 64px);background:#111;overflow:hidden}
+.chat-tipo-bar{display:flex;gap:0;background:#0a0a0a;border-bottom:1px solid #222;padding:0}
+.chat-tipo-btn{flex:1;padding:10px 4px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;text-align:center;cursor:pointer;color:#555;border:none;background:transparent;transition:all 0.15s;border-bottom:2px solid transparent}
+.chat-tipo-btn.active{color:#00d4a0;border-bottom-color:#00d4a0}
+.chat-msgs{flex:1;overflow-y:auto;padding:16px 12px;display:flex;flex-direction:column;gap:10px;background:#111}
+.chat-msg{display:flex;flex-direction:column;max-width:78%}
+.chat-msg.enviado{align-self:flex-end;align-items:flex-end}
+.chat-msg.recebido{align-self:flex-start;align-items:flex-start}
+.chat-bubble{padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.5;position:relative}
+.chat-msg.enviado .chat-bubble{background:#005c4b;color:#e9ffed;border-radius:12px 12px 2px 12px}
+.chat-msg.recebido .chat-bubble{background:#1f2c34;color:#e9edef;border-radius:12px 12px 12px 2px}
+.chat-bubble.processando{color:#8696a0;font-style:italic}
+.chat-time{font-size:10px;color:#8696a0;margin-top:3px;padding:0 4px}
+.chat-audio-bubble{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:#005c4b;border-radius:12px 12px 2px 12px}
+.chat-audio-icon{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-audio-waves{flex:1;height:20px;display:flex;align-items:center;gap:2px}
+.chat-audio-wave{width:3px;border-radius:2px;background:#4caf94}
+.chat-input-bar{background:#1f2c34;border-top:1px solid #2a3942;padding:10px 12px;display:flex;align-items:flex-end;gap:10px}
+.chat-input-bar textarea{flex:1;background:#2a3942;border:none;border-radius:20px;padding:10px 16px;color:#e9edef;font-family:'DM Sans',sans-serif;font-size:14px;resize:none;outline:none;min-height:20px;max-height:100px;line-height:1.4}
+.chat-input-bar textarea::placeholder{color:#8696a0}
+.chat-send-btn{width:44px;height:44px;border-radius:50%;border:none;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background 0.2s}
+.chat-send-btn:active{background:var(--teal2)}
+.chat-mic-btn{width:44px;height:44px;border-radius:50%;border:none;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.2s}
+.chat-mic-btn.gravando{background:#cc3333;animation:pulse-mic 1s infinite}
+@keyframes pulse-mic{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
 /* TABS BOLETOS MOBILE */
 .boleto-tabs{display:none;gap:0;margin-bottom:16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .boleto-tab-btn{flex:1;padding:10px 4px;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;text-align:center;cursor:pointer;color:var(--text2);border:none;background:transparent;transition:all 0.15s;border-right:1px solid var(--border)}
 .boleto-tab-btn:last-child{border-right:none}
 .boleto-tab-btn.active{background:var(--teal);color:#fff}
 .boleto-tab-btn .tab-count{display:block;font-size:15px;font-weight:700;margin-bottom:1px}
-
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;width:100%;max-width:440px}
 .modal-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:16px}
 .modal-actions{display:flex;gap:10px;margin-top:20px}
-
 @media(min-width:769px) and (max-width:1024px){
   .sidebar{width:180px}
   .main-content{margin-left:180px}
@@ -203,7 +226,6 @@ input::placeholder{color:var(--text3)}
   .topbar .logo{color:#f0f0f0}
   .topbar .logo span{color:#00d4a0}
   .toast{bottom:80px}
-  /* No mobile: kanban-4 vira coluna única, tabs controlam qual mostrar */
   .kanban-4{display:flex;flex-direction:column;gap:0}
   .kanban-4 .kanban-col{display:none;border-radius:12px}
   .kanban-4 .kanban-col.bol-ativo{display:block}
@@ -395,14 +417,42 @@ input::placeholder{color:var(--text3)}
   </div>
   <div class="dashboard-layout">
   <div class="sidebar">
-    <div class="tab-btn" id="tab-perfil" onclick="switchTab2('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</div>
+    <div class="tab-btn" id="tab-registrar" onclick="switchTab2('registrar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Registrar</div>
     <div class="tab-btn" id="tab-financeiro" onclick="switchTab2('financeiro')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Financeiro</div>
     <div class="tab-btn" id="tab-agenda" onclick="switchTab2('agenda')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda</div>
     <div class="tab-btn" id="tab-boletos" onclick="switchTab2('boletos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Boletos</div>
-    <div class="tab-btn" id="tab-comousar" onclick="switchTab2('comousar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Como usar</div>
+    <div class="tab-btn" id="tab-perfil" onclick="switchTab2('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</div>
     <div class="tab-btn sair" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair</div>
   </div>
   <div class="main-content">
+  <!-- REGISTRAR -->
+  <div class="tab-content" id="content-registrar">
+  <div class="chat-wrap">
+    <div class="chat-tipo-bar">
+      <button class="chat-tipo-btn active" id="ctipo-despesa" onclick="setChatTipo('despesa')">💸 Despesa</button>
+      <button class="chat-tipo-btn" id="ctipo-receita" onclick="setChatTipo('receita')">💰 Receita</button>
+      <button class="chat-tipo-btn" id="ctipo-agendamento" onclick="setChatTipo('agendamento')">📅 Agenda</button>
+      <button class="chat-tipo-btn" id="ctipo-boleto" onclick="setChatTipo('boleto')">🧾 Boleto</button>
+    </div>
+    <div class="chat-msgs" id="chat-msgs">
+      <div class="chat-msg recebido">
+        <div class="chat-bubble">Olá! 👋 Pode me dizer o que quer registrar. Mande áudio ou texto!</div>
+        <div class="chat-time">Secretária de Bolso</div>
+      </div>
+    </div>
+    <div class="chat-input-bar">
+      <textarea id="chat-texto" rows="1" placeholder="Digite aqui ou grave um áudio..."
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px';atualizarBtnChat()"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();enviarChatTexto()}"></textarea>
+      <button class="chat-send-btn" id="chat-send-btn" onclick="enviarChatTexto()" style="display:none">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+      <button class="chat-mic-btn" id="chat-mic-btn" onclick="toggleChatGravacao()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </button>
+    </div>
+  </div>
+  </div>
   <div class="tab-content" id="content-financeiro">
   <div class="content fade-in">
     <div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
@@ -487,20 +537,11 @@ input::placeholder{color:var(--text3)}
         <span id="busca-boletos-limpar" onclick="document.getElementById('busca-boletos-global').value='';filtrarBoletosGlobal()" style="cursor:pointer;color:var(--text2);font-size:18px;display:none">✕</span>
       </div>
     </div>
-    <!-- TABS MOBILE — só aparece no mobile -->
     <div class="boleto-tabs" id="boleto-tabs">
-      <button class="boleto-tab-btn active" id="btab-vencidos" onclick="switchBoletoTab('vencidos')">
-        <span class="tab-count" id="btab-cnt-vencidos">0</span>Vencidos
-      </button>
-      <button class="boleto-tab-btn" id="btab-hoje" onclick="switchBoletoTab('hoje')">
-        <span class="tab-count" id="btab-cnt-hoje">0</span>Hoje
-      </button>
-      <button class="boleto-tab-btn" id="btab-apagar" onclick="switchBoletoTab('apagar')">
-        <span class="tab-count" id="btab-cnt-apagar">0</span>A pagar
-      </button>
-      <button class="boleto-tab-btn" id="btab-pagos" onclick="switchBoletoTab('pagos')">
-        <span class="tab-count" id="btab-cnt-pagos">0</span>Pagos
-      </button>
+      <button class="boleto-tab-btn active" id="btab-vencidos" onclick="switchBoletoTab('vencidos')"><span class="tab-count" id="btab-cnt-vencidos">0</span>Vencidos</button>
+      <button class="boleto-tab-btn" id="btab-hoje" onclick="switchBoletoTab('hoje')"><span class="tab-count" id="btab-cnt-hoje">0</span>Hoje</button>
+      <button class="boleto-tab-btn" id="btab-apagar" onclick="switchBoletoTab('apagar')"><span class="tab-count" id="btab-cnt-apagar">0</span>A pagar</button>
+      <button class="boleto-tab-btn" id="btab-pagos" onclick="switchBoletoTab('pagos')"><span class="tab-count" id="btab-cnt-pagos">0</span>Pagos</button>
     </div>
     <div class="kanban-4" id="kanban-boletos-wrap">
       <div class="kanban-col bol-ativo" id="col-wrap-vencidos" style="border-color:rgba(255,77,77,0.3)">
@@ -567,6 +608,16 @@ input::placeholder{color:var(--text3)}
           <div class="form-group"><label>Confirmar nova senha</label><div style="position:relative"><input type="password" id="perf-senha2" placeholder="Repita a nova senha" style="padding-right:40px"><span onclick="toggleSenha('perf-senha2')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text2)">👁</span></div></div>
           <button class="btn btn-primary btn-full" onclick="salvarPerfil()">Salvar alterações</button>
         </div>
+        <!-- COMO USAR DENTRO DO PERFIL -->
+        <div class="card">
+          <div class="section-label">Como usar</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg3);border-radius:10px"><div style="font-size:22px;flex-shrink:0">💸</div><div><div style="font-size:13px;font-weight:700;margin-bottom:2px;font-family:'Syne',sans-serif">Despesa</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Mercado, 85 reais, dia 18"</div></div></div>
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg3);border-radius:10px"><div style="font-size:22px;flex-shrink:0">💰</div><div><div style="font-size:13px;font-weight:700;margin-bottom:2px;font-family:'Syne',sans-serif">Receita</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Recebi do Pedro, 300 reais"</div></div></div>
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg3);border-radius:10px"><div style="font-size:22px;flex-shrink:0">📅</div><div><div style="font-size:13px;font-weight:700;margin-bottom:2px;font-family:'Syne',sans-serif">Agenda</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Dentista amanhã às 14h"</div></div></div>
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;background:var(--bg3);border-radius:10px"><div style="font-size:22px;flex-shrink:0">🧾</div><div><div style="font-size:13px;font-weight:700;margin-bottom:2px;font-family:'Syne',sans-serif">Boleto</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Boleto internet, 89 reais, vence dia 20"</div></div></div>
+          </div>
+        </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:14px">
         <div class="card">
@@ -593,47 +644,35 @@ input::placeholder{color:var(--text3)}
     </div>
   </div>
   </div>
-  <div class="tab-content" id="content-comousar">
-  <div class="content fade-in">
-    <div class="page-title">Como usar</div>
-    <div class="page-sub">Tudo que você pode fazer pelo WhatsApp</div>
-    <div class="card" style="max-width:600px">
-      <div style="display:flex;flex-direction:column;gap:20px">
-        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px"><div style="font-size:28px;flex-shrink:0">🎤</div><div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Registre um gasto</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Uber, 25 reais, hoje"</div></div></div>
-        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px"><div style="font-size:28px;flex-shrink:0">💰</div><div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Registre uma receita</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Recebi do cliente Pedro, 300 reais"</div></div></div>
-        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px"><div style="font-size:28px;flex-shrink:0">📅</div><div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Agende um compromisso</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Reunião com fornecedor dia 20 às 10h"</div></div></div>
-        <div style="display:flex;gap:14px;align-items:flex-start;padding:14px;background:var(--bg3);border-radius:10px"><div style="font-size:28px;flex-shrink:0">🧾</div><div><div style="font-size:14px;font-weight:700;margin-bottom:4px;font-family:'Syne',sans-serif">Cadastre um boleto</div><div style="font-size:12px;color:var(--text2);margin-bottom:6px">Mande áudio ou texto pelo WhatsApp</div><div style="font-size:12px;color:var(--teal);font-style:italic">"Boleto internet, 89 reais, vence dia 20"</div></div></div>
-      </div>
-    </div>
-  </div>
-  </div>
   </div>
   </div>
   <div class="drawer-overlay" id="drawer-overlay" onclick="fecharDrawer()"></div>
   <div class="drawer" id="drawer">
     <div class="drawer-header"><span class="drawer-header-title">Menu</span><button class="drawer-close" onclick="fecharDrawer()">✕</button></div>
-    <div class="tab-btn" onclick="switchTab2('perfil');fecharDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</div>
+    <div class="tab-btn" onclick="switchTab2('registrar');fecharDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Registrar</div>
     <div class="tab-btn" onclick="switchTab2('financeiro');fecharDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Financeiro</div>
     <div class="tab-btn" onclick="switchTab2('agenda');fecharDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agenda</div>
     <div class="tab-btn" onclick="switchTab2('boletos');fecharDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Boletos</div>
-    <div class="tab-btn" onclick="switchTab2('comousar');fecharDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Como usar</div>
+    <div class="tab-btn" onclick="switchTab2('perfil');fecharDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</div>
     <div class="tab-btn sair" onclick="doLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sair</div>
   </div>
   <div class="footer">© 2026 Secretária de Bolso</div>
   <nav class="mobile-nav" id="mobile-nav">
+    <button class="mobile-nav-btn" id="mnav-registrar" onclick="switchTab2('registrar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg><span>Registrar</span></button>
     <button class="mobile-nav-btn active" id="mnav-financeiro" onclick="switchTab2('financeiro')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>Financeiro</span></button>
     <button class="mobile-nav-btn" id="mnav-agenda" onclick="switchTab2('agenda')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Agenda</span></button>
     <button class="mobile-nav-btn" id="mnav-boletos" onclick="switchTab2('boletos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Boletos</span></button>
     <button class="mobile-nav-btn" id="mnav-perfil" onclick="switchTab2('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></button>
-    <button class="mobile-nav-btn" id="mnav-comousar" onclick="switchTab2('comousar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Como usar</span></button>
   </nav>
 </div>
 <script>
 const SUPA_URL='https://krqlbdpuuamimbllddtj.supabase.co';
 const SUPA_KEY='sb_publishable_DWDJXwLW4zXqeApYiZOLGA_yt9pJj1e';
+const WEBHOOKS={despesa:'https://n8n.secretariadebolso.com/webhook/despesas',receita:'https://n8n.secretariadebolso.com/webhook/receitas',agendamento:'https://n8n.secretariadebolso.com/webhook/agendamentos',boleto:'https://n8n.secretariadebolso.com/webhook/boletos'};
 const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
 var currentUser={nome:'',email:'',id:''};
 var qrTimer=null,qrSeconds=120,totalReceitasSupa=0,totalDespesasSupa=0,currentLTab='despesas',categoriasAtivas=[];
+var chatTipo='despesa',chatGravando=false,chatMediaRecorder=null,chatAudioChunks=[];
 const CATS_PADRAO=['Alimentação — Casa','Alimentação — Trabalho','Restaurante — Lazer','Restaurante — Trabalho','Mercado','Farmácia — Saúde','Farmácia — Pet','Combustível','Transporte — Uber/Táxi','Transporte — Outros','Moradia — Aluguel','Moradia — Condomínio','Moradia — Manutenção','Saúde — Médico','Saúde — Dentista','Saúde — Academia','Educação','Vestuário','Lazer — Entretenimento','Viagem','Pet Shop','Assinaturas','Serviços','Boletos','Outros'];
 function toggleSenha(id){var i=document.getElementById(id);i.type=i.type==='password'?'text':'password'}
 function toast(msg,err){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' error':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
@@ -642,30 +681,87 @@ function fecharDrawer(){document.getElementById('drawer').classList.remove('open
 function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
 function abrirModal(id){document.getElementById(id).classList.add('open')}
 function fecharModal(id){document.getElementById(id).classList.remove('open')}
-
-// TABS BOLETOS MOBILE
-function switchBoletoTab(tab){
-  ['vencidos','hoje','apagar','pagos'].forEach(t=>{
-    document.getElementById('btab-'+t).classList.remove('active');
-    document.getElementById('col-wrap-'+t).classList.remove('bol-ativo');
-  });
-  document.getElementById('btab-'+tab).classList.add('active');
-  document.getElementById('col-wrap-'+tab).classList.add('bol-ativo');
-}
-
+function switchBoletoTab(tab){['vencidos','hoje','apagar','pagos'].forEach(t=>{document.getElementById('btab-'+t).classList.remove('active');document.getElementById('col-wrap-'+t).classList.remove('bol-ativo')});document.getElementById('btab-'+tab).classList.add('active');document.getElementById('col-wrap-'+tab).classList.add('bol-ativo')}
 function switchTab2(tab){
-  ['financeiro','agenda','boletos','perfil','comousar'].forEach(t=>{document.getElementById('tab-'+t).classList.remove('active');document.getElementById('content-'+t).classList.remove('active')});
-  document.getElementById('tab-'+tab).classList.add('active');document.getElementById('content-'+tab).classList.add('active');
-  ['financeiro','agenda','boletos','perfil','comousar'].forEach(t=>{var el=document.getElementById('mnav-'+t);if(el)el.classList.remove('active')});
+  ['financeiro','agenda','boletos','perfil','registrar'].forEach(t=>{var tb=document.getElementById('tab-'+t);if(tb)tb.classList.remove('active');var ct=document.getElementById('content-'+t);if(ct)ct.classList.remove('active')});
+  var el=document.getElementById('tab-'+tab);if(el)el.classList.add('active');
+  var ct=document.getElementById('content-'+tab);if(ct)ct.classList.add('active');
+  ['financeiro','agenda','boletos','perfil','registrar'].forEach(t=>{var el=document.getElementById('mnav-'+t);if(el)el.classList.remove('active')});
   var mnav=document.getElementById('mnav-'+tab);if(mnav)mnav.classList.add('active');
   if(tab==='agenda')carregarAgenda();if(tab==='boletos')carregarBoletos();if(tab==='perfil')carregarPerfil();if(tab==='financeiro')carregarDashboard();
 }
-function switchLTab(tab){
-  currentLTab=tab;
-  document.getElementById('ltab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-despesas').style.background=tab==='despesas'?'var(--teal-dim)':'transparent';
-  document.getElementById('ltab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-receitas').style.background=tab==='receitas'?'var(--teal-dim)':'transparent';
-  carregarLancamentos();
+function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-despesas').style.background=tab==='despesas'?'var(--teal-dim)':'transparent';document.getElementById('ltab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-receitas').style.background=tab==='receitas'?'var(--teal-dim)':'transparent';carregarLancamentos()}
+
+// CHAT REGISTRAR
+function setChatTipo(tipo){
+  chatTipo=tipo;
+  ['despesa','receita','agendamento','boleto'].forEach(t=>document.getElementById('ctipo-'+t).classList.remove('active'));
+  document.getElementById('ctipo-'+tipo).classList.add('active');
 }
+function atualizarBtnChat(){
+  var txt=document.getElementById('chat-texto').value.trim();
+  document.getElementById('chat-send-btn').style.display=txt?'flex':'none';
+  document.getElementById('chat-mic-btn').style.display=txt?'none':'flex';
+}
+function adicionarMsgChat(texto,tipo){
+  var msgs=document.getElementById('chat-msgs');
+  var hora=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  var div=document.createElement('div');div.className='chat-msg '+tipo;
+  div.innerHTML=`<div class="chat-bubble">${texto}</div><div class="chat-time">${hora}</div>`;
+  msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;
+  return div;
+}
+async function enviarChatTexto(){
+  var texto=document.getElementById('chat-texto').value.trim();
+  if(!texto)return;
+  adicionarMsgChat(texto,'enviado');
+  document.getElementById('chat-texto').value='';
+  document.getElementById('chat-texto').style.height='auto';
+  atualizarBtnChat();
+  var msgResp=adicionarMsgChat('<span style="color:#8696a0;font-style:italic">⏳ Processando...</span>','recebido');
+  try{
+    var res=await fetch(WEBHOOKS[chatTipo],{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:currentUser.id,texto,tipo:chatTipo})});
+    var data=await res.json().catch(()=>({}));
+    msgResp.querySelector('.chat-bubble').innerHTML=data.mensagem||'✅ Registrado com sucesso!';
+  }catch(e){msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao enviar. Tente novamente.';}
+}
+async function toggleChatGravacao(){
+  if(!chatGravando)await iniciarChatGravacao();else pararChatGravacao();
+}
+async function iniciarChatGravacao(){
+  try{
+    var stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    chatAudioChunks=[];
+    chatMediaRecorder=new MediaRecorder(stream);
+    chatMediaRecorder.ondataavailable=e=>chatAudioChunks.push(e.data);
+    chatMediaRecorder.onstop=async()=>{
+      var blob=new Blob(chatAudioChunks,{type:'audio/webm'});
+      stream.getTracks().forEach(t=>t.stop());
+      await enviarChatAudio(blob);
+    };
+    chatMediaRecorder.start();chatGravando=true;
+    var btn=document.getElementById('chat-mic-btn');btn.classList.add('gravando');
+    btn.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+  }catch(e){toast('Permita acesso ao microfone',true);}
+}
+function pararChatGravacao(){
+  if(chatMediaRecorder&&chatGravando){
+    chatMediaRecorder.stop();chatGravando=false;
+    var btn=document.getElementById('chat-mic-btn');btn.classList.remove('gravando');
+    btn.innerHTML='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>';
+  }
+}
+async function enviarChatAudio(blob){
+  var msgEnv=adicionarMsgChat('🎤 Áudio enviado','enviado');
+  var msgResp=adicionarMsgChat('<span style="color:#8696a0;font-style:italic">⏳ Transcrevendo...</span>','recebido');
+  try{
+    var fd=new FormData();fd.append('audio',blob,'audio.webm');fd.append('user_id',currentUser.id);fd.append('tipo',chatTipo);
+    var res=await fetch(WEBHOOKS[chatTipo],{method:'POST',body:fd});
+    var data=await res.json().catch(()=>({}));
+    msgResp.querySelector('.chat-bubble').innerHTML=data.mensagem||'✅ Registrado com sucesso!';
+  }catch(e){msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao enviar. Tente novamente.';}
+}
+
 async function doLogin(){
   var email=document.getElementById('login-email').value,senha=document.getElementById('login-senha').value;
   if(!email||!senha){toast('Preencha e-mail e senha',true);return}
@@ -706,16 +802,8 @@ async function carregarWAStatus(){
   }catch(e){}
 }
 function parseSalario(str){if(!str)return 0;return parseFloat(str.replace(/[R$\s.]/g,'').replace(',','.'))||0}
-function recalcularComSalario(){
-  var sal=parseSalario(document.getElementById('dash-salario').value),totalRec=totalReceitasSupa+sal;
-  document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2).replace('.',',');
-  var saldo=totalRec-totalDespesasSupa,el=document.getElementById('m-saldo');
-  el.textContent='R$ '+saldo.toFixed(2).replace('.',',');el.className='metric-value '+(saldo>=0?'green':'red');
-}
-async function salvarSalarioDash(){
-  var val=parseSalario(document.getElementById('dash-salario').value);
-  await sb.from('clientes').update({salario_fixo:val}).eq('user_id',currentUser.id);recalcularComSalario();toast('Salário salvo!');
-}
+function recalcularComSalario(){var sal=parseSalario(document.getElementById('dash-salario').value),totalRec=totalReceitasSupa+sal;document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2).replace('.',',');var saldo=totalRec-totalDespesasSupa,el=document.getElementById('m-saldo');el.textContent='R$ '+saldo.toFixed(2).replace('.',',');el.className='metric-value '+(saldo>=0?'green':'red')}
+async function salvarSalarioDash(){var val=parseSalario(document.getElementById('dash-salario').value);await sb.from('clientes').update({salario_fixo:val}).eq('user_id',currentUser.id);recalcularComSalario();toast('Salário salvo!')}
 async function carregarDashboard(){
   try{
     var {data:cliente}=await sb.from('clientes').select('salario_fixo').eq('user_id',currentUser.id).single();
@@ -758,20 +846,13 @@ function renderLancamentos(){
   var total=lancamentosData.length,maxPag=Math.ceil(total/LANC_POR_PAG);
   if(paginacao){if(maxPag>1){paginacao.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border)"><span style="font-size:12px;color:var(--text2)">${inicio+1}–${Math.min(inicio+LANC_POR_PAG,total)} de ${total}</span><div style="display:flex;gap:6px"><button class="td-edit-btn" ${lancPagina===0?'disabled style="opacity:0.3"':''} onclick="lancPagina=Math.max(0,lancPagina-1);renderLancamentos()">← Anterior</button><button class="td-edit-btn" ${lancPagina>=maxPag-1?'disabled style="opacity:0.3"':''} onclick="lancPagina=Math.min(${maxPag-1},lancPagina+1);renderLancamentos()">Próximo →</button></div></div>`;}else{paginacao.innerHTML='';}}
 }
-function abrirEdicao(id,desc,val,data,cat){
-  document.getElementById('edit-id').value=id;document.getElementById('edit-desc').value=desc;document.getElementById('edit-valor').value=val;document.getElementById('edit-data').value=data;
-  var sel=document.getElementById('edit-cat');sel.innerHTML='';CATS_PADRAO.forEach(c=>{var op=document.createElement('option');op.value=c;op.textContent=c;if(c===cat)op.selected=true;sel.appendChild(op)});abrirModal('modal-edit');
-}
-async function salvarEdicao(){
-  var id=document.getElementById('edit-id').value;
-  await sb.from('lancamentos').update({descricao:document.getElementById('edit-desc').value,valor:parseFloat(document.getElementById('edit-valor').value),data:document.getElementById('edit-data').value,categoria:document.getElementById('edit-cat').value}).eq('id',id);
-  fecharModal('modal-edit');toast('Lançamento atualizado!');carregarDashboard();
-}
+function abrirEdicao(id,desc,val,data,cat){document.getElementById('edit-id').value=id;document.getElementById('edit-desc').value=desc;document.getElementById('edit-valor').value=val;document.getElementById('edit-data').value=data;var sel=document.getElementById('edit-cat');sel.innerHTML='';CATS_PADRAO.forEach(c=>{var op=document.createElement('option');op.value=c;op.textContent=c;if(c===cat)op.selected=true;sel.appendChild(op)});abrirModal('modal-edit')}
+async function salvarEdicao(){var id=document.getElementById('edit-id').value;await sb.from('lancamentos').update({descricao:document.getElementById('edit-desc').value,valor:parseFloat(document.getElementById('edit-valor').value),data:document.getElementById('edit-data').value,categoria:document.getElementById('edit-cat').value}).eq('id',id);fecharModal('modal-edit');toast('Lançamento atualizado!');carregarDashboard()}
 function confirmarAcao(titulo,msg,callback){document.getElementById('confirm-title').textContent=titulo;document.getElementById('confirm-msg').textContent=msg;document.getElementById('confirm-btn').onclick=()=>{fecharModal('modal-confirm');callback()};abrirModal('modal-confirm')}
-async function deletarLancamento(){var id=document.getElementById('edit-id').value;fecharModal('modal-edit');confirmarAcao('Excluir lançamento','Tem certeza que deseja excluir este lançamento?',async()=>{await sb.from('lancamentos').delete().eq('id',id);toast('Lançamento excluído!');carregarDashboard();})}
+async function deletarLancamento(){var id=document.getElementById('edit-id').value;fecharModal('modal-edit');confirmarAcao('Excluir lançamento','Tem certeza que deseja excluir este lançamento?',async()=>{await sb.from('lancamentos').delete().eq('id',id);toast('Lançamento excluído!');carregarDashboard()})}
 async function carregarCategorias(){try{var {data}=await sb.from('categorias').select('nome').eq('user_id',currentUser.id);categoriasAtivas=(data||[]).map(c=>c.nome);renderCategorias();}catch(e){renderCategorias()}}
-function renderCategorias(){var grid=document.getElementById('cat-grid');grid.innerHTML='';CATS_PADRAO.forEach(cat=>{var ativo=categoriasAtivas.includes(cat),chip=document.createElement('div');chip.className='cat-chip'+(ativo?' active':'');chip.innerHTML=cat+(ativo?'<span class="cat-remove">✕</span>':'');chip.onclick=()=>toggleCategoria(cat,chip);grid.appendChild(chip);})}
-async function toggleCategoria(cat,chip){var ativo=chip.classList.contains('active');if(ativo){await sb.from('categorias').delete().eq('user_id',currentUser.id).eq('nome',cat);categoriasAtivas=categoriasAtivas.filter(c=>c!==cat);}else{await sb.from('categorias').insert({user_id:currentUser.id,nome:cat});categoriasAtivas.push(cat);}renderCategorias()}
+function renderCategorias(){var grid=document.getElementById('cat-grid');grid.innerHTML='';CATS_PADRAO.forEach(cat=>{var ativo=categoriasAtivas.includes(cat),chip=document.createElement('div');chip.className='cat-chip'+(ativo?' active':'');chip.innerHTML=cat+(ativo?'<span class="cat-remove">✕</span>':'');chip.onclick=()=>toggleCategoria(cat,chip);grid.appendChild(chip)})}
+async function toggleCategoria(cat,chip){var ativo=chip.classList.contains('active');if(ativo){await sb.from('categorias').delete().eq('user_id',currentUser.id).eq('nome',cat);categoriasAtivas=categoriasAtivas.filter(c=>c!==cat);}else{await sb.from('categorias').insert({user_id:currentUser.id,nome:cat});categoriasAtivas.push(cat)}renderCategorias()}
 var agendaTodos=[],agendaOffset=0;
 async function carregarAgenda(){
   try{
@@ -800,20 +881,8 @@ async function salvarAgendamento(){var id=document.getElementById('agenda-edit-i
 async function excluirAgendamento(){var id=document.getElementById('agenda-edit-id').value;fecharModal('modal-agenda-edit');confirmarAcao('Excluir compromisso','Tem certeza que deseja excluir este compromisso?',async()=>{await sb.from('agendamentos').delete().eq('id',id);toast('Compromisso excluído!');carregarAgenda()})}
 var todosBoletosPagos=[],todosBoletos=[],todosBoletosPendentes=[],boletosVencidos=[],boletosHoje=[];
 function renderBoletoCard(b,vencido){var val=parseFloat(b.valor)||0;return `<div class="boleto-card" style="${vencido?'border-color:rgba(255,77,77,0.3)':''}"><div class="boleto-info"><div class="boleto-nome">${b.nome||'Boleto'}</div><div class="boleto-meta" style="${vencido?'color:var(--red)':''}">${vencido?'⚠️ Venceu em':'Vence:'} ${formatData(b.vencimento)}</div></div><div style="display:flex;align-items:center;gap:8px"><div class="boleto-val ${b.pago?'boleto-pago':''}">R$ ${val.toFixed(2).replace('.',',')}</div>${!b.pago?`<button class="btn-pagar" onclick="marcarPago('${b.id}',this)">Pagar</button>`:'<span class="badge badge-green">✓ Pago</span>'}</div></div>`}
-function filtrarColuna(col){
-  var configs={vencidos:{nome:'busca-vencidos-nome',data:'busca-vencidos-data',body:'col-bol-vencidos',dados:boletosVencidos,vencido:true,empty:'Nenhum boleto vencido'},hoje:{nome:'busca-hoje-nome',data:'busca-hoje-data',body:'col-bol-hoje',dados:boletosHoje,vencido:false,empty:'Nenhum boleto hoje'},apagar:{nome:'busca-apagar-nome',data:'busca-apagar-data',body:'col-bol-apagar',dados:todosBoletosPendentes,vencido:false,empty:'Nenhum boleto pendente'},pagos:{nome:'busca-pagos-nome',data:'busca-pagos-data2',body:'col-bol-pagos',dados:todosBoletosPagos,vencido:false,empty:'Nenhum boleto pago'}};
-  var c=configs[col];if(!c)return;var nome=(document.getElementById(c.nome).value||'').toLowerCase().trim(),data=document.getElementById(c.data).value;
-  var filtrados=c.dados.filter(b=>(!nome||(b.nome||'').toLowerCase().includes(nome))&&(!data||b.vencimento===data));
-  var body=document.getElementById(c.body);body.innerHTML='';if(!filtrados.length){body.innerHTML=`<div class="kanban-empty">${c.empty}</div>`;return}filtrados.forEach(b=>body.innerHTML+=renderBoletoCard(b,c.vencido));
-}
-function filtrarBoletosGlobal(){
-  var busca=(document.getElementById('busca-boletos-global').value||'').toLowerCase().trim();
-  var wrap=document.getElementById('kanban-boletos-wrap'),resultado=document.getElementById('resultado-busca-boletos'),lista=document.getElementById('lista-busca-boletos'),limpar=document.getElementById('busca-boletos-limpar');
-  if(limpar)limpar.style.display=busca?'block':'none';if(!busca){wrap.style.display='';resultado.style.display='none';return}
-  wrap.style.display='none';resultado.style.display='block';var filtrados=todosBoletos.filter(b=>(b.nome||'').toLowerCase().includes(busca));lista.innerHTML='';
-  if(!filtrados.length){lista.innerHTML='<div class="kanban-empty">Nenhum boleto encontrado</div>';return}
-  filtrados.forEach(b=>{var val=parseFloat(b.valor)||0,hoje=new Date().toISOString().split('T')[0],status=b.pago?'Pago':b.vencimento<hoje?'Vencido':b.vencimento===hoje?'Vence hoje':'A pagar',cor=b.pago?'var(--teal)':b.vencimento<hoje?'var(--red)':'var(--yellow)';lista.innerHTML+=`<div class="boleto-card"><div class="boleto-info"><div class="boleto-nome">${b.nome||'Boleto'}</div><div class="boleto-meta">Vence: ${formatData(b.vencimento)} · <span style="color:${cor}">${status}</span></div></div><div style="display:flex;align-items:center;gap:8px"><div class="boleto-val" style="color:${cor}">R$ ${val.toFixed(2).replace('.',',')}</div>${!b.pago?`<button class="btn-pagar" onclick="marcarPago('${b.id}',this)">Pagar</button>`:'<span class="badge badge-green">✓ Pago</span>'}</div></div>`;});
-}
+function filtrarColuna(col){var configs={vencidos:{nome:'busca-vencidos-nome',data:'busca-vencidos-data',body:'col-bol-vencidos',dados:boletosVencidos,vencido:true,empty:'Nenhum boleto vencido'},hoje:{nome:'busca-hoje-nome',data:'busca-hoje-data',body:'col-bol-hoje',dados:boletosHoje,vencido:false,empty:'Nenhum boleto hoje'},apagar:{nome:'busca-apagar-nome',data:'busca-apagar-data',body:'col-bol-apagar',dados:todosBoletosPendentes,vencido:false,empty:'Nenhum boleto pendente'},pagos:{nome:'busca-pagos-nome',data:'busca-pagos-data2',body:'col-bol-pagos',dados:todosBoletosPagos,vencido:false,empty:'Nenhum boleto pago'}};var c=configs[col];if(!c)return;var nome=(document.getElementById(c.nome).value||'').toLowerCase().trim(),data=document.getElementById(c.data).value;var filtrados=c.dados.filter(b=>(!nome||(b.nome||'').toLowerCase().includes(nome))&&(!data||b.vencimento===data));var body=document.getElementById(c.body);body.innerHTML='';if(!filtrados.length){body.innerHTML=`<div class="kanban-empty">${c.empty}</div>`;return}filtrados.forEach(b=>body.innerHTML+=renderBoletoCard(b,c.vencido))}
+function filtrarBoletosGlobal(){var busca=(document.getElementById('busca-boletos-global').value||'').toLowerCase().trim();var wrap=document.getElementById('kanban-boletos-wrap'),resultado=document.getElementById('resultado-busca-boletos'),lista=document.getElementById('lista-busca-boletos'),limpar=document.getElementById('busca-boletos-limpar');if(limpar)limpar.style.display=busca?'block':'none';if(!busca){wrap.style.display='';resultado.style.display='none';return}wrap.style.display='none';resultado.style.display='block';var filtrados=todosBoletos.filter(b=>(b.nome||'').toLowerCase().includes(busca));lista.innerHTML='';if(!filtrados.length){lista.innerHTML='<div class="kanban-empty">Nenhum boleto encontrado</div>';return}filtrados.forEach(b=>{var val=parseFloat(b.valor)||0,hoje=new Date().toISOString().split('T')[0],status=b.pago?'Pago':b.vencimento<hoje?'Vencido':b.vencimento===hoje?'Vence hoje':'A pagar',cor=b.pago?'var(--teal)':b.vencimento<hoje?'var(--red)':'var(--yellow)';lista.innerHTML+=`<div class="boleto-card"><div class="boleto-info"><div class="boleto-nome">${b.nome||'Boleto'}</div><div class="boleto-meta">Vence: ${formatData(b.vencimento)} · <span style="color:${cor}">${status}</span></div></div><div style="display:flex;align-items:center;gap:8px"><div class="boleto-val" style="color:${cor}">R$ ${val.toFixed(2).replace('.',',')}</div>${!b.pago?`<button class="btn-pagar" onclick="marcarPago('${b.id}',this)">Pagar</button>`:'<span class="badge badge-green">✓ Pago</span>'}</div></div>`})}
 async function carregarBoletos(){
   try{
     var hoje=new Date().toISOString().split('T')[0],{data}=await sb.from('Boletos').select('*').eq('user_id',currentUser.id).order('vencimento');
@@ -821,21 +890,12 @@ async function carregarBoletos(){
     colV.innerHTML='';colH.innerHTML='';colA.innerHTML='';colP.innerHTML='';todosBoletosPagos=[];todosBoletos=[];todosBoletosPendentes=[];boletosVencidos=[];boletosHoje=[];var cV=0,cH=0,cA=0,cP=0;
     (data||[]).forEach(b=>{var venc=b.vencimento,vencido=!b.pago&&venc<hoje,card=renderBoletoCard(b,vencido);todosBoletos.push(b);if(b.pago){colP.innerHTML+=card;cP++;todosBoletosPagos.push(b);}else if(venc<hoje){colV.innerHTML+=card;cV++;boletosVencidos.push(b);}else if(venc===hoje){colH.innerHTML+=card;cH++;boletosHoje.push(b);}else{colA.innerHTML+=card;cA++;todosBoletosPendentes.push(b);}});
     if(!cV)colV.innerHTML='<div class="kanban-empty">Nenhum boleto vencido</div>';if(!cH)colH.innerHTML='<div class="kanban-empty">Nenhum boleto hoje</div>';if(!cA)colA.innerHTML='<div class="kanban-empty">Nenhum boleto pendente</div>';if(!cP)colP.innerHTML='<div class="kanban-empty">Nenhum boleto pago</div>';
-    // Atualiza contadores desktop
     document.getElementById('cnt-bol-vencidos').textContent=cV;document.getElementById('cnt-bol-hoje').textContent=cH;document.getElementById('cnt-bol-apagar').textContent=cA;document.getElementById('cnt-bol-pagos').textContent=cP;
-    // Atualiza contadores nas tabs mobile
     document.getElementById('btab-cnt-vencidos').textContent=cV;document.getElementById('btab-cnt-hoje').textContent=cH;document.getElementById('btab-cnt-apagar').textContent=cA;document.getElementById('btab-cnt-pagos').textContent=cP;
-    // No mobile, abre vencidos por padrão se tiver, senão hoje, senão a pagar
-    var tabInicial=cV>0?'vencidos':cH>0?'hoje':cA>0?'apagar':'pagos';
-    switchBoletoTab(tabInicial);
+    var tabInicial=cV>0?'vencidos':cH>0?'hoje':cA>0?'apagar':'pagos';switchBoletoTab(tabInicial);
   }catch(e){console.log(e)}
 }
-async function marcarPago(id,btn){
-  btn.textContent='✓';btn.disabled=true;btn.className='btn-pagar pago';
-  var {data:boleto}=await sb.from('Boletos').select('nome,valor').eq('id',id).single();await sb.from('Boletos').update({pago:true}).eq('id',id);
-  if(boleto){var hoje=new Date().toISOString().split('T')[0];await sb.from('lancamentos').insert({user_id:currentUser.id,tipo:'despesa',descricao:'Boleto: '+(boleto.nome||'Boleto'),valor:parseFloat(boleto.valor)||0,data:hoje,categoria:'Boletos',origem:'painel'});}
-  toast('Boleto pago e lançado no financeiro!');setTimeout(()=>carregarBoletos(),600);
-}
+async function marcarPago(id,btn){btn.textContent='✓';btn.disabled=true;btn.className='btn-pagar pago';var {data:boleto}=await sb.from('Boletos').select('nome,valor').eq('id',id).single();await sb.from('Boletos').update({pago:true}).eq('id',id);if(boleto){var hoje=new Date().toISOString().split('T')[0];await sb.from('lancamentos').insert({user_id:currentUser.id,tipo:'despesa',descricao:'Boleto: '+(boleto.nome||'Boleto'),valor:parseFloat(boleto.valor)||0,data:hoje,categoria:'Boletos',origem:'painel'});}toast('Boleto pago e lançado no financeiro!');setTimeout(()=>carregarBoletos(),600)}
 async function carregarPerfil(){
   try{
     var {data:authData}=await sb.auth.getUser(),user=authData?.user,nomeAuth=user?.user_metadata?.nome||currentUser.nome;
@@ -845,7 +905,7 @@ async function carregarPerfil(){
     if(data){document.getElementById('perf-wa-numero').textContent=data.whatsapp||'—';if(data.profissao)document.getElementById('perf-profissao').value=data.profissao;}
   }catch(e){document.getElementById('perf-nome').value=currentUser.nome;document.getElementById('perf-email').value=currentUser.email;}
 }
-function previewFoto(input){if(input.files&&input.files[0]){var reader=new FileReader();reader.onload=e=>{document.getElementById('perf-foto-img').src=e.target.result;document.getElementById('perf-foto-img').style.display='block';document.getElementById('perf-foto-inicial').style.display='none';};reader.readAsDataURL(input.files[0]);}}
+function previewFoto(input){if(input.files&&input.files[0]){var reader=new FileReader();reader.onload=e=>{document.getElementById('perf-foto-img').src=e.target.result;document.getElementById('perf-foto-img').style.display='block';document.getElementById('perf-foto-inicial').style.display='none';};reader.readAsDataURL(input.files[0])}}
 async function salvarPerfil(){
   var nome=document.getElementById('perf-nome').value.trim(),senha=document.getElementById('perf-senha').value,senha2=document.getElementById('perf-senha2').value,profissao=document.getElementById('perf-profissao').value.trim();
   if(!nome){toast('Nome não pode estar vazio',true);return}if(senha&&senha!==senha2){toast('As senhas não conferem',true);return}if(senha&&senha.length<8){toast('Senha deve ter ao menos 8 caracteres',true);return}
