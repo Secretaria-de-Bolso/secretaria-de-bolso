@@ -345,9 +345,13 @@ input::placeholder{color:var(--text3)}
       <span style="font-size:12px;color:#666" id="wa-num-desk">—</span>
       <span class="wa-bar-badge on" id="wa-badge-desk">Conectado</span>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;margin-right:16px">
-      <span style="font-size:13px;color:#888" id="topbar-name"></span>
+    <div style="display:flex;align-items:center;gap:8px;margin-right:4px">
+      <div id="wa-dot-topbar" style="width:7px;height:7px;border-radius:50%;background:#00d4a0;flex-shrink:0"></div>
+      <span style="font-size:11px;color:#888" id="topbar-name"></span>
       <div class="avatar" id="topbar-avatar" onclick="switchTab2('perfil')">P</div>
+      <button onclick="doLogout()" style="background:none;border:none;color:#ff6b6b;cursor:pointer;padding:4px;display:flex;align-items:center" title="Sair">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
     </div>
   </div>
   <div class="wa-bar-mobile" id="wa-bar-mobile">
@@ -724,7 +728,7 @@ async function carregarWAStatus(){
   try{
     var {data}=await sb.from('clientes').select('whatsapp,whatsapp_conectado').eq('user_id',currentUser.id).single();
     if(data){var num=data.whatsapp||'—',on=data.whatsapp_conectado;
-      document.getElementById('wa-num-desk').textContent=num;document.getElementById('wa-dot-desk').className='wa-bar-dot'+(on?'':' off');document.getElementById('wa-badge-desk').textContent=on?'Conectado':'Desconectado';document.getElementById('wa-badge-desk').className='wa-bar-badge '+(on?'on':'off');
+      document.getElementById('wa-num-desk').textContent=num;document.getElementById('wa-dot-desk').className='wa-bar-dot'+(on?'':' off');var td=document.getElementById('wa-dot-topbar');if(td)td.style.background=on?'#00d4a0':'#ff6b6b';document.getElementById('wa-badge-desk').textContent=on?'Conectado':'Desconectado';document.getElementById('wa-badge-desk').className='wa-bar-badge '+(on?'on':'off');
       document.getElementById('wa-num-mob').textContent=num;document.getElementById('wa-dot-mob').className='wa-bar-dot'+(on?'':' off');document.getElementById('wa-badge-mob').textContent=on?'Conectado':'Desconectado';document.getElementById('wa-badge-mob').className='wa-bar-badge '+(on?'on':'off');}
   }catch(e){}
 }
