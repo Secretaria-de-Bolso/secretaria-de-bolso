@@ -354,6 +354,11 @@ input::placeholder{color:var(--text3)}
       </button>
     </div>
   </div>
+  <div id="sub-topbar" style="display:none;align-items:center;gap:8px;padding:6px 16px;background:#0a0a0a;border-bottom:1px solid #222;position:fixed;top:56px;left:0;right:0;z-index:99;height:36px">
+    <div id="wa-dot-sub" style="width:7px;height:7px;border-radius:50%;background:#00d4a0;flex-shrink:0"></div>
+    <span style="font-size:12px;color:#aaa" id="wa-num-sub">—</span>
+    <span id="wa-badge-sub" style="padding:1px 7px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;background:#00d4a0;color:#000">Conectado</span>
+  </div>
   <div class="wa-bar-mobile" id="wa-bar-mobile">
     <div class="wa-bar-dot" id="wa-dot-mob"></div>
     <span class="wa-bar-num" id="wa-num-mob">—</span>
@@ -575,6 +580,7 @@ input::placeholder{color:var(--text3)}
         <div class="card">
           <div class="section-label">Conta</div>
           <div style="font-size:12px;color:var(--text2);margin-bottom:12px" id="perf-membro-desde"></div>
+          <button class="btn btn-outline btn-full btn-sm" style="margin-bottom:8px;color:#ff6b6b;border-color:#ff6b6b" onclick="doLogout()">Sair da conta</button>
           <button class="btn btn-danger btn-full btn-sm" onclick="confirmarAcao('Excluir conta','Tem certeza? Esta ação não pode ser desfeita.',()=>doLogout())">Excluir conta</button>
         </div>
       </div>
@@ -631,9 +637,14 @@ function switchTab2(tab){
   var ct=document.getElementById('content-'+tab);if(ct)ct.classList.add('active');
   ['financeiro','agenda','boletos','perfil','registrar'].forEach(t=>{var el=document.getElementById('mnav-'+t);if(el)el.classList.remove('active')});
   var mnav=document.getElementById('mnav-'+tab);if(mnav)mnav.classList.add('active');
-  /* Esconder wa-bar-mobile na aba registrar */
   var wabar=document.getElementById('wa-bar-mobile');
-  if(wabar)wabar.style.display=tab==='registrar'?'none':'';
+  if(wabar)wabar.style.display='none';
+  var sub=document.getElementById('sub-topbar');
+  var reg=document.getElementById('content-registrar');
+  if(window.innerWidth<=768){
+    if(sub)sub.style.display=tab==='registrar'?'none':'flex';
+    if(reg)reg.style.top=tab==='registrar'?'56px':'92px';
+  }
   if(tab==='agenda')carregarAgenda();
   if(tab==='boletos')carregarBoletos();
   if(tab==='perfil')carregarPerfil();
@@ -728,7 +739,10 @@ async function carregarWAStatus(){
   try{
     var {data}=await sb.from('clientes').select('whatsapp,whatsapp_conectado').eq('user_id',currentUser.id).single();
     if(data){var num=data.whatsapp||'—',on=data.whatsapp_conectado;
-      document.getElementById('wa-num-desk').textContent=num;document.getElementById('wa-dot-desk').className='wa-bar-dot'+(on?'':' off');var td=document.getElementById('wa-dot-topbar');if(td)td.style.background=on?'#00d4a0':'#ff6b6b';document.getElementById('wa-badge-desk').textContent=on?'Conectado':'Desconectado';document.getElementById('wa-badge-desk').className='wa-bar-badge '+(on?'on':'off');
+      document.getElementById('wa-num-desk').textContent=num;document.getElementById('wa-dot-desk').className='wa-bar-dot'+(on?'':' off');var td=document.getElementById('wa-dot-topbar');if(td)td.style.background=on?'#00d4a0':'#ff6b6b';
+      var ds=document.getElementById('wa-dot-sub');if(ds)ds.style.background=on?'#00d4a0':'#ff6b6b';
+      var ns=document.getElementById('wa-num-sub');if(ns)ns.textContent=num;
+      var bs=document.getElementById('wa-badge-sub');if(bs){bs.textContent=on?'Conectado':'Desconectado';bs.style.background=on?'#00d4a0':'#ff6b6b';}document.getElementById('wa-badge-desk').textContent=on?'Conectado':'Desconectado';document.getElementById('wa-badge-desk').className='wa-bar-badge '+(on?'on':'off');
       document.getElementById('wa-num-mob').textContent=num;document.getElementById('wa-dot-mob').className='wa-bar-dot'+(on?'':' off');document.getElementById('wa-badge-mob').textContent=on?'Conectado':'Desconectado';document.getElementById('wa-badge-mob').className='wa-bar-badge '+(on?'on':'off');}
   }catch(e){}
 }
