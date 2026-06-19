@@ -209,7 +209,8 @@ input::placeholder{color:var(--text3)}
   #content-registrar{left:180px}
 }
 @media(max-width:768px){
-  body{padding-bottom:64px;padding-top:56px}
+  body{padding-bottom:64px}
+  #screen-dashboard{padding-top:56px}
   .sidebar{display:none!important}.main-content{margin-left:0!important}
   .dashboard-layout{margin-top:0;flex-direction:column}
   #wa-bar-desktop{display:none!important}.mobile-nav{display:flex!important}
@@ -338,7 +339,7 @@ input::placeholder{color:var(--text3)}
     <div style="display:flex;align-items:center;gap:12px">
       <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
     </div>
-    <div id="wa-bar-desktop" style="display:flex;align-items:center;gap:8px;flex:1;padding:0 24px">
+    <div id="wa-bar-desktop" style="display:flex;align-items:center;gap:8px;flex:1;padding:0 12px">
       <div class="wa-bar-dot" id="wa-dot-desk"></div>
       <span style="font-size:12px;color:#888">WhatsApp</span>
       <span style="font-size:12px;color:#666" id="wa-num-desk">—</span>
@@ -354,6 +355,7 @@ input::placeholder{color:var(--text3)}
     <span class="wa-bar-num" id="wa-num-mob">—</span>
     <span class="wa-bar-badge on" id="wa-badge-mob">Conectado</span>
   </div>
+  <style>@media(max-width:768px){.wa-bar-mobile{display:none!important}}</style>
   <div class="dashboard-layout">
   <div class="sidebar">
     <div class="tab-btn" id="tab-registrar" onclick="switchTab2('registrar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>Registrar</div>
