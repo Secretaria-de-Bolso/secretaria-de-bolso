@@ -155,7 +155,6 @@ input::placeholder{color:var(--text3)}
 .mobile-nav-btn span{font-size:11px}
 
 /* ── CHAT REGISTRAR ── */
-/* Desktop: fixed dentro do main-content */
 #content-registrar{
   position:fixed;top:56px;left:220px;right:0;bottom:0;
   display:none;flex-direction:column;
@@ -217,7 +216,6 @@ input::placeholder{color:var(--text3)}
   .topbar{background:#0a0a0a;border-bottom:1px solid #222;padding:10px 16px}
   .topbar .logo{color:#f0f0f0}.topbar .logo span{color:#00d4a0}
   .toast{bottom:80px}
-  /* Mobile: chat ocupa tela inteira sem wa-bar */
   #content-registrar{left:0!important;top:92px;bottom:64px}
   .kanban-4{display:flex;flex-direction:column;gap:0}
   .kanban-4 .kanban-col{display:none;border-radius:12px}
@@ -397,13 +395,14 @@ input::placeholder{color:var(--text3)}
   <!-- FINANCEIRO -->
   <div class="tab-content" id="content-financeiro">
   <div class="content fade-in">
-    <div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-      <div style="flex:1;min-width:160px">
-        <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:13px;margin-bottom:2px">💼 Salário fixo mensal</div>
-        <div style="font-size:11px;color:var(--text2)">Incluído automaticamente nas receitas</div>
+    <!-- CORREÇÃO: flex-wrap:nowrap + min-width:0 no texto + input menor -->
+    <div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:nowrap">
+      <div style="flex:1;min-width:0;overflow:hidden">
+        <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:13px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">💼 Salário fixo mensal</div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Incluído automaticamente nas receitas</div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <input type="text" id="dash-salario" placeholder="R$ 0,00" style="width:140px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;text-align:right" oninput="recalcularComSalario()">
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <input type="text" id="dash-salario" placeholder="R$ 0,00" style="width:110px;min-width:0;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;text-align:right" oninput="recalcularComSalario()">
         <button class="btn btn-primary btn-sm" onclick="salvarSalarioDash()">Salvar</button>
       </div>
     </div>
