@@ -386,7 +386,8 @@ input::placeholder{color:var(--text3)}
       <button class="chat-send-btn" id="chat-send-btn" onclick="enviarChatTexto()" style="display:none">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
-      <button class="chat-mic-btn" id="chat-mic-btn"
+      <button class="chat-mic-btn" id="chat-mic-btn" style="touch-action:none;-webkit-user-select:none;-webkit-touch-callout:none;"
+oncontextmenu="return false"
 onmousedown="iniciarChatGravacao()" onmouseup="pararChatGravacao()"
 ontouchstart="event.preventDefault();iniciarChatGravacao()"
 ontouchend="event.preventDefault();pararChatGravacao()"
