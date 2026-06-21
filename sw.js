@@ -1,4 +1,4 @@
-const CACHE='sb-v1';
+const CACHE='sb-v7';
 const ASSETS=['/','./index.html','./manifest.json'];
 
 self.addEventListener('install',e=>{
@@ -16,4 +16,18 @@ self.addEventListener('fetch',e=>{
   e.respondWith(
     fetch(e.request).catch(()=>caches.match(e.request).then(r=>r||caches.match('./index.html')))
   );
+});
+
+self.addEventListener('push', e => {
+  const d = e.data ? e.data.json() : { title: 'Secretária de Bolso', body: '' };
+  e.waitUntil(self.registration.showNotification(d.title, {
+    body: d.body,
+    icon: '/icon-192.png',
+    badge: '/icon-192.png'
+  }));
+});
+
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  e.waitUntil(clients.openWindow('/'));
 });

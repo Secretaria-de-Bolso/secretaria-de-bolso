@@ -231,6 +231,15 @@ input::placeholder{color:var(--text3)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .spinning{animation:spin 1s linear infinite}.pulsing{animation:pulse 2s ease-in-out infinite}.fade-in{animation:fadeIn 0.3s ease forwards}
+
+#install-banner{display:none;position:fixed;bottom:70px;left:0;right:0;margin:0 12px;background:#fff;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.15);padding:16px;z-index:9999;align-items:center;gap:12px;}
+#install-banner.show{display:flex;}
+#install-banner img{width:48px;height:48px;border-radius:12px;}
+#install-banner-text{flex:1;}
+#install-banner-text strong{display:block;font-size:14px;color:#111;}
+#install-banner-text span{font-size:12px;color:#666;}
+#install-banner-btn{background:#25d366;color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;}
+#install-banner-close{background:none;border:none;font-size:20px;color:#999;cursor:pointer;padding:0 4px;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -335,7 +344,7 @@ input::placeholder{color:var(--text3)}
 <div class="screen" id="screen-dashboard">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:12px">
-      <div class="logo"><div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>Secretária de <span>Bolso</span></div>
+      <div class="logo"><div class="logo-icon"><img src="/sb.png" style="width:32px;height:32px;border-radius:8px;"></div>Secretária de <span>Bolso</span></div>
     </div>
     <div id="wa-bar-desktop" style="display:flex;align-items:center;gap:8px;flex:1;padding:0 12px">
       <div class="wa-bar-dot" id="wa-dot-desk"></div>
@@ -731,6 +740,20 @@ async function iniciarSessao(user){
   document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
   goTo('screen-dashboard');toast('Bem-vindo, '+primeiroNome+'!');if(window.innerWidth<=768){var sub=document.getElementById('sub-topbar');if(sub)sub.style.display='flex';}switchTab2('registrar');
   await Promise.all([carregarWAStatus(),carregarCategorias()]);
+  await registrarPush();
+  
+async function registrarPush(){
+  try{
+    if(!("Notification" in window)||!("serviceWorker" in navigator))return;
+    const perm=await Notification.requestPermission();
+    if(perm!=="granted")return;
+    const reg=await navigator.serviceWorker.ready;
+    const VAPID_PUBLIC="BJTs92Dy1WoUpGHN_evm-CxoTF72VFYPw4icitZZ8xzAZ95qO-lxZhBOD4_umq-5c81VXvCX4GagbSDoT8AVE0Y";
+    const sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:VAPID_PUBLIC});
+    const subJson=sub.toJSON();await sb.from("push_subscriptions").upsert({user_id:currentUser.id,endpoint:subJson.endpoint,p256dh:subJson.keys.p256dh,auth:subJson.keys.auth,subscription:JSON.stringify(subJson)},{onConflict:"user_id"});
+  }catch(e){console.error("Push:",e)}
+}
+await registrarPush();
 }
 async function doLogout(){await sb.auth.signOut();currentUser={nome:'',email:'',id:''};goTo('screen-login')}
 async function doCadastro(){
@@ -871,5 +894,6 @@ async function salvarPerfil(){
 sb.auth.getSession().then(({data})=>{if(data.session)iniciarSessao(data.session.user)});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 </script>
-</body>
+
+<script src="/push.js"></script></body>
 </html>
