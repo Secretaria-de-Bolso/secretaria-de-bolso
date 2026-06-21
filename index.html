@@ -677,6 +677,15 @@ async function confirmarRegistro(btn){
   btn.closest('.chat-confirm-btns').remove();
   var msgResp=adicionarMsg('<span style="color:#aaa;font-style:italic">⏳ Salvando...</span>','recebido');
   try{
+    if(pendingConfirm.tipo==='agendamento'&&pendingConfirm.hora){
+      var dataFmt=pendingConfirm.data.split('/').reverse().join('-');
+      var chk=await fetch(SUPA_URL+'/rest/v1/agendamentos?user_id=eq.'+currentUser.id+'&data=eq.'+dataFmt+'&hora=eq.'+pendingConfirm.hora,{headers:{apikey:SUPA_KEY}});
+      var chkData=await chk.json();
+      if(chkData.length>0){
+        msgResp.querySelector('.chat-bubble').innerHTML='⚠️ Você já tem um agendamento nesse dia e nesse horário, agende em outra hora!';
+        pendingConfirm=null;return;
+      }
+    }
     var res=await fetch(WEBHOOK_REGISTRAR+'/confirmar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...pendingConfirm,user_id:currentUser.id,confirmado:true})});
     var data=await res.json().catch(()=>({}));
     msgResp.querySelector('.chat-bubble').innerHTML=data.mensagem||'✅ Registrado com sucesso!';
