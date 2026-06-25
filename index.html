@@ -655,13 +655,14 @@ function switchTab2(tab){
   if(tab==='boletos')carregarBoletos();
   if(tab==='perfil')carregarPerfil();
   if(tab==='financeiro')carregarDashboard();
+  if(tab==='registrar')carregarHistoricoChat();
 }
 function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-despesas').style.background=tab==='despesas'?'var(--teal-dim)':'transparent';document.getElementById('ltab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-receitas').style.background=tab==='receitas'?'var(--teal-dim)':'transparent';carregarLancamentos()}
 
 /* ── CHAT ── */
 function atualizarBtnChat(){var txt=document.getElementById('chat-texto').value.trim();document.getElementById('chat-send-btn').style.display=txt?'flex':'none';document.getElementById('chat-mic-btn').style.display=txt?'none':'flex'}
 function adicionarMsg(html,tipo){var msgs=document.getElementById('chat-msgs');var hora=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});var div=document.createElement('div');div.className='chat-msg '+tipo;div.innerHTML=`<div class="chat-bubble">${html}</div><div class="chat-time">${hora}</div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;return div}
-async function enviarChatTexto(){var texto=document.getElementById('chat-texto').value.trim();if(!texto)return;adicionarMsg(texto,'enviado');document.getElementById('chat-texto').value='';document.getElementById('chat-texto').style.height='auto';atualizarBtnChat();await processarEnvio({texto})}
+async function enviarChatTexto(){var texto=document.getElementById('chat-texto').value.trim();if(!texto)return;adicionarMsg(texto,'enviado');salvarMsgHistorico('enviado',texto);document.getElementById('chat-texto').value='';document.getElementById('chat-texto').style.height='auto';atualizarBtnChat();await processarEnvio({texto})}
 async function processarEnvio(payload){
   var msgResp=adicionarMsg('<span style="color:#aaa;font-style:italic">⏳ Processando...</span>','recebido');
   try{
@@ -678,7 +679,7 @@ async function processarEnvio(payload){
       var btns=document.createElement('div');btns.className='chat-confirm-btns';
       btns.innerHTML=`<button class="btn-confirmar" onclick="confirmarRegistro(this)">✅ Confirmar</button><button class="btn-cancelar" onclick="cancelarRegistro(this)">✕ Cancelar</button>`;
       msgResp.appendChild(btns);
-    }else{msgResp.querySelector('.chat-bubble').innerHTML=data.mensagem||'✅ Registrado com sucesso!';}
+    }else{var respMsg=data.mensagem||'✅ Registrado com sucesso!';msgResp.querySelector('.chat-bubble').innerHTML=respMsg;salvarMsgHistorico('recebido',respMsg);}
   }catch(e){msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao enviar. Tente novamente.';}
   document.getElementById('chat-msgs').scrollTop=document.getElementById('chat-msgs').scrollHeight;
 }
@@ -697,7 +698,9 @@ async function confirmarRegistro(btn){
     }
     var res=await fetch(WEBHOOK_REGISTRAR+'/confirmar',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...pendingConfirm,user_id:currentUser.id,confirmado:true})});
     var data=await res.json().catch(()=>({}));
-    msgResp.querySelector('.chat-bubble').innerHTML=data.mensagem||'✅ Registrado com sucesso!';
+    var confMsg=data.mensagem||'✅ Registrado com sucesso!';
+    msgResp.querySelector('.chat-bubble').innerHTML=confMsg;
+    salvarMsgHistorico('recebido',confMsg);
     pendingConfirm=null;
   }catch(e){msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao salvar. Tente novamente.';}
 }
@@ -710,7 +713,7 @@ async function iniciarChatGravacao(){
     var stream=await navigator.mediaDevices.getUserMedia({audio:true});
     chatAudioChunks=[];chatMediaRecorder=new MediaRecorder(stream);
     chatMediaRecorder.ondataavailable=e=>chatAudioChunks.push(e.data);
-    chatMediaRecorder.onstop=async()=>{var blob=new Blob(chatAudioChunks,{type:'audio/webm'});stream.getTracks().forEach(t=>t.stop());adicionarMsg('🎤 Áudio enviado','enviado');await processarEnvio({audio:blob})};
+    chatMediaRecorder.onstop=async()=>{var blob=new Blob(chatAudioChunks,{type:'audio/webm'});stream.getTracks().forEach(t=>t.stop());adicionarMsg('🎤 Áudio enviado','enviado');salvarMsgHistorico('enviado','🎤 Áudio enviado');await processarEnvio({audio:blob})};
     chatMediaRecorder.start();chatGravando=true;chatIniciando=false;
     var btn=document.getElementById('chat-mic-btn');btn.classList.add('gravando');
     btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
@@ -890,6 +893,24 @@ async function salvarPerfil(){
   var btn=document.querySelector('#content-perfil .btn-primary');btn.textContent='Salvando...';btn.disabled=true;
   try{var updates={data:{nome}};if(senha)updates.password=senha;await sb.auth.updateUser(updates);await sb.from('clientes').update({nome:nome.split(' ')[0],...(profissao?{profissao}:{})}).eq('user_id',currentUser.id);var primeiroNome=nome.split(' ')[0];currentUser.nome=primeiroNome;document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();document.getElementById('perf-foto-inicial').textContent=primeiroNome.charAt(0).toUpperCase();if(senha){document.getElementById('perf-senha').value='';document.getElementById('perf-senha2').value='';}toast('Perfil salvo com sucesso!');}catch(e){toast('Erro ao salvar: '+e.message,true)}
   btn.textContent='Salvar alterações';btn.disabled=false;
+}
+async function salvarMsgHistorico(tipo,conteudo){
+  try{await sb.from('chat_historico').insert({user_id:currentUser.id,tipo:tipo,conteudo:conteudo});}catch(e){}
+}
+async function carregarHistoricoChat(){
+  try{
+    var {data}=await sb.from('chat_historico').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:true}).limit(50);
+    if(!data||!data.length)return;
+    var msgs=document.getElementById('chat-msgs');
+    msgs.innerHTML='';
+    data.forEach(m=>{
+      var hora=new Date(m.created_at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      var div=document.createElement('div');div.className='chat-msg '+m.tipo;
+      div.innerHTML=`<div class="chat-bubble">${m.conteudo}</div><div class="chat-time">${hora}</div>`;
+      msgs.appendChild(div);
+    });
+    msgs.scrollTop=msgs.scrollHeight;
+  }catch(e){}
 }
 sb.auth.getSession().then(({data})=>{if(data.session)iniciarSessao(data.session.user)});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
