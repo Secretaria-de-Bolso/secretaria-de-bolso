@@ -907,7 +907,9 @@ async function carregarHistoricoChat(){
     data.forEach(m=>{
       var hora=new Date(m.created_at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
       var div=document.createElement('div');div.className='chat-msg '+m.tipo;
-      div.innerHTML=`<div class="chat-bubble">${m.mensagem}</div><div class="chat-time">${hora}</div>`;
+      var msg=m.mensagem;
+      if(msg&&!msg.includes('<')&&msg.includes(' | '))msg=msg.replace(/ \| /g,'<br>');
+      div.innerHTML=`<div class="chat-bubble">${msg}</div><div class="chat-time">${hora}</div>`;
       msgs.appendChild(div);
     });
     msgs.scrollTop=msgs.scrollHeight;
