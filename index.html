@@ -651,7 +651,6 @@ function switchTab2(tab){
   if(wabar)wabar.style.display='none';
   var sub=document.getElementById('sub-topbar');
   if(sub)sub.style.display='flex';
-  if(tab==='registrar')setTimeout(carregarHistoricoChat,500);
   if(tab==='agenda')carregarAgenda();
   if(tab==='boletos')carregarBoletos();
   if(tab==='perfil')carregarPerfil();
@@ -662,7 +661,7 @@ function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas'
 /* ── CHAT ── */
 function atualizarBtnChat(){var txt=document.getElementById('chat-texto').value.trim();document.getElementById('chat-send-btn').style.display=txt?'flex':'none';document.getElementById('chat-mic-btn').style.display=txt?'none':'flex'}
 function adicionarMsg(html,tipo){var msgs=document.getElementById('chat-msgs');var hora=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});var div=document.createElement('div');div.className='chat-msg '+tipo;div.innerHTML=`<div class="chat-bubble">${html}</div><div class="chat-time">${hora}</div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;return div}
-async function enviarChatTexto(){var texto=document.getElementById('chat-texto').value.trim();if(!texto)return;adicionarMsg(texto,'enviado');salvarMsgHistorico(texto,'enviado');document.getElementById('chat-texto').value='';document.getElementById('chat-texto').style.height='auto';atualizarBtnChat();await processarEnvio({texto})}
+async function enviarChatTexto(){var texto=document.getElementById('chat-texto').value.trim();if(!texto)return;adicionarMsg(texto,'enviado');document.getElementById('chat-texto').value='';document.getElementById('chat-texto').style.height='auto';atualizarBtnChat();await processarEnvio({texto})}
 async function processarEnvio(payload){
   var msgResp=adicionarMsg('<span style="color:#aaa;font-style:italic">⏳ Processando...</span>','recebido');
   try{
@@ -676,11 +675,11 @@ async function processarEnvio(payload){
       var tipoEmoji={despesa:'💸',receita:'💰',agendamento:'📅',boleto:'🧾'}[data.tipo]||'📋';
       var html=`${tipoEmoji} <strong>Confirme o registro:</strong><br><small style="color:#555">Tipo:</small> ${data.tipo||'—'}<br><small style="color:#555">Descrição:</small> ${data.descricao||'—'}${data.valor?`<br><small style="color:#555">Valor:</small> R$ ${parseFloat(data.valor).toFixed(2).replace('.',',')}`:''  }${data.data?`<br><small style="color:#555">Data:</small> ${data.data}`:''}${data.hora?`<br><small style="color:#555">Hora:</small> ${data.hora}`:''}`;
       msgResp.querySelector('.chat-bubble').innerHTML=html;
-            var btns=document.createElement('div');btns.className='chat-confirm-btns';
+      var btns=document.createElement('div');btns.className='chat-confirm-btns';
       btns.innerHTML=`<button class="btn-confirmar" onclick="confirmarRegistro(this)">✅ Confirmar</button><button class="btn-cancelar" onclick="cancelarRegistro(this)">✕ Cancelar</button>`;
       msgResp.appendChild(btns);
-      }else{var msg=data.mensagem||'✅ Registrado com sucesso!';msgResp.querySelector('.chat-bubble').innerHTML=msg;salvarMsgHistorico(msg,'recebido');}
-      }catch(e){msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao enviar. Tente novamente.';}
+    }else{msgResp.querySelector('.chat-bubble').innerHTML=data.mensagem||'✅ Registrado com sucesso!';}
+  }catch(e){msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao enviar. Tente novamente.';}
   document.getElementById('chat-msgs').scrollTop=document.getElementById('chat-msgs').scrollHeight;
 }
 async function confirmarRegistro(btn){
@@ -892,8 +891,7 @@ async function salvarPerfil(){
   try{var updates={data:{nome}};if(senha)updates.password=senha;await sb.auth.updateUser(updates);await sb.from('clientes').update({nome:nome.split(' ')[0],...(profissao?{profissao}:{})}).eq('user_id',currentUser.id);var primeiroNome=nome.split(' ')[0];currentUser.nome=primeiroNome;document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();document.getElementById('perf-foto-inicial').textContent=primeiroNome.charAt(0).toUpperCase();if(senha){document.getElementById('perf-senha').value='';document.getElementById('perf-senha2').value='';}toast('Perfil salvo com sucesso!');}catch(e){toast('Erro ao salvar: '+e.message,true)}
   btn.textContent='Salvar alterações';btn.disabled=false;
 }
-async function salvarMsgHistorico(mensagem,tipo){if(!currentUser.id)return;var tmp=document.createElement('div');tmp.innerHTML=mensagem;var t=(tmp.textContent||tmp.innerText||'').trim();if(!t||t.includes('Processando')||t.includes('Salvando'))return;try{await sb.from('chat_historico').insert({user_id:currentUser.id,mensagem:mensagem,tipo});}catch(e){}}
-async function carregarHistoricoChat(){if(!currentUser.id)return;try{var {data}=await sb.from('chat_historico').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(20);if(!data||!data.length)return;var msgs=document.getElementById('chat-msgs');msgs.innerHTML='';data.reverse().forEach(m=>{var hora=new Date(m.created_at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});var div=document.createElement('div');div.className='chat-msg '+m.tipo;div.innerHTML='<div class="chat-bubble">'+m.mensagem+'</div><div class="chat-time">'+hora+'</div>';msgs.appendChild(div);});msgs.scrollTop=msgs.scrollHeight;}catch(e){}}sb.auth.getSession().then(({data})=>{if(data.session)iniciarSessao(data.session.user)});
+sb.auth.getSession().then(({data})=>{if(data.session)iniciarSessao(data.session.user)});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 </script>
 
