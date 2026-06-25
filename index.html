@@ -655,13 +655,12 @@ function switchTab2(tab){
   if(tab==='boletos')carregarBoletos();
   if(tab==='perfil')carregarPerfil();
   if(tab==='financeiro')carregarDashboard();
-  if(tab==='registrar')carregarHistoricoChat();
 }
 function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-despesas').style.background=tab==='despesas'?'var(--teal-dim)':'transparent';document.getElementById('ltab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-receitas').style.background=tab==='receitas'?'var(--teal-dim)':'transparent';carregarLancamentos()}
 
 /* ── CHAT ── */
 function atualizarBtnChat(){var txt=document.getElementById('chat-texto').value.trim();document.getElementById('chat-send-btn').style.display=txt?'flex':'none';document.getElementById('chat-mic-btn').style.display=txt?'none':'flex'}
-function adicionarMsg(html,tipo){var msgs=document.getElementById('chat-msgs');var hora=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});var div=document.createElement('div');div.className='chat-msg '+tipo;div.innerHTML=`<div class="chat-bubble">${html}</div><div class="chat-time">${hora}</div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;if(typeof salvarMsgHistorico==='function'&&currentUser.id)salvarMsgHistorico(html,tipo);return div}
+function adicionarMsg(html,tipo){var msgs=document.getElementById('chat-msgs');var hora=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});var div=document.createElement('div');div.className='chat-msg '+tipo;div.innerHTML=`<div class="chat-bubble">${html}</div><div class="chat-time">${hora}</div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;return div}
 async function enviarChatTexto(){var texto=document.getElementById('chat-texto').value.trim();if(!texto)return;adicionarMsg(texto,'enviado');document.getElementById('chat-texto').value='';document.getElementById('chat-texto').style.height='auto';atualizarBtnChat();await processarEnvio({texto})}
 async function processarEnvio(payload){
   var msgResp=adicionarMsg('<span style="color:#aaa;font-style:italic">⏳ Processando...</span>','recebido');
@@ -892,33 +891,8 @@ async function salvarPerfil(){
   try{var updates={data:{nome}};if(senha)updates.password=senha;await sb.auth.updateUser(updates);await sb.from('clientes').update({nome:nome.split(' ')[0],...(profissao?{profissao}:{})}).eq('user_id',currentUser.id);var primeiroNome=nome.split(' ')[0];currentUser.nome=primeiroNome;document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();document.getElementById('perf-foto-inicial').textContent=primeiroNome.charAt(0).toUpperCase();if(senha){document.getElementById('perf-senha').value='';document.getElementById('perf-senha2').value='';}toast('Perfil salvo com sucesso!');}catch(e){toast('Erro ao salvar: '+e.message,true)}
   btn.textContent='Salvar alterações';btn.disabled=false;
 }
-async function salvarMsgHistorico(mensagem, tipo) {
-  try {
-    var tmp = document.createElement('div');
-    tmp.innerHTML = mensagem;
-    var textoLimpo = (tmp.textContent || tmp.innerText || '').trim();
-    if (!textoLimpo || textoLimpo.includes('Processando') || textoLimpo.includes('Salvando')) return;
-    await sb.from('chat_historico').insert({ user_id: currentUser.id, mensagem: textoLimpo, tipo });
-  } catch(e) {}
-}
-async function carregarHistoricoChat() {
-  try {
-    var { data } = await sb.from('chat_historico').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false }).limit(20);
-    if (!data || !data.length) return;
-    var msgs = document.getElementById('chat-msgs');
-    msgs.innerHTML = '';
-    data.reverse().forEach(m => {
-      var hora = new Date(m.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-      var div = document.createElement('div');
-      div.className = 'chat-msg ' + m.tipo;
-      div.innerHTML = '<div class="chat-bubble">' + m.mensagem + '</div><div class="chat-time">' + hora + '</div>';
-      msgs.appendChild(div);
-    });
-    msgs.scrollTop = msgs.scrollHeight;
-  } catch(e) {}
-}
 sb.auth.getSession().then(({data})=>{if(data.session)iniciarSessao(data.session.user)});
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 </script>
 
 <script src="/push.js"></script></body>
