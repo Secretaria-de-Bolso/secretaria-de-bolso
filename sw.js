@@ -1,4 +1,4 @@
-const CACHE='sb-v15';
+const CACHE='sb-v16';
 const ASSETS=['/manifest.json'];
 
 self.addEventListener('install',e=>{
