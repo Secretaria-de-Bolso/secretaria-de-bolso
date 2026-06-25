@@ -895,7 +895,7 @@ async function salvarPerfil(){
   btn.textContent='Salvar alterações';btn.disabled=false;
 }
 async function salvarMsgHistorico(tipo,conteudo){
-  try{await sb.from('chat_historico').insert({user_id:currentUser.id,tipo:tipo,conteudo:conteudo});}catch(e){}
+  try{await sb.from('chat_historico').insert({user_id:currentUser.id,tipo:tipo,mensagem:conteudo});}catch(e){}
 }
 async function carregarHistoricoChat(){
   try{
@@ -906,7 +906,7 @@ async function carregarHistoricoChat(){
     data.forEach(m=>{
       var hora=new Date(m.created_at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
       var div=document.createElement('div');div.className='chat-msg '+m.tipo;
-      div.innerHTML=`<div class="chat-bubble">${m.conteudo}</div><div class="chat-time">${hora}</div>`;
+      div.innerHTML=`<div class="chat-bubble">${m.mensagem}</div><div class="chat-time">${hora}</div>`;
       msgs.appendChild(div);
     });
     msgs.scrollTop=msgs.scrollHeight;
