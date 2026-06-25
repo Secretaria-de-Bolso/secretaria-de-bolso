@@ -676,6 +676,7 @@ async function processarEnvio(payload){
       var tipoEmoji={despesa:'💸',receita:'💰',agendamento:'📅',boleto:'🧾'}[data.tipo]||'📋';
       var html=`${tipoEmoji} <strong>Confirme o registro:</strong><br><small style="color:#555">Tipo:</small> ${data.tipo||'—'}<br><small style="color:#555">Descrição:</small> ${data.descricao||'—'}${data.valor?`<br><small style="color:#555">Valor:</small> R$ ${parseFloat(data.valor).toFixed(2).replace('.',',')}`:''  }${data.data?`<br><small style="color:#555">Data:</small> ${data.data}`:''}${data.hora?`<br><small style="color:#555">Hora:</small> ${data.hora}`:''}`;
       msgResp.querySelector('.chat-bubble').innerHTML=html;
+      salvarMsgHistorico('recebido',html);
       var btns=document.createElement('div');btns.className='chat-confirm-btns';
       btns.innerHTML=`<button class="btn-confirmar" onclick="confirmarRegistro(this)">✅ Confirmar</button><button class="btn-cancelar" onclick="cancelarRegistro(this)">✕ Cancelar</button>`;
       msgResp.appendChild(btns);
