@@ -900,8 +900,9 @@ async function salvarMsgHistorico(tipo,conteudo){
 }
 async function carregarHistoricoChat(){
   try{
-    var {data}=await sb.from('chat_historico').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:true}).limit(50);
+    var {data}=await sb.from('chat_historico').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(50);
     if(!data||!data.length)return;
+    data.reverse();
     var msgs=document.getElementById('chat-msgs');
     msgs.innerHTML='';
     data.forEach(m=>{
