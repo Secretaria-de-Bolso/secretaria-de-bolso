@@ -54,4 +54,4 @@ app.post('/send-push', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Push server na porta ${PORT}`));
+app.listen(PORT, '0.0.0.0', () => console.log(`Push server na porta ${PORT}`));
