@@ -740,7 +740,7 @@ async function doLogin(){
 }
 async function iniciarSessao(user){
   var nome=user.user_metadata?.nome||user.email.split('@')[0];nome=nome.charAt(0).toUpperCase()+nome.slice(1);
-  var primeiroNome=nome.split(' ')[0];currentUser={nome:primeiroNome,email:user.email,id:user.id};console.log('[currentUser.id]', currentUser.id);
+  var primeiroNome=nome.split(' ')[0];currentUser={nome:primeiroNome,email:user.email,id:user.id};
   document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
   goTo('screen-dashboard');toast('Bem-vindo, '+primeiroNome+'!');if(window.innerWidth<=768){var sub=document.getElementById('sub-topbar');if(sub)sub.style.display='flex';}switchTab2('registrar');
   await Promise.all([carregarWAStatus(),carregarCategorias()]);
