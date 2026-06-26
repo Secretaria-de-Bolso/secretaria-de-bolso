@@ -50,9 +50,11 @@ app.post('/send-push', async (req, res) => {
     await Promise.all(subs.map(async (s) => {
       try {
         const sub = typeof s.subscription === 'string' ? JSON.parse(s.subscription) : s.subscription;
-        await webpush.sendNotification(sub, payload);
+        const result = await webpush.sendNotification(sub, payload);
+        console.log(`[push] OK user=${s.user_id} status=${result.statusCode}`);
         sent++;
       } catch (e) {
+        console.log(`[push] FAIL user=${s.user_id} status=${e.statusCode} body=${e.body}`);
         failed++;
         if (e.statusCode === 410 || e.statusCode === 404) await deleteSubscription(s.endpoint);
       }
@@ -60,6 +62,7 @@ app.post('/send-push', async (req, res) => {
 
     res.json({ sent, failed });
   } catch (e) {
+    console.error('[push] ERROR', e.message);
     res.status(500).json({ error: e.message });
   }
 });

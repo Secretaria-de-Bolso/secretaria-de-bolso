@@ -752,6 +752,7 @@ async function registrarPush(){
     const perm=await Notification.requestPermission();
     if(perm!=="granted")return;
     const reg=await navigator.serviceWorker.ready;
+    const existing=await reg.pushManager.getSubscription();if(existing)await existing.unsubscribe();
     const VAPID_PUBLIC="BJTs92Dy1WoUpGHN_evm-CxoTF72VFYPw4icitZZ8xzAZ95qO-lxZhBOD4_umq-5c81VXvCX4GagbSDoT8AVE0Y";
     const sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:VAPID_PUBLIC});
     const subJson=sub.toJSON();await sb.from("push_subscriptions").upsert({user_id:currentUser.id,endpoint:subJson.endpoint,p256dh:subJson.keys.p256dh,auth:subJson.keys.auth,subscription:JSON.stringify(subJson)},{onConflict:"user_id"});
