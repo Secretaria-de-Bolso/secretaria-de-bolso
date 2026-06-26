@@ -655,7 +655,7 @@ function switchTab2(tab){
   if(tab==='boletos')carregarBoletos();
   if(tab==='perfil')carregarPerfil();
   if(tab==='financeiro')carregarDashboard();
-  if(tab==='registrar')carregarHistoricoChat();
+  if(tab==='registrar')carregarHistoricoChat().then(carregarLembretes);
 }
 function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-despesas').style.background=tab==='despesas'?'var(--teal-dim)':'transparent';document.getElementById('ltab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-receitas').style.background=tab==='receitas'?'var(--teal-dim)':'transparent';carregarLancamentos()}
 
@@ -913,6 +913,15 @@ async function carregarHistoricoChat(){
       msgs.appendChild(div);
     });
     msgs.scrollTop=msgs.scrollHeight;
+  }catch(e){}
+}
+async function carregarLembretes(){
+  try{
+    var {data}=await sb.from('lembretes').select('*').eq('user_id',currentUser.id).eq('lido',false).order('created_at',{ascending:true});
+    if(!data||!data.length)return;
+    data.forEach(l=>{adicionarMsg(`<strong>${l.titulo||''}</strong><br>${l.corpo||''}`, 'recebido');});
+    var ids=data.map(l=>l.id);
+    await sb.from('lembretes').update({lido:true}).in('id',ids);
   }catch(e){}
 }
 sb.auth.getSession().then(({data})=>{if(data.session)iniciarSessao(data.session.user)});
