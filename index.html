@@ -919,7 +919,7 @@ async function carregarLembretes(){
   try{
     var {data}=await sb.from('lembretes').select('*').eq('user_id',currentUser.id).eq('lido',false).order('created_at',{ascending:true});
     if(!data||!data.length)return;
-    data.forEach(l=>{adicionarMsg(`<strong>${l.titulo||''}</strong><br>${l.corpo||''}`, 'recebido');});
+    data.forEach(l=>{var conteudo=`<strong>${l.titulo||''}</strong><br>${l.corpo||''}`;adicionarMsg(conteudo,'recebido');salvarMsgHistorico('recebido',conteudo);});
     var ids=data.map(l=>l.id);
     await sb.from('lembretes').update({lido:true}).in('id',ids);
   }catch(e){}
