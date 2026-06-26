@@ -899,36 +899,21 @@ async function salvarMsgHistorico(tipo,conteudo){
   try{await sb.from('chat_historico').insert({user_id:currentUser.id,tipo:tipo,mensagem:conteudo});}catch(e){}
 }
 async function carregarHistoricoChat(){
-  console.log('[carregarHistoricoChat] currentUser.id:', currentUser.id);
   try{
-    var {data}=await sb.from('chat_historico').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:true}).limit(20);
+    var {data}=await sb.from('chat_historico').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:true}).limit(50);
+    if(!data||!data.length)return;
     var msgs=document.getElementById('chat-msgs');
     msgs.innerHTML='';
-    if(data&&data.length){
-      data.forEach(m=>{
-        var hora=new Date(m.created_at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-        var div=document.createElement('div');div.className='chat-msg '+m.tipo;
-        var msg=m.mensagem;
-        if(msg&&!msg.includes('<')&&msg.includes(' | '))msg=msg.replace(/ \| /g,'<br>');
-        div.innerHTML=`<div class="chat-bubble">${msg}</div><div class="chat-time">${hora}</div>`;
-        msgs.appendChild(div);
-      });
-    }
-    var {data:lembretes,error:errLembretes}=await sb.from('lembretes').select('*').eq('user_id',currentUser.id).eq('lido',false).order('created_at',{ascending:true});
-    console.log('[carregarHistoricoChat] lembretes result:', lembretes);
-    console.log('[carregarHistoricoChat] lembretes error:', errLembretes);
-    if(lembretes&&lembretes.length){
-      lembretes.forEach(l=>{
-        var hora=new Date(l.created_at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-        var div=document.createElement('div');div.className='chat-msg recebido';
-        div.innerHTML=`<div class="chat-bubble"><strong>${l.titulo||''}</strong><br>${l.corpo||''}</div><div class="chat-time">${hora}</div>`;
-        msgs.appendChild(div);
-      });
-      var ids=lembretes.map(l=>l.id);
-      await sb.from('lembretes').update({lido:true}).in('id',ids);
-    }
+    data.forEach(m=>{
+      var hora=new Date(m.created_at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      var div=document.createElement('div');div.className='chat-msg '+m.tipo;
+      var msg=m.mensagem;
+      if(msg&&!msg.includes('<')&&msg.includes(' | '))msg=msg.replace(/ \| /g,'<br>');
+      div.innerHTML=`<div class="chat-bubble">${msg}</div><div class="chat-time">${hora}</div>`;
+      msgs.appendChild(div);
+    });
     msgs.scrollTop=msgs.scrollHeight;
-  }catch(e){console.error('[carregarHistoricoChat] erro:', e);}
+  }catch(e){}
 }
 sb.auth.getSession().then(({data})=>{if(data.session)iniciarSessao(data.session.user)});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
