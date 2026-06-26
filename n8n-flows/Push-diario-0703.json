@@ -29,7 +29,8 @@
         "url": "http://172.17.0.1:3001/send-push",
         "sendBody": true,
         "contentType": "json",
-        "body": "={\"title\": \"Secretária de Bolso\", \"body\": \"Seus compromissos, agenda e pagamentos do dia estão prontos.\", \"requireInteraction\": true}"
+        "specifyBody": "json",
+        "jsonBody": "{\"title\": \"Secretária de Bolso\", \"body\": \"Seus compromissos, agenda e pagamentos do dia estão prontos.\", \"requireInteraction\": true}"
       }
     }
   ],

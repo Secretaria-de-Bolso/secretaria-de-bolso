@@ -19,38 +19,42 @@ webpush.setVapidDetails(
 );
 
 app.post('/send-push', async (req, res) => {
-  const {
-    title = 'Secretária de Bolso',
-    body = '',
-    icon = '/icon-192.png',
-    badge = '/icon-512.png',
-    requireInteraction = true,
-    url = 'https://app.secretariadebolso.com'
-  } = req.body;
+  try {
+    const {
+      title = 'Secretária de Bolso',
+      body = '',
+      icon = '/icon-192.png',
+      badge = '/icon-512.png',
+      requireInteraction = true,
+      url = 'https://app.secretariadebolso.com'
+    } = req.body || {};
 
-  const { data: subs, error } = await sb.from('push_subscriptions').select('*');
-  if (error) return res.status(500).json({ error: error.message });
-  if (!subs || !subs.length) return res.json({ sent: 0, failed: 0 });
+    const { data: subs, error } = await sb.from('push_subscriptions').select('*');
+    if (error) return res.status(500).json({ error: error.message });
+    if (!subs || !subs.length) return res.json({ sent: 0, failed: 0 });
 
-  const payload = JSON.stringify({ title, body, icon, badge, requireInteraction, url });
+    const payload = JSON.stringify({ title, body, icon, badge, requireInteraction, url });
 
-  let sent = 0;
-  let failed = 0;
+    let sent = 0;
+    let failed = 0;
 
-  await Promise.all(subs.map(async (s) => {
-    try {
-      const sub = typeof s.subscription === 'string' ? JSON.parse(s.subscription) : s.subscription;
-      await webpush.sendNotification(sub, payload);
-      sent++;
-    } catch (e) {
-      failed++;
-      if (e.statusCode === 410 || e.statusCode === 404) {
-        await sb.from('push_subscriptions').delete().eq('endpoint', s.endpoint);
+    await Promise.all(subs.map(async (s) => {
+      try {
+        const sub = typeof s.subscription === 'string' ? JSON.parse(s.subscription) : s.subscription;
+        await webpush.sendNotification(sub, payload);
+        sent++;
+      } catch (e) {
+        failed++;
+        if (e.statusCode === 410 || e.statusCode === 404) {
+          await sb.from('push_subscriptions').delete().eq('endpoint', s.endpoint);
+        }
       }
-    }
-  }));
+    }));
 
-  res.json({ sent, failed });
+    res.json({ sent, failed });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 const PORT = process.env.PORT || 3001;
