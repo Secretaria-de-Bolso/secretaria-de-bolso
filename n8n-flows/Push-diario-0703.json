@@ -1,0 +1,53 @@
+{
+  "name": "Push Diario 07h03",
+  "nodes": [
+    {
+      "id": "p1u2s3h4-0001-0001-0001-000000000001",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [250, 300],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "3 7 * * *"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "p1u2s3h4-0002-0002-0002-000000000002",
+      "name": "Enviar Push",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [470, 300],
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:3001/send-push",
+        "sendBody": true,
+        "contentType": "json",
+        "body": "={\"title\": \"Secretária de Bolso\", \"body\": \"Seus compromissos, agenda e pagamentos do dia estão prontos.\", \"requireInteraction\": true}"
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Enviar Push",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null
+}

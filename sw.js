@@ -1,4 +1,4 @@
-const CACHE='sb-v16';
+const CACHE='sb-v17';
 const ASSETS=['/manifest.json'];
 
 self.addEventListener('install',e=>{
@@ -25,11 +25,22 @@ self.addEventListener('push',e=>{
   const data=e.data?e.data.json():{title:'Secretária de Bolso',body:'Nova notificação'};
   e.waitUntil(self.registration.showNotification(data.title||'Secretária de Bolso',{
     body:data.body||'',
-    icon:'/icon-192.png'
+    icon:data.icon||'/icon-192.png',
+    badge:data.badge||'/icon-512.png',
+    requireInteraction:data.requireInteraction!==false,
+    data:{url:data.url||'https://app.secretariadebolso.com'}
   }));
 });
 
 self.addEventListener('notificationclick',e=>{
   e.notification.close();
-  e.waitUntil(clients.openWindow('/'));
+  const target=(e.notification.data&&e.notification.data.url)||'https://app.secretariadebolso.com';
+  e.waitUntil(
+    clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{
+      for(const c of list){
+        if(c.url.startsWith('https://app.secretariadebolso.com')&&'focus' in c)return c.focus();
+      }
+      return clients.openWindow(target);
+    })
+  );
 });
