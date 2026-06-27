@@ -35,8 +35,8 @@ app.post('/send-push', async (req, res) => {
     const {
       title = 'Secretária de Bolso',
       body = '',
-      icon = '/icon-192.png',
-      badge = '/icon-512.png',
+      icon = 'https://app.secretariadebolso.com/icon-192.png',
+      badge = 'https://app.secretariadebolso.com/icon-192.png',
       requireInteraction = true,
       url = 'https://app.secretariadebolso.com'
     } = req.body || {};

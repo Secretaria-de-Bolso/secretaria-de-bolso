@@ -31,13 +31,6 @@ h1,h2,h3,h4,h5{font-family:'Syne',sans-serif}
 .logo-icon{width:28px;height:28px;background:var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .logo-icon svg{width:14px;height:14px;fill:#fff}
 .logo span{color:#00d4a0}
-.wa-bar-mobile{display:none;align-items:center;gap:10px;padding:8px 16px;background:#111;border-bottom:1px solid #222;font-size:13px}
-.wa-bar-dot{width:8px;height:8px;border-radius:50%;background:#00d4a0;flex-shrink:0}
-.wa-bar-dot.off{background:#ff6b6b}
-.wa-bar-num{color:#aaa;font-size:12px}
-.wa-bar-badge{padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;font-family:'Syne',sans-serif}
-.wa-bar-badge.on{background:#00d4a0;color:#000}
-.wa-bar-badge.off{background:#ff6b6b;color:#000}
 .dashboard-layout{display:flex;flex:1;min-height:0;margin-top:56px}
 .sidebar{width:220px;flex-shrink:0;background:#0a0a0a;border-right:1px solid #222;display:flex;flex-direction:column;position:fixed;top:56px;left:0;height:calc(100vh - 56px);overflow-y:auto;z-index:90}
 .tab-btn{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:13px;font-family:'Syne',sans-serif;font-weight:600;color:#aaa;cursor:pointer;border-left:3px solid transparent;border-bottom:1px solid #161616;transition:all 0.15s;width:100%}
@@ -316,12 +309,6 @@ input::placeholder{color:var(--text3)}
   <div class="auth-sub">Dados pessoais</div>
   <div class="form-group"><label>Nome completo</label><input type="text" id="cad-nome" placeholder="Seu nome"></div>
   <div class="form-group"><label>E-mail</label><input type="email" id="cad-email" placeholder="seu@email.com"></div>
-  <div class="form-group"><label>WhatsApp (com DDD)</label>
-    <div style="display:flex;gap:8px">
-      <select id="cad-pais" style="width:100px"><option value="55">🇧🇷 +55</option><option value="1">🇺🇸 +1</option><option value="351">🇵🇹 +351</option></select>
-      <input type="tel" id="cad-telefone" placeholder="(44) 99999-9999" style="flex:1">
-    </div>
-  </div>
   <div class="form-group"><label>Senha</label>
     <div style="position:relative">
       <input type="password" id="cad-senha" placeholder="Mínimo 8 caracteres" style="padding-right:40px">
@@ -346,29 +333,12 @@ input::placeholder{color:var(--text3)}
     <div style="display:flex;align-items:center;gap:12px">
       <div class="logo"><div class="logo-icon"><img src="/sb.png" style="width:32px;height:32px;border-radius:8px;"></div>Secretária de <span>Bolso</span></div>
     </div>
-    <div id="wa-bar-desktop" style="display:flex;align-items:center;gap:8px;flex:1;padding:0 12px">
-      <div class="wa-bar-dot" id="wa-dot-desk"></div>
-      <span style="font-size:12px;color:#888">WhatsApp</span>
-      <span style="font-size:12px;color:#666" id="wa-num-desk">—</span>
-      <span class="wa-bar-badge on" id="wa-badge-desk">Conectado</span>
-    </div>
+    <div style="flex:1"></div>
     <div style="display:flex;align-items:center;gap:8px;margin-right:4px">
-      <div id="wa-dot-topbar" style="width:7px;height:7px;border-radius:50%;background:#00d4a0;flex-shrink:0"></div>
       <span style="font-size:11px;color:#888" id="topbar-name"></span>
       <div class="avatar" id="topbar-avatar" onclick="switchTab2('perfil')">P</div>
     </div>
   </div>
-  <div id="sub-topbar" style="display:none;align-items:center;gap:8px;padding:6px 16px;background:#111;border-bottom:1px solid #222;position:fixed;top:56px;left:0;right:0;z-index:99;height:36px">
-    <div id="wa-dot-sub" style="width:7px;height:7px;border-radius:50%;background:#00d4a0;flex-shrink:0"></div>
-    <span style="font-size:12px;color:#aaa" id="wa-num-sub">—</span>
-    <span id="wa-badge-sub" style="padding:1px 7px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;background:#00d4a0;color:#000">Conectado</span>
-  </div>
-  <div class="wa-bar-mobile" id="wa-bar-mobile">
-    <div class="wa-bar-dot" id="wa-dot-mob"></div>
-    <span class="wa-bar-num" id="wa-num-mob">—</span>
-    <span class="wa-bar-badge on" id="wa-badge-mob">Conectado</span>
-  </div>
-  <style>@media(max-width:768px){.wa-bar-mobile{display:none!important}}</style>
   <div class="dashboard-layout">
   <div class="sidebar">
     <div class="tab-btn" id="tab-registrar" onclick="switchTab2('registrar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>Registrar</div>
@@ -575,10 +545,9 @@ ontouchcancel="event.preventDefault();pararChatGravacao()">
       </div>
       <div style="display:flex;flex-direction:column;gap:14px">
         <div class="card">
-          <div class="section-label">WhatsApp</div>
-          <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:14px">
-            <div style="flex:1"><div style="font-weight:500;font-size:13px" id="perf-wa-numero">—</div><div class="badge badge-green" style="margin-top:4px"><div class="dot"></div>Conectado</div></div>
-          </div>
+          <div class="section-label">Notificações</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Receba lembretes diários de agenda, boletos e compromissos.</div>
+          <button id="btn-ativar-push" class="btn btn-primary btn-full btn-sm" onclick="ativarNotificacoes()">Ativar notificações</button>
         </div>
         <div class="card">
           <div class="section-label">Plano atual</div>
@@ -647,10 +616,6 @@ function switchTab2(tab){
   var ct=document.getElementById('content-'+tab);if(ct)ct.classList.add('active');
   ['financeiro','agenda','boletos','perfil','registrar'].forEach(t=>{var el=document.getElementById('mnav-'+t);if(el)el.classList.remove('active')});
   var mnav=document.getElementById('mnav-'+tab);if(mnav)mnav.classList.add('active');
-  var wabar=document.getElementById('wa-bar-mobile');
-  if(wabar)wabar.style.display='none';
-  var sub=document.getElementById('sub-topbar');
-  if(sub)sub.style.display='flex';
   if(tab==='agenda')carregarAgenda();
   if(tab==='boletos')carregarBoletos();
   if(tab==='perfil')carregarPerfil();
@@ -742,8 +707,8 @@ async function iniciarSessao(user){
   var nome=user.user_metadata?.nome||user.email.split('@')[0];nome=nome.charAt(0).toUpperCase()+nome.slice(1);
   var primeiroNome=nome.split(' ')[0];currentUser={nome:primeiroNome,email:user.email,id:user.id};
   document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
-  goTo('screen-dashboard');toast('Bem-vindo, '+primeiroNome+'!');if(window.innerWidth<=768){var sub=document.getElementById('sub-topbar');if(sub)sub.style.display='flex';}switchTab2('registrar');
-  await Promise.all([carregarWAStatus(),carregarCategorias()]);
+  goTo('screen-dashboard');toast('Bem-vindo, '+primeiroNome+'!');switchTab2('registrar');
+  await carregarCategorias();
   await registrarPush();
 }
 async function doLogout(){await sb.auth.signOut();currentUser={nome:'',email:'',id:''};goTo('screen-login')}
@@ -755,20 +720,8 @@ async function doCadastro(){
   if(error){toast(error.message,true);return}
   var primeiroNome=nome.split(' ')[0];currentUser={nome:primeiroNome,email,id:data.user?.id||''};
   document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
-  var tel=document.getElementById('cad-pais').value+document.getElementById('cad-telefone').value.replace(/\D/g,'');
-  if(data.user){await sb.from('clientes').insert({user_id:data.user.id,nome:primeiroNome,whatsapp:tel,whatsapp_conectado:false,evolution_instance:'teste-sb'})}
+  if(data.user){await sb.from('clientes').insert({user_id:data.user.id,nome:primeiroNome})}
   toast('Conta criada!');goTo('screen-dashboard');switchTab2('registrar');
-}
-async function carregarWAStatus(){
-  try{
-    var {data}=await sb.from('clientes').select('whatsapp,whatsapp_conectado').eq('user_id',currentUser.id).single();
-    if(data){var num=data.whatsapp||'—',on=data.whatsapp_conectado;
-      document.getElementById('wa-num-desk').textContent=num;document.getElementById('wa-dot-desk').className='wa-bar-dot'+(on?'':' off');var td=document.getElementById('wa-dot-topbar');if(td)td.style.background=on?'#00d4a0':'#ff6b6b';
-      var ds=document.getElementById('wa-dot-sub');if(ds)ds.style.background=on?'#00d4a0':'#ff6b6b';
-      var ns=document.getElementById('wa-num-sub');if(ns)ns.textContent=num;
-      var bs=document.getElementById('wa-badge-sub');if(bs){bs.textContent=on?'Conectado':'Desconectado';bs.style.background=on?'#00d4a0':'#ff6b6b';}document.getElementById('wa-badge-desk').textContent=on?'Conectado':'Desconectado';document.getElementById('wa-badge-desk').className='wa-bar-badge '+(on?'on':'off');
-      document.getElementById('wa-num-mob').textContent=num;document.getElementById('wa-dot-mob').className='wa-bar-dot'+(on?'':' off');document.getElementById('wa-badge-mob').textContent=on?'Conectado':'Desconectado';document.getElementById('wa-badge-mob').className='wa-bar-badge '+(on?'on':'off');}
-  }catch(e){}
 }
 function parseSalario(str){if(!str)return 0;return parseFloat(str.replace(/[R$\s.]/g,'').replace(',','.'))||0}
 function recalcularComSalario(){var sal=parseSalario(document.getElementById('dash-salario').value),totalRec=totalReceitasSupa+sal;document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2).replace('.',',');var saldo=totalRec-totalDespesasSupa,el=document.getElementById('m-saldo');el.textContent='R$ '+saldo.toFixed(2).replace('.',',');el.className='metric-value '+(saldo>=0?'green':'red')}
@@ -870,8 +823,8 @@ async function carregarPerfil(){
     var {data:authData}=await sb.auth.getUser(),user=authData?.user,nomeAuth=user?.user_metadata?.nome||currentUser.nome;
     document.getElementById('perf-nome').value=nomeAuth;document.getElementById('perf-email').value=user?.email||currentUser.email;document.getElementById('perf-foto-inicial').textContent=nomeAuth.charAt(0).toUpperCase();
     if(user?.created_at){var d=new Date(user.created_at);document.getElementById('perf-membro-desde').textContent='Membro desde '+d.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});}
-    var {data}=await sb.from('clientes').select('whatsapp,profissao').eq('user_id',currentUser.id).single();
-    if(data){document.getElementById('perf-wa-numero').textContent=data.whatsapp||'—';if(data.profissao)document.getElementById('perf-profissao').value=data.profissao;}
+    var {data}=await sb.from('clientes').select('profissao').eq('user_id',currentUser.id).single();
+    if(data&&data.profissao)document.getElementById('perf-profissao').value=data.profissao;
   }catch(e){document.getElementById('perf-nome').value=currentUser.nome;document.getElementById('perf-email').value=currentUser.email;}
 }
 function previewFoto(input){if(input.files&&input.files[0]){var reader=new FileReader();reader.onload=e=>{document.getElementById('perf-foto-img').src=e.target.result;document.getElementById('perf-foto-img').style.display='block';document.getElementById('perf-foto-inicial').style.display='none';};reader.readAsDataURL(input.files[0])}}
@@ -905,6 +858,27 @@ async function carregarHistoricoChat(){
 }
 sb.auth.getSession().then(({data})=>{if(data.session)iniciarSessao(data.session.user)});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+async function ativarNotificacoes(){
+  const btn=document.getElementById('btn-ativar-push');
+  if(btn){btn.textContent='Ativando...';btn.disabled=true;}
+  try{
+    if(!("Notification" in window)||!("serviceWorker" in navigator)){if(btn){btn.textContent='Ativar notificações';btn.disabled=false;}return;}
+    const perm=await Notification.requestPermission();
+    if(perm==='denied'){toast('Notificações bloqueadas. Libere nas configurações.',true);if(btn){btn.textContent='Bloqueado';btn.disabled=false;}return;}
+    if(perm!=='granted'){if(btn){btn.textContent='Ativar notificações';btn.disabled=false;}return;}
+    const reg=await navigator.serviceWorker.ready;
+    const VAPID='BJTs92Dy1WoUpGHN_evm-CxoTF72VFYPw4icitZZ8xzAZ95qO-lxZhBOD4_umq-5c81VXvCX4GagbSDoT8AVE0Y';
+    const existing=await reg.pushManager.getSubscription();
+    const sub=existing||await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:VAPID});
+    const s=sub.toJSON();
+    await sb.from("push_subscriptions").upsert({user_id:currentUser.id,endpoint:s.endpoint,p256dh:s.keys.p256dh,auth:s.keys.auth,subscription:JSON.stringify(s)},{onConflict:"user_id"});
+    toast('Notificações ativadas!');
+    if(btn){btn.textContent='✅ Ativas';btn.disabled=true;}
+  }catch(e){
+    toast('Erro: '+e.message,true);
+    if(btn){btn.textContent='Tentar novamente';btn.disabled=false;}
+  }
+}
 </script>
 
 <script src="/push.js"></script></body>
