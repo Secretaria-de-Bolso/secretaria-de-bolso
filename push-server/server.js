@@ -37,10 +37,12 @@ app.post('/send-push', async (req, res) => {
       body = '',
       icon = 'https://app.secretariadebolso.com/sb.png',
       requireInteraction = true,
-      url = 'https://app.secretariadebolso.com'
+      url = 'https://app.secretariadebolso.com',
+      user_id
     } = req.body || {};
 
-    const subs = await getSubscriptions();
+    let subs = await getSubscriptions();
+    if (user_id) subs = subs.filter((s) => s.user_id === user_id);
     if (!subs.length) return res.json({ sent: 0, failed: 0 });
 
     const payload = JSON.stringify({ title, body, icon, requireInteraction, url });
