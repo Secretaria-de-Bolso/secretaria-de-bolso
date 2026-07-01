@@ -120,12 +120,6 @@ label{font-size:12px;color:var(--text2);font-weight:500}
 input,select,textarea{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border 0.15s;width:100%}
 input:focus,select:focus,textarea:focus{border-color:var(--teal)}
 input::placeholder{color:var(--text3)}
-.cat-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.cat-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);transition:all 0.15s;font-family:'Syne',sans-serif}
-.cat-chip:hover{border-color:var(--teal);color:var(--teal)}
-.cat-chip.active{background:var(--teal-dim);border-color:var(--teal);color:var(--teal)}
-.cat-chip .cat-remove{opacity:0;font-size:14px;line-height:1;transition:opacity 0.15s}
-.cat-chip.active:hover .cat-remove{opacity:1}
 .avatar{width:32px;height:32px;border-radius:50%;background:rgba(23,179,105,0.1);border:1px solid #17B369;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:#17B369;cursor:pointer;flex-shrink:0}
 .toast{position:fixed;bottom:20px;right:20px;background:#1a1a1a;border:1px solid var(--teal);border-radius:10px;padding:12px 18px;font-size:13px;color:#f0f0f0;z-index:9999;transform:translateY(100px);opacity:0;transition:all 0.3s;max-width:300px}
 .toast.show{transform:translateY(0);opacity:1}
@@ -487,10 +481,6 @@ input::placeholder{color:var(--text3)}
       <div class="table-wrap"><table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead><tbody id="tbody-lanc"><tr><td colspan="5" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody></table></div>
       <div id="lanc-paginacao"></div>
     </div>
-    <div class="card">
-      <div class="section-label">Minhas categorias<span style="font-size:11px;color:var(--text2);text-transform:none;letter-spacing:0;font-weight:400">Ative as que usa</span></div>
-      <div class="cat-grid" id="cat-grid"><div style="color:var(--text2);font-size:13px">Carregando...</div></div>
-    </div>
   </div>
   </div>
 
@@ -643,7 +633,7 @@ const SUPA_KEY='sb_publishable_DWDJXwLW4zXqeApYiZOLGA_yt9pJj1e';
 const WEBHOOK_REGISTRAR='https://n8n.secretariadebolso.com/webhook/registrar';
 const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
 var currentUser={nome:'',email:'',id:''};
-var totalReceitasSupa=0,totalDespesasSupa=0,currentLTab='despesas',categoriasAtivas=[];
+var totalReceitasSupa=0,totalDespesasSupa=0,currentLTab='despesas';
 var chatGravando=false,chatMediaRecorder=null,chatAudioChunks=[],pendingConfirm=null,chatRecStream=null,chatRecStartTime=0,chatRecTimerInterval=null,chatMicPressed=false;
 const CATS_PADRAO=['Alimentação — Casa','Alimentação — Trabalho','Restaurante — Lazer','Restaurante — Trabalho','Mercado','Farmácia — Saúde','Farmácia — Pet','Combustível','Transporte — Uber/Táxi','Transporte — Outros','Moradia — Aluguel','Moradia — Condomínio','Moradia — Manutenção','Saúde — Médico','Saúde — Dentista','Saúde — Academia','Educação','Vestuário','Lazer — Entretenimento','Viagem','Pet Shop','Assinaturas','Serviços','Boletos','Outros'];
 
@@ -851,7 +841,7 @@ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();def
 window.addEventListener('appinstalled',function(){entrarDashboard(pendingTabAposInstalar)});
 function isStandalonePWA(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true}
 function isIOSDevice(){return /iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream}
-function entrarDashboard(destino){goTo('screen-dashboard');switchTab2(destino||'registrar');carregarCategorias();registrarPush()}
+function entrarDashboard(destino){goTo('screen-dashboard');switchTab2(destino||'registrar');registrarPush()}
 function exigirInstalacao(destino){
   if(isStandalonePWA()){entrarDashboard(destino);return}
   pendingTabAposInstalar=destino||'registrar';
@@ -951,9 +941,6 @@ async function salvarEdicao(){var id=document.getElementById('edit-id').value;aw
 function confirmarAcao(titulo,msg,callback){document.getElementById('confirm-title').textContent=titulo;document.getElementById('confirm-msg').textContent=msg;document.getElementById('confirm-btn').onclick=()=>{fecharModal('modal-confirm');callback()};abrirModal('modal-confirm')}
 async function deletarLancamento(){var id=document.getElementById('edit-id').value;fecharModal('modal-edit');confirmarAcao('Excluir lançamento','Tem certeza que deseja excluir este lançamento?',async()=>{await sb.from('lancamentos').delete().eq('id',id);toast('Lançamento excluído!');carregarDashboard()})}
 function excluirLancamentoDireto(id){confirmarAcao('Excluir lançamento','Tem certeza que deseja excluir este lançamento?',async()=>{await sb.from('lancamentos').delete().eq('id',id);toast('Lançamento excluído!');carregarDashboard()})}
-async function carregarCategorias(){try{var {data}=await sb.from('categorias').select('nome').eq('user_id',currentUser.id);categoriasAtivas=(data||[]).map(c=>c.nome);renderCategorias();}catch(e){renderCategorias()}}
-function renderCategorias(){var grid=document.getElementById('cat-grid');grid.innerHTML='';CATS_PADRAO.forEach(cat=>{var ativo=categoriasAtivas.includes(cat),chip=document.createElement('div');chip.className='cat-chip'+(ativo?' active':'');chip.innerHTML=cat+(ativo?'<span class="cat-remove">✕</span>':'');chip.onclick=()=>toggleCategoria(cat,chip);grid.appendChild(chip)})}
-async function toggleCategoria(cat,chip){var ativo=chip.classList.contains('active');if(ativo){await sb.from('categorias').delete().eq('user_id',currentUser.id).eq('nome',cat);categoriasAtivas=categoriasAtivas.filter(c=>c!==cat);}else{await sb.from('categorias').insert({user_id:currentUser.id,nome:cat});categoriasAtivas.push(cat)}renderCategorias()}
 var agendaTodos=[],agendaOffset=0;
 async function carregarAgenda(){
   try{
