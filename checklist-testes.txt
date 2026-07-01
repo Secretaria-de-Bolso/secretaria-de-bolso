@@ -1,0 +1,73 @@
+CHECKLIST DE TESTES — SECRETÁRIA DE BOLSO
+(marque [x] conforme for testando. Ideal: testar com 2 contas diferentes, ex: a sua e a da sua esposa)
+
+===== 1. CADASTRO E LOGIN =====
+[ ] Criar conta nova com nome, e-mail, celular (com DDI) e senha
+[ ] Tentar criar conta SEM preencher celular — deve bloquear e avisar
+[ ] Tentar criar conta com e-mail já usado — deve avisar "já cadastrado"
+[ ] Fazer logout e login de novo com o mesmo e-mail/senha
+[ ] Tentar logar com senha errada — deve mostrar erro claro
+
+===== 2. INSTALAÇÃO DO APP =====
+[ ] Depois do cadastro/login, deve aparecer a tela pedindo pra instalar
+[ ] No Android: aparece botão "Clique aqui para instalar" e funciona
+[ ] No iPhone: aparece instrução de "Compartilhar → Adicionar à Tela de Início"
+[ ] Depois de instalar, abrir pelo ícone da tela inicial — deve entrar direto no dashboard
+
+===== 3. REGISTRO POR TEXTO =====
+[ ] Digitar uma despesa (ex: "mercado 85 reais hoje") — confirma tipo, valor e data certos
+[ ] Digitar uma receita (ex: "recebi 500 reais do João")
+[ ] Digitar um agendamento SEM hora (ex: "dentista amanhã") — checar se a descrição não vem estranha
+[ ] Digitar um agendamento COM hora (ex: "reunião às 15h")
+[ ] Digitar um boleto (ex: "boleto da Nubank 200 reais vence dia 10")
+[ ] Confirmar um registro e ver se aparece na aba certa (Financeiro/Agenda/Boletos)
+[ ] Cancelar um registro (botão "✕ Cancelar") — não deve salvar nada
+
+===== 4. REGISTRO POR ÁUDIO =====
+[ ] Segurar o microfone e falar uma despesa — confere se transcreve certo
+[ ] Falar um agendamento sem hora (ex: "academia amanhã") — checar descrição
+[ ] Segurar o mic sem falar nada (silêncio) — deve avisar erro, não inventar registro
+[ ] Testar com pouca internet/3G fraco — ver se trava ou dá erro depois de um tempo
+
+===== 5. EDIÇÃO E EXCLUSÃO =====
+[ ] Editar um lançamento (Financeiro) — mudar valor/descrição/categoria
+[ ] Excluir um lançamento
+[ ] Editar um agendamento (mudar data/hora)
+[ ] Excluir um agendamento
+[ ] Editar um boleto, marcar como pago, conferir se entra automaticamente no Financeiro
+
+===== 6. FINANCEIRO =====
+[ ] Cadastrar salário fixo e ver se soma certo nas receitas
+[ ] Trocar o mês no filtro e ver se a lista muda
+[ ] Conferir gráfico de despesas por categoria
+
+===== 7. AGENDA =====
+[ ] Ver compromissos de hoje
+[ ] Navegar "Ontem"/"Amanhã"
+[ ] Ver lista dos próximos 7 dias
+
+===== 8. BOLETOS =====
+[ ] Ver aba "Vencidos", "Hoje", "A pagar", "Pagos" — conferir se cada boleto está na coluna certa
+[ ] Buscar boleto pelo nome
+
+===== 9. PERFIL =====
+[ ] Trocar nome e profissão, salvar
+[ ] Trocar senha e logar de novo com a senha nova
+[ ] Testar "Excluir conta" — usar uma conta DESCARTÁVEL (crie uma conta só pra esse teste!). Depois de excluir, tentar logar de novo com o mesmo e-mail — deve dar erro de conta inexistente
+
+===== 10. NOTIFICAÇÕES (PUSH) =====
+[ ] Ativar notificações no Perfil
+[ ] Pedir pra mim disparar um teste — só o seu celular deve receber, não o de outros usuários
+[ ] Fechar o app e ver se a notificação chega mesmo assim
+[ ] Clicar na notificação — deve abrir o app
+
+===== 11. ISOLAMENTO ENTRE CONTAS (fazer com 2 contas reais) =====
+[ ] Registrar uma despesa na sua conta — a outra pessoa NÃO deve ver isso na conta dela
+[ ] Cada um recebe só os próprios avisos de boleto/agenda, nunca o do outro
+
+===== 12. OFFLINE =====
+[ ] Colocar o celular no modo avião, digitar uma mensagem — deve avisar "sem conexão, será enviada ao reconectar"
+[ ] Tirar do modo avião — mensagem deve ser enviada sozinha
+
+===== 13. ATUALIZAÇÃO DO APP =====
+[ ] Depois de eu publicar uma mudança, abrir o app de novo (sem precisar fechar/reinstalar) e confirmar que já pegou a versão nova
