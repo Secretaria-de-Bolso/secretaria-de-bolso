@@ -377,6 +377,22 @@ input::placeholder{color:var(--text3)}
 </div>
 </div>
 
+<!-- INSTALAR -->
+<div class="screen" id="screen-instalar">
+<div class="auth-wrap">
+<div class="auth-box fade-in">
+  <div class="auth-logo"><div class="auth-logo-icon"><img src="/sb.png?v=2" style="width:36px;height:36px;object-fit:cover;border-radius:10px;display:block;"></div>Secretária de <span>Bolso</span></div>
+  <div class="auth-title">Instale o app no seu celular</div>
+  <div class="auth-sub">Pra usar a Secretária de Bolso e receber os avisos diários, instale o app na tela de início.</div>
+  <div id="instalar-corpo" style="margin-top:20px"></div>
+  <div id="instalar-fallback" style="display:none;margin-top:16px">
+    <div class="auth-sub">Não conseguimos detectar instalação automática nesse navegador.</div>
+    <button class="btn btn-outline btn-full" onclick="entrarDashboard(pendingTabAposInstalar)" style="margin-top:10px">Continuar mesmo assim</button>
+  </div>
+</div>
+</div>
+</div>
+
 <!-- DASHBOARD -->
 <div class="screen" id="screen-dashboard">
   <div class="topbar">
@@ -827,9 +843,38 @@ async function iniciarSessao(user){
   var nome=user.user_metadata?.nome||user.email.split('@')[0];nome=nome.charAt(0).toUpperCase()+nome.slice(1);
   var primeiroNome=nome.split(' ')[0];currentUser={nome:primeiroNome,email:user.email,id:user.id};
   document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
-  goTo('screen-dashboard');toast('Bem-vindo, '+primeiroNome+'!');switchTab2('registrar');
-  await carregarCategorias();
-  await registrarPush();
+  toast('Bem-vindo, '+primeiroNome+'!');
+  exigirInstalacao('registrar');
+}
+/* ── INSTALAÇÃO OBRIGATÓRIA DO PWA ── */
+var deferredInstallPrompt=null,pendingTabAposInstalar='registrar';
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferredInstallPrompt=e;renderTelaInstalar()});
+window.addEventListener('appinstalled',function(){entrarDashboard(pendingTabAposInstalar)});
+function isStandalonePWA(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true}
+function isIOSDevice(){return /iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream}
+function entrarDashboard(destino){goTo('screen-dashboard');switchTab2(destino||'registrar');carregarCategorias();registrarPush()}
+function exigirInstalacao(destino){
+  if(isStandalonePWA()){entrarDashboard(destino);return}
+  pendingTabAposInstalar=destino||'registrar';
+  document.getElementById('instalar-fallback').style.display='none';
+  goTo('screen-instalar');renderTelaInstalar();
+  setTimeout(function(){if(!isIOSDevice()&&!deferredInstallPrompt){document.getElementById('instalar-fallback').style.display='block'}},4000);
+}
+function renderTelaInstalar(){
+  var corpo=document.getElementById('instalar-corpo');
+  if(isIOSDevice()){
+    corpo.innerHTML='<div class="auth-sub" style="text-align:left;line-height:1.8">1. Toque no ícone de <strong>Compartilhar</strong> (□↑) na barra do Safari.<br>2. Escolha <strong>"Adicionar à Tela de Início"</strong>.<br>3. Abra o app pelo ícone que aparecer na sua tela inicial.</div>';
+  }else if(deferredInstallPrompt){
+    corpo.innerHTML='<button class="btn btn-primary btn-full btn-lg" onclick="clicarInstalar()">Clique aqui para instalar</button>';
+  }else{
+    corpo.innerHTML='<div class="auth-sub">Preparando instalação...</div>';
+  }
+}
+async function clicarInstalar(){
+  if(!deferredInstallPrompt)return;
+  deferredInstallPrompt.prompt();
+  var escolha=await deferredInstallPrompt.userChoice;
+  if(escolha.outcome==='accepted')deferredInstallPrompt=null;
 }
 async function doLogout(){await sb.auth.signOut();currentUser={nome:'',email:'',id:''};goTo('screen-login')}
 function cadFormatarCelular(){
@@ -851,7 +896,7 @@ async function doCadastro(){
   var primeiroNome=nome.split(' ')[0];currentUser={nome:primeiroNome,email,id:data.user?.id||''};
   document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
   if(data.user){await sb.from('clientes').insert({user_id:data.user.id,nome:primeiroNome,whatsapp})}
-  toast('Conta criada!');goTo('screen-dashboard');switchTab2('registrar');
+  toast('Conta criada!');exigirInstalacao('registrar');
 }
 function parseSalario(str){if(!str)return 0;return parseFloat(str.replace(/[R$\s.]/g,'').replace(',','.'))||0}
 function recalcularComSalario(){var sal=parseSalario(document.getElementById('dash-salario').value),totalRec=totalReceitasSupa+sal;document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2).replace('.',',');var saldo=totalRec-totalDespesasSupa,el=document.getElementById('m-saldo');el.textContent='R$ '+saldo.toFixed(2).replace('.',',');el.className='metric-value '+(saldo>=0?'green':'red')}
