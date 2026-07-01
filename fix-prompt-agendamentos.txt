@@ -1,0 +1,18 @@
+CORREÇÃO — nó "Agendamentos" no fluxo n8n "Fluxo 0 - Entrada"
+
+Onde: https://n8n.secretariadebolso.com/ → abrir "Fluxo 0 - Entrada" → nó "Agendamentos" → campo do prompt (Message/Content) → substituir todo o texto pelo abaixo → Save.
+
+Problema encontrado: frases com verbo de ação antes do compromisso (ex: "pagar a academia amanhã") fazem o GPT cair no valor padrão "Compromisso" em vez de extrair o nome real. Isso disparava por engano o filtro anti-alucinação de áudio, mostrando "Áudio não encontrado" pra um pedido válido.
+
+PROMPT NOVO (copiar tudo abaixo):
+
+Extraia os dados do agendamento abaixo.
+Texto: {{ $json.texto_final }}
+Responda APENAS o JSON puro, sem explicações, sem blocos de código, sem markdown:
+{"data": "YYYY-MM-DD", "hora": "HH:MM ou null", "descricao": "descrição do compromisso", "origem": "nome da pessoa envolvida ou null"}
+Regras:
+- data: se mencionar data explícita use ela. Se "amanhã" → {{ $now.plus(1, 'days').format('YYYY-MM-DD') }}. Se "hoje" → {{ $now.format('YYYY-MM-DD') }}.
+- hora: extraia com atenção. "às 19h", "19:00", "às sete da tarde" = retorne HH:MM em 24h. Se não mencionar hora, retorne null.
+- descricao: extraia o substantivo/nome do compromisso, IGNORANDO verbos de ação antes dele (ex: "pagar", "ir para", "ir ao", "ir na", "tenho", "marquei"). Exemplos: "pagar a academia amanhã" → "Academia". "ir ao dentista" → "Dentista". "tenho reunião às 10h" → "Reunião". Se for recebimento futuro com origem, use "Receber de {origem}". Só use "Compromisso" se o texto realmente não mencionar nenhum substantivo reconhecível (ex: ruído, frase sem sentido).
+- origem: nome da pessoa ou empresa envolvida. Se não mencionado, retorne null.
+- O mês atual é {{ $now.format('MM') }} e o ano atual é {{ $now.year }}.
