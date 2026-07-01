@@ -668,7 +668,7 @@ async function _enviarPayload(payload){
       var btns=document.createElement('div');btns.className='chat-confirm-btns';
       btns.innerHTML=`<button class="btn-confirmar" onclick="confirmarRegistro(this)">✅ Confirmar</button><button class="btn-cancelar" onclick="cancelarRegistro(this)">✕ Cancelar</button>`;
       msgResp.appendChild(btns);
-    }else{var respMsg=data.mensagem||'✅ Registrado com sucesso!';msgResp.querySelector('.chat-bubble').innerHTML=respMsg;salvarMsgHistorico('recebido',respMsg);}
+    }else{var respMsg=data.mensagem||'⚠️ Não consegui processar agora (falha temporária no servidor). Tente de novo em instantes.';msgResp.querySelector('.chat-bubble').innerHTML=respMsg;salvarMsgHistorico('recebido',respMsg);}
   }catch(e){msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao enviar. Tente novamente.';}
   document.getElementById('chat-msgs').scrollTop=document.getElementById('chat-msgs').scrollHeight;
 }
