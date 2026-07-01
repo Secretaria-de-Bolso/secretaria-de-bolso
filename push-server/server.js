@@ -35,8 +35,7 @@ app.post('/send-push', async (req, res) => {
     const {
       title = 'Secretária de Bolso',
       body = '',
-      icon = 'https://app.secretariadebolso.com/icon-192.png',
-      badge = 'https://app.secretariadebolso.com/icon-192.png',
+      icon = 'https://app.secretariadebolso.com/sb.png',
       requireInteraction = true,
       url = 'https://app.secretariadebolso.com'
     } = req.body || {};
@@ -44,19 +43,28 @@ app.post('/send-push', async (req, res) => {
     const subs = await getSubscriptions();
     if (!subs.length) return res.json({ sent: 0, failed: 0 });
 
-    const payload = JSON.stringify({ title, body, icon, badge, requireInteraction, url });
+    const payload = JSON.stringify({ title, body, icon, requireInteraction, url });
     let sent = 0, failed = 0;
 
     await Promise.all(subs.map(async (s) => {
-      try {
-        const sub = typeof s.subscription === 'string' ? JSON.parse(s.subscription) : s.subscription;
-        const result = await webpush.sendNotification(sub, payload);
-        console.log(`[push] OK user=${s.user_id} status=${result.statusCode}`);
-        sent++;
-      } catch (e) {
-        console.log(`[push] FAIL user=${s.user_id} status=${e.statusCode} body=${e.body}`);
+      const sub = typeof s.subscription === 'string' ? JSON.parse(s.subscription) : s.subscription;
+      let lastErr;
+      for (let attempt = 1; attempt <= 2; attempt++) {
+        try {
+          const result = await webpush.sendNotification(sub, payload);
+          console.log(`[push] OK user=${s.user_id} status=${result.statusCode}`);
+          sent++;
+          lastErr = null;
+          break;
+        } catch (e) {
+          lastErr = e;
+          if (attempt < 2) await new Promise(r => setTimeout(r, 2000));
+        }
+      }
+      if (lastErr) {
+        console.log(`[push] FAIL user=${s.user_id} status=${lastErr.statusCode} body=${lastErr.body}`);
         failed++;
-        if (e.statusCode === 410 || e.statusCode === 404) await deleteSubscription(s.endpoint);
+        if (lastErr.statusCode === 410 || lastErr.statusCode === 404) await deleteSubscription(s.endpoint);
       }
     }));
 

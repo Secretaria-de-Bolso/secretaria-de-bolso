@@ -3,12 +3,10 @@ const VAPID_PUBLIC="BJTs92Dy1WoUpGHN_evm-CxoTF72VFYPw4icitZZ8xzAZ95qO-lxZhBOD4_u
 async function registrarPush(){
   try{
     if(!("Notification" in window)||!("serviceWorker" in navigator))return;
-    const perm=await Notification.requestPermission();
-    if(perm!=="granted")return;
+    if(Notification.permission!=="granted")return;
     const reg=await navigator.serviceWorker.ready;
     const existing=await reg.pushManager.getSubscription();
-    if(existing)await existing.unsubscribe();
-    const sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:VAPID_PUBLIC});
+    const sub=existing||await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:VAPID_PUBLIC});
     const s=sub.toJSON();
     await sb.from("push_subscriptions").upsert({user_id:currentUser.id,endpoint:s.endpoint,p256dh:s.keys.p256dh,auth:s.keys.auth,subscription:JSON.stringify(s)},{onConflict:"user_id"});
   }catch(e){console.error("Push:",e)}
