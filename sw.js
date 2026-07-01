@@ -1,4 +1,4 @@
-const CACHE='sb-v27';
+const CACHE='sb-v28';
 const ASSETS=['/manifest.json'];
 
 self.addEventListener('install',e=>{
@@ -15,7 +15,13 @@ self.addEventListener('fetch',e=>{
   if(e.request.method!=='GET')return;
   const url=new URL(e.request.url);
   if(url.pathname==='/'||url.pathname==='/index.html'){
-    e.respondWith(fetch(e.request,{cache:'no-store'}));
+    e.respondWith(
+      fetch(e.request,{cache:'no-store'}).then(res=>{
+        const copy=res.clone();
+        caches.open(CACHE).then(c=>c.put(e.request,copy));
+        return res;
+      }).catch(()=>caches.match(e.request))
+    );
     return;
   }
   e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));
