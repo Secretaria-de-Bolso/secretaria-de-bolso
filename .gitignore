@@ -1,3 +1,4 @@
 push-server/node_modules/
 .vercel
 .env*
+landing/

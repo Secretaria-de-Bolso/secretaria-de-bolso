@@ -1,0 +1,7 @@
+{
+  "title": "Secretária de Bolso",
+  "body": "SB atualizada. Verifique!",
+  "requireInteraction": true,
+  "icon": "https://app.secretariadebolso.com/sb.png",
+  "badge": "https://app.secretariadebolso.com/badge-warning.png"
+}
