@@ -609,7 +609,7 @@ input::placeholder{color:var(--text3)}
       <div class="card">
         <div class="section-label">Conta</div>
         <button class="btn btn-outline btn-full btn-sm" style="margin-bottom:8px;color:#ff6b6b;border-color:#ff6b6b" onclick="doLogout()">Sair da conta</button>
-        <button class="btn btn-danger btn-full btn-sm" onclick="confirmarAcao('Excluir conta','Tem certeza? Esta ação não pode ser desfeita.',()=>doLogout())">Excluir conta</button>
+        <button class="btn btn-danger btn-full btn-sm" onclick="confirmarAcao('Excluir conta','Tem certeza? Esta ação não pode ser desfeita.',excluirConta)">Excluir conta</button>
       </div>
     </div>
   </div>
@@ -876,6 +876,10 @@ async function clicarInstalar(){
   if(escolha.outcome==='accepted')deferredInstallPrompt=null;
 }
 async function doLogout(){await sb.auth.signOut();currentUser={nome:'',email:'',id:''};goTo('screen-login')}
+async function excluirConta(){
+  try{await sb.rpc('excluir_minha_conta')}catch(e){toast('Erro ao excluir conta: '+e.message,true);return}
+  await sb.auth.signOut();currentUser={nome:'',email:'',id:''};goTo('screen-login');
+}
 function cadFormatarCelular(){
   var ddi=document.getElementById('cad-ddi').value,el=document.getElementById('cad-celular'),v=el.value.replace(/\D/g,'');
   if(ddi==='55'){v=v.slice(0,11);v=v.replace(/^(\d{2})(\d)/,'($1) $2');v=v.replace(/(\d)(\d{4})$/,'$1-$2');}
