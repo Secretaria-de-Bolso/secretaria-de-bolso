@@ -332,6 +332,33 @@ input::placeholder{color:var(--text3)}
   <div class="auth-sub">Dados pessoais</div>
   <div class="form-group"><label>Nome completo</label><input type="text" id="cad-nome" placeholder="Seu nome"></div>
   <div class="form-group"><label>E-mail</label><input type="email" id="cad-email" placeholder="seu@email.com"></div>
+  <div class="form-group"><label>Celular</label>
+    <div style="display:flex;gap:8px">
+      <select id="cad-ddi" style="flex:0 0 100px" onchange="cadFormatarCelular()">
+        <option value="55" selected>🇧🇷 +55</option>
+        <option value="1">🇺🇸 +1</option>
+        <option value="351">🇵🇹 +351</option>
+        <option value="54">🇦🇷 +54</option>
+        <option value="598">🇺🇾 +598</option>
+        <option value="595">🇵🇾 +595</option>
+        <option value="56">🇨🇱 +56</option>
+        <option value="57">🇨🇴 +57</option>
+        <option value="51">🇵🇪 +51</option>
+        <option value="52">🇲🇽 +52</option>
+        <option value="34">🇪🇸 +34</option>
+        <option value="33">🇫🇷 +33</option>
+        <option value="49">🇩🇪 +49</option>
+        <option value="39">🇮🇹 +39</option>
+        <option value="44">🇬🇧 +44</option>
+        <option value="81">🇯🇵 +81</option>
+        <option value="86">🇨🇳 +86</option>
+        <option value="91">🇮🇳 +91</option>
+        <option value="244">🇦🇴 +244</option>
+        <option value="258">🇲🇿 +258</option>
+      </select>
+      <input type="tel" id="cad-celular" placeholder="(11) 98765-4321" style="flex:1" oninput="cadFormatarCelular()">
+    </div>
+  </div>
   <div class="form-group"><label>Senha</label>
     <div style="position:relative">
       <input type="password" id="cad-senha" placeholder="Mínimo 8 caracteres" style="padding-right:40px">
@@ -805,15 +832,25 @@ async function iniciarSessao(user){
   await registrarPush();
 }
 async function doLogout(){await sb.auth.signOut();currentUser={nome:'',email:'',id:''};goTo('screen-login')}
+function cadFormatarCelular(){
+  var ddi=document.getElementById('cad-ddi').value,el=document.getElementById('cad-celular'),v=el.value.replace(/\D/g,'');
+  if(ddi==='55'){v=v.slice(0,11);v=v.replace(/^(\d{2})(\d)/,'($1) $2');v=v.replace(/(\d)(\d{4})$/,'$1-$2');}
+  else{v=v.slice(0,15);}
+  el.value=v;
+}
 async function doCadastro(){
   var nome=document.getElementById('cad-nome').value.trim(),email=document.getElementById('cad-email').value.trim(),s1=document.getElementById('cad-senha').value,s2=document.getElementById('cad-senha2').value;
-  if(!nome||!email||!s1){toast('Preencha todos os campos',true);return}if(s1!==s2){toast('As senhas não conferem',true);return}if(s1.length<8){toast('Senha deve ter ao menos 8 caracteres',true);return}
+  var ddi=document.getElementById('cad-ddi').value,celularDigits=document.getElementById('cad-celular').value.replace(/\D/g,'');
+  if(!nome||!email||!s1||!celularDigits){toast('Preencha todos os campos',true);return}if(s1!==s2){toast('As senhas não conferem',true);return}if(s1.length<8){toast('Senha deve ter ao menos 8 caracteres',true);return}
+  var celularOk=ddi==='55'?(celularDigits.length===10||celularDigits.length===11):celularDigits.length>=7;
+  if(!celularOk){toast('Celular inválido',true);return}
+  var whatsapp='+'+ddi+celularDigits;
   var btn=document.querySelector('#screen-cadastro .btn-primary');btn.textContent='Criando conta...';btn.disabled=true;
   var {data,error}=await sb.auth.signUp({email,password:s1,options:{data:{nome}}});btn.textContent='Criar conta';btn.disabled=false;
   if(error){toast(error.message,true);return}
   var primeiroNome=nome.split(' ')[0];currentUser={nome:primeiroNome,email,id:data.user?.id||''};
   document.getElementById('topbar-name').textContent=primeiroNome;document.getElementById('topbar-avatar').textContent=primeiroNome.charAt(0).toUpperCase();
-  if(data.user){await sb.from('clientes').insert({user_id:data.user.id,nome:primeiroNome})}
+  if(data.user){await sb.from('clientes').insert({user_id:data.user.id,nome:primeiroNome,whatsapp})}
   toast('Conta criada!');goTo('screen-dashboard');switchTab2('registrar');
 }
 function parseSalario(str){if(!str)return 0;return parseFloat(str.replace(/[R$\s.]/g,'').replace(',','.'))||0}
