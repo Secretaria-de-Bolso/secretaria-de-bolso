@@ -706,7 +706,7 @@ async function _enviarPayload(payload){
       if(ehAudio){
         var v=parseFloat(data.valor);
         var ehPadrao=(data.descricao==='Gasto'&&v===25)||(data.descricao==='Recebimento'&&v===25)||(data.tipo==='agendamento'&&data.descricao==='Compromisso'&&!data.hora);
-        if(ehPadrao){msgResp.querySelector('.chat-bubble').innerHTML='⚠️ Áudio não encontrado, tente novamente.';salvarMsgHistorico('recebido','⚠️ Áudio não encontrado, tente novamente.');return;}
+        if(ehPadrao){msgResp.querySelector('.chat-bubble').innerHTML='⚠️ Áudio não encontrado, tente novamente.';salvarMsgHistorico('recebido','⚠️ Áudio não encontrado, tente novamente.');return true;}
       }
       var tipoEmoji={despesa:'💸',receita:'💰',agendamento:'📅',boleto:'🧾'}[data.tipo]||'📋';
       var html=`${tipoEmoji} <strong>Confirme o registro:</strong><br><span style="color:var(--text2);font-size:14.95px">Tipo:</span> ${data.tipo||'—'}<br><span style="color:var(--text2);font-size:14.95px">Descrição:</span> ${data.descricao||'—'}${data.valor?`<br><span style="color:var(--text2);font-size:14.95px">Valor:</span> R$ ${parseFloat(data.valor).toFixed(2).replace('.',',')}`:''  }${data.data?`<br><span style="color:var(--text2);font-size:14.95px">Data:</span> ${formatData(data.data)}`:''}${data.hora?`<br><span style="color:var(--text2);font-size:14.95px">Hora:</span> ${data.hora}`:''}`;
@@ -716,8 +716,13 @@ async function _enviarPayload(payload){
       btns.innerHTML=`<button class="btn-confirmar" onclick="confirmarRegistro(this)">✅ Confirmar</button><button class="btn-cancelar" onclick="cancelarRegistro(this)">✕ Cancelar</button>`;
       msgResp.appendChild(btns);
     }else{var respMsg=data.mensagem||'⚠️ Não consegui processar agora (falha temporária no servidor). Tente de novo em instantes.';msgResp.querySelector('.chat-bubble').innerHTML=respMsg;salvarMsgHistorico('recebido',respMsg);}
-  }catch(e){msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao enviar. Tente novamente.';}
-  document.getElementById('chat-msgs').scrollTop=document.getElementById('chat-msgs').scrollHeight;
+    document.getElementById('chat-msgs').scrollTop=document.getElementById('chat-msgs').scrollHeight;
+    return true;
+  }catch(e){
+    msgResp.querySelector('.chat-bubble').innerHTML='❌ Erro ao enviar. Tente novamente.';
+    document.getElementById('chat-msgs').scrollTop=document.getElementById('chat-msgs').scrollHeight;
+    return false;
+  }
 }
 async function processarFilaOffline(){
   if(!navigator.onLine)return;
@@ -725,7 +730,12 @@ async function processarFilaOffline(){
   if(!fila.length)return;
   adicionarMsg('🔄 Conexão restaurada! Enviando '+(fila.length===1?'1 mensagem pendente...':(fila.length+' mensagens pendentes...')),'recebido');
   for(var item of fila){
-    await _enviarPayload({texto:item.texto||undefined,audio:item.audio||undefined});
+    var payload={texto:item.texto||undefined,audio:item.audio||undefined};
+    var ok=await _enviarPayload(payload);
+    if(!ok){
+      await new Promise(r=>setTimeout(r,3000));
+      await _enviarPayload(payload);
+    }
     await _removerFila(item.id);
   }
 }
