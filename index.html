@@ -644,7 +644,7 @@ const WEBHOOK_REGISTRAR='https://n8n.secretariadebolso.com/webhook/registrar';
 const sb=supabase.createClient(SUPA_URL,SUPA_KEY);
 var currentUser={nome:'',email:'',id:''};
 var totalReceitasSupa=0,totalDespesasSupa=0,currentLTab='despesas',categoriasAtivas=[];
-var chatGravando=false,chatMediaRecorder=null,chatAudioChunks=[],pendingConfirm=null,chatRecStream=null,chatRecStartTime=0,chatRecTimerInterval=null,chatMicPressed=false,ultimoFoiAudio=false;
+var chatGravando=false,chatMediaRecorder=null,chatAudioChunks=[],pendingConfirm=null,chatRecStream=null,chatRecStartTime=0,chatRecTimerInterval=null,chatMicPressed=false;
 const CATS_PADRAO=['Alimentação — Casa','Alimentação — Trabalho','Restaurante — Lazer','Restaurante — Trabalho','Mercado','Farmácia — Saúde','Farmácia — Pet','Combustível','Transporte — Uber/Táxi','Transporte — Outros','Moradia — Aluguel','Moradia — Condomínio','Moradia — Manutenção','Saúde — Médico','Saúde — Dentista','Saúde — Academia','Educação','Vestuário','Lazer — Entretenimento','Viagem','Pet Shop','Assinaturas','Serviços','Boletos','Outros'];
 
 function toggleSenha(id){var i=document.getElementById(id);i.type=i.type==='password'?'text':'password'}
@@ -690,6 +690,7 @@ async function processarEnvio(payload){
   await _enviarPayload(payload);
 }
 async function _enviarPayload(payload){
+  var ehAudio=!!payload.audio;
   var msgResp=adicionarMsg('<span style="color:#aaa;font-style:italic">⏳ Processando...</span>','recebido');
   try{
     var fd=new FormData();fd.append('user_id',currentUser.id);
@@ -698,12 +699,11 @@ async function _enviarPayload(payload){
     var res=await fetch(WEBHOOK_REGISTRAR,{method:'POST',body:fd});
     var data=await res.json().catch(()=>({}));
     if(data.confirmar){
-      if(ultimoFoiAudio){
+      if(ehAudio){
         var v=parseFloat(data.valor);
         var ehPadrao=(data.descricao==='Gasto'&&v===25)||(data.descricao==='Recebimento'&&v===25)||(data.tipo==='agendamento'&&data.descricao==='Compromisso'&&!data.hora);
-        ultimoFoiAudio=false;
         if(ehPadrao){msgResp.querySelector('.chat-bubble').innerHTML='⚠️ Áudio não encontrado, tente novamente.';salvarMsgHistorico('recebido','⚠️ Áudio não encontrado, tente novamente.');return;}
-      } else {ultimoFoiAudio=false;}
+      }
       var tipoEmoji={despesa:'💸',receita:'💰',agendamento:'📅',boleto:'🧾'}[data.tipo]||'📋';
       var html=`${tipoEmoji} <strong>Confirme o registro:</strong><br><span style="color:var(--text2);font-size:14.95px">Tipo:</span> ${data.tipo||'—'}<br><span style="color:var(--text2);font-size:14.95px">Descrição:</span> ${data.descricao||'—'}${data.valor?`<br><span style="color:var(--text2);font-size:14.95px">Valor:</span> R$ ${parseFloat(data.valor).toFixed(2).replace('.',',')}`:''  }${data.data?`<br><span style="color:var(--text2);font-size:14.95px">Data:</span> ${data.data}`:''}${data.hora?`<br><span style="color:var(--text2);font-size:14.95px">Hora:</span> ${data.hora}`:''}`;
       pendingConfirm={...data,cardHtml:html};
@@ -789,7 +789,6 @@ async function iniciarChatGravacao(){
       if(chatRecStream)chatRecStream.getTracks().forEach(t=>t.stop());
       if(!chatAudioChunks.length)return;
       var blob=new Blob(chatAudioChunks,{type:'audio/webm'});
-      ultimoFoiAudio=true;
       adicionarMsg('🎤 Áudio enviado','enviado');
       salvarMsgHistorico('enviado','🎤 Áudio enviado');
       await processarEnvio({audio:blob});
