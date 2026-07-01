@@ -1,4 +1,4 @@
-const CACHE='sb-v28';
+const CACHE='sb-v29';
 const ASSETS=['/manifest.json'];
 
 self.addEventListener('install',e=>{
@@ -31,7 +31,7 @@ self.addEventListener('push',e=>{
   const data=e.data?e.data.json():{title:'Secretária de Bolso',body:'Nova notificação'};
   e.waitUntil(self.registration.showNotification(data.title||'Secretária de Bolso',{
     body:data.body||'',
-    icon:data.icon||'https://app.secretariadebolso.com/sb.png',
+    icon:data.icon||'https://app.secretariadebolso.com/sb-nova.png',
     tag:'sb-push',
     requireInteraction:data.requireInteraction!==false,
     data:{url:data.url||'https://app.secretariadebolso.com'}

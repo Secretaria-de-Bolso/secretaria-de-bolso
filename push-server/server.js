@@ -35,7 +35,7 @@ app.post('/send-push', async (req, res) => {
     const {
       title = 'Secretária de Bolso',
       body = '',
-      icon = 'https://app.secretariadebolso.com/sb.png',
+      icon = 'https://app.secretariadebolso.com/sb-nova.png',
       requireInteraction = true,
       url = 'https://app.secretariadebolso.com',
       user_id
