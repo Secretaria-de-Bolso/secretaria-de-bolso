@@ -1,0 +1,42 @@
+ROADMAP DE LANÇAMENTO — SECRETÁRIA DE BOLSO
+(ordem sugerida, por dependência técnica e risco)
+
+1. VALIDAÇÃO DO PRODUTO
+Revisar o produto e ver se existem outras soluções/abordagens, sem deixar complicado pro usuário.
+Por quê primeiro: é revisão, não código, custa barato fazer agora. Se a abordagem mudar aqui, evita retrabalho em tudo que vem depois.
+
+2. ESTABILIDADE EM ESCALA
+Blindar o sistema contra bugs e saber quando algo quebrar. Meta: escalar para centenas de clientes sem suporte manual individual.
+Por quê nessa posição: sem essa base, cobrar de centenas de clientes multiplica a dor de suporte manual — exatamente o que se quer evitar.
+
+3. TESTES ANTES DO LANÇAMENTO
+Definir como testar tudo antes de lançar.
+Por quê nessa posição: decorrência direta do item 2 — valida que a blindagem funciona ponta a ponta antes de expor a clientes pagantes.
+
+4. VENDA/PAGAMENTO (KIWIFY)
+Vender pela Kiwify (venda direta, não revenda). Kiwify cuida de cobrança mensal, trial de 7 dias, renovação e cancelamento.
+Definir como liberar acesso automático ao cliente após pagamento, já que hoje o cadastro no app é livre (qualquer um cria conta grátis).
+Direção: webhooks da Kiwify (compra aprovada, renovação, cancelamento, trial expirado) → n8n → campo assinatura_status em clientes (casado por e-mail) → app checa status antes de liberar acesso.
+Pendência já identificada: os botões da landing page ("Quero começar agora" / "Começar agora") hoje apontam direto pra app.secretariadebolso.com (cadastro grátis). Precisam passar a apontar pro checkout da Kiwify.
+Por quê nessa posição: com produto validado e estável, agora sim liga a chave do negócio.
+
+5. CONTRATO PARA O CLIENTE
+Criar contrato detalhado para o cliente.
+Por quê nessa posição: precisa existir antes ou junto do Kiwify ir ao ar — não dá pra cobrar sem termos definidos. Não trava o time técnico, roda em paralelo aos itens 2-4.
+
+6. AVISO DE VENCIMENTO
+Informar o cliente que o pagamento está vencendo ou já venceu (aba própria: "vence em X dias" / "venceu há X dias"). Definir se o controle é pela Kiwify ou pelo nosso sistema — mapear todas as possibilidades antes de decidir.
+Por quê nessa posição: depende diretamente do item 4 já estar no ar (precisa do assinatura_status e do webhook da Kiwify rodando).
+
+7. SUPORTE/ONBOARDING
+Mapear as principais dificuldades do cliente ao usar o produto e responder essas dúvidas com clareza dentro do próprio app, reduzindo suporte manual.
+Por quê nessa posição: as dúvidas reais só aparecem com cliente pagante de verdade — faz sentido implementar próximo do lançamento pra já nascer reduzindo suporte manual.
+
+8. PROTEÇÃO DA IDEIA
+Pesquisar forma de registrar/patentear o produto (algo via web, barato ou gratuito).
+Por quê nessa posição: pesquisa barata, roda em paralelo a qualquer momento, mas melhor resolver antes de divulgar publicamente.
+
+9. SITE INSTITUCIONAL + SEO
+Criar site mostrando o produto, separado do app. SEO pra rankear no Google (orgânico e pago). Domínio: secretariadebolso.com. Avaliar subdomínio para landing page.
+Observação: já existe uma landing page pronta (repo separado landing-page, pasta /landing) cobrindo problema, funcionalidades, preço e FAQ em página única. Hoje ela já funciona como site institucional básico. Decisão em aberto: expandir pra múltiplas páginas/blog (ajuda SEO orgânico) ou manter como está e só ajustar os CTAs pra apontar pro checkout da Kiwify.
+Por quê por último: SEO orgânico demora meses pra ranquear (dá pra começar cedo em paralelo se sobrar tempo), mas não faz sentido gerar tráfego pra um produto que ainda pode mudar ou ter bugs.
