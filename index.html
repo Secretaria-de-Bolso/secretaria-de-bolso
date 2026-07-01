@@ -387,6 +387,19 @@ input::placeholder{color:var(--text3)}
 </div>
 </div>
 
+<!-- NOTIFICAÇÕES -->
+<div class="screen" id="screen-notificacoes">
+<div class="auth-wrap">
+<div class="auth-box fade-in">
+  <div class="auth-logo"><div class="auth-logo-icon"><img src="/sb.png?v=2" style="width:36px;height:36px;object-fit:cover;border-radius:10px;display:block;"></div>Secretária de <span>Bolso</span></div>
+  <div class="auth-title">Ative as notificações</div>
+  <div class="auth-sub">Receba avisos diários de boletos vencendo, compromissos e lembretes direto no seu celular — sem precisar abrir o app pra conferir.</div>
+  <button class="btn btn-primary btn-full btn-lg" onclick="ativarNotifOnboarding()" style="margin-top:20px">Ativar notificações</button>
+  <div class="auth-footer"><a onclick="pularNotificacoes()">Agora não</a></div>
+</div>
+</div>
+</div>
+
 <!-- DASHBOARD -->
 <div class="screen" id="screen-dashboard">
   <div class="topbar">
@@ -842,7 +855,18 @@ window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();def
 window.addEventListener('appinstalled',function(){entrarDashboard(pendingTabAposInstalar)});
 function isStandalonePWA(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true}
 function isIOSDevice(){return /iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream}
-function entrarDashboard(destino){goTo('screen-dashboard');switchTab2(destino||'registrar');registrarPush()}
+var pendingTabAposNotif='registrar';
+function entrarDashboard(destino){
+  if('Notification' in window && Notification.permission==='default'){
+    pendingTabAposNotif=destino||'registrar';
+    goTo('screen-notificacoes');
+    return;
+  }
+  irParaDashboardFinal(destino);
+}
+function irParaDashboardFinal(destino){goTo('screen-dashboard');switchTab2(destino||'registrar');registrarPush()}
+async function ativarNotifOnboarding(){await ativarNotificacoes();irParaDashboardFinal(pendingTabAposNotif)}
+function pularNotificacoes(){irParaDashboardFinal(pendingTabAposNotif)}
 function exigirInstalacao(destino){
   if(isStandalonePWA()){entrarDashboard(destino);return}
   pendingTabAposInstalar=destino||'registrar';
