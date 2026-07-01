@@ -441,16 +441,17 @@ input::placeholder{color:var(--text3)}
   <!-- FINANCEIRO -->
   <div class="tab-content" id="content-financeiro">
   <div class="content fade-in">
-    <!-- CORREÇÃO: flex-wrap:nowrap + min-width:0 no texto + input menor -->
-    <div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:nowrap">
-      <div style="flex:1;min-width:0;overflow:hidden">
-        <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:13px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">💼 Salário fixo mensal</div>
-        <div style="font-size:13px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Cadastre seu salário fixo, se houver (opcional)</div>
+    <div class="card" style="margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:nowrap">
+        <div style="flex:1;min-width:0;overflow:hidden">
+          <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">💼 Salário Fixo</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <input type="text" id="dash-salario" placeholder="R$ 0,00" style="width:110px;min-width:0;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;text-align:right" oninput="recalcularComSalario()">
+          <button class="btn btn-primary btn-sm" onclick="salvarSalarioDash()">Salvar</button>
+        </div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-        <input type="text" id="dash-salario" placeholder="R$ 0,00" style="width:110px;min-width:0;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;text-align:right" oninput="recalcularComSalario()">
-        <button class="btn btn-primary btn-sm" onclick="salvarSalarioDash()">Salvar</button>
-      </div>
+      <div style="font-size:12px;color:var(--text2);margin-top:8px">Cadastre seu salário aqui. (se houver)</div>
     </div>
     <div class="grid-4" style="margin-bottom:16px">
       <div class="metric"><div class="metric-label">Receitas</div><div class="metric-value green" id="m-receitas">R$ —</div><div class="metric-sub">Este mês</div></div>
