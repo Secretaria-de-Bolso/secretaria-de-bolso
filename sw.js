@@ -29,24 +29,30 @@ self.addEventListener('fetch',e=>{
 
 self.addEventListener('push',e=>{
   const data=e.data?e.data.json():{title:'Secretária de Bolso',body:'Nova notificação'};
-  e.waitUntil(self.registration.showNotification(data.title||'Secretária de Bolso',{
-    body:data.body||'',
-    icon:data.icon||'https://app.secretariadebolso.com/sb-nova.png',
-    tag:'sb-push',
-    requireInteraction:data.requireInteraction!==false,
-    data:{url:data.url||'https://app.secretariadebolso.com'}
-  }));
+  e.waitUntil(Promise.all([
+    self.registration.showNotification(data.title||'Secretária de Bolso',{
+      body:data.body||'',
+      icon:data.icon||'https://app.secretariadebolso.com/sb-nova.png',
+      tag:'sb-push',
+      requireInteraction:data.requireInteraction!==false,
+      data:{url:data.url||'https://app.secretariadebolso.com'}
+    }),
+    'setAppBadge' in self.registration ? self.registration.setAppBadge(1).catch(()=>{}) : Promise.resolve()
+  ]));
 });
 
 self.addEventListener('notificationclick',e=>{
   e.notification.close();
   const target=(e.notification.data&&e.notification.data.url)||'https://app.secretariadebolso.com';
   e.waitUntil(
-    clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{
-      for(const c of list){
-        if(c.url.startsWith('https://app.secretariadebolso.com')&&'focus' in c)return c.focus();
-      }
-      return clients.openWindow(target);
-    })
+    Promise.all([
+      'clearAppBadge' in self.registration ? self.registration.clearAppBadge().catch(()=>{}) : Promise.resolve(),
+      clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{
+        for(const c of list){
+          if(c.url.startsWith('https://app.secretariadebolso.com')&&'focus' in c)return c.focus();
+        }
+        return clients.openWindow(target);
+      })
+    ])
   );
 });
