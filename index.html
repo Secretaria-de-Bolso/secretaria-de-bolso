@@ -1115,7 +1115,6 @@ async function registrarPush(){
   }catch(e){console.error("Push:",e)}
 }
 if("clearAppBadge" in navigator){
-  document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")navigator.clearAppBadge().catch(function(){})});
   navigator.clearAppBadge().catch(function(){});
 }
 </script></body>
