@@ -1114,8 +1114,5 @@ async function registrarPush(){
     await sb.from("push_subscriptions").upsert({user_id:currentUser.id,endpoint:s.endpoint,p256dh:s.keys.p256dh,auth:s.keys.auth,subscription:JSON.stringify(s)},{onConflict:"user_id"});
   }catch(e){console.error("Push:",e)}
 }
-if("clearAppBadge" in navigator){
-  navigator.clearAppBadge().catch(function(){});
-}
 </script></body>
 </html>
