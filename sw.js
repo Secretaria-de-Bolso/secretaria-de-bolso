@@ -27,18 +27,29 @@ self.addEventListener('fetch',e=>{
   e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));
 });
 
+function setBadgeSafe(){
+  try{
+    if('setAppBadge' in self.registration)return Promise.resolve(self.registration.setAppBadge(1)).catch(()=>{});
+  }catch(err){}
+  return Promise.resolve();
+}
+function clearBadgeSafe(){
+  try{
+    if('clearAppBadge' in self.registration)return Promise.resolve(self.registration.clearAppBadge()).catch(()=>{});
+  }catch(err){}
+  return Promise.resolve();
+}
+
 self.addEventListener('push',e=>{
   const data=e.data?e.data.json():{title:'Secretária de Bolso',body:'Nova notificação'};
-  e.waitUntil(Promise.all([
-    self.registration.showNotification(data.title||'Secretária de Bolso',{
-      body:data.body||'',
-      icon:data.icon||'https://app.secretariadebolso.com/sb-nova.png',
-      tag:'sb-push',
-      requireInteraction:data.requireInteraction!==false,
-      data:{url:data.url||'https://app.secretariadebolso.com'}
-    }),
-    'setAppBadge' in self.registration ? self.registration.setAppBadge(1).catch(()=>{}) : Promise.resolve()
-  ]));
+  const notifPromise=self.registration.showNotification(data.title||'Secretária de Bolso',{
+    body:data.body||'',
+    icon:data.icon||'https://app.secretariadebolso.com/sb-nova.png',
+    tag:'sb-push',
+    requireInteraction:data.requireInteraction!==false,
+    data:{url:data.url||'https://app.secretariadebolso.com'}
+  });
+  e.waitUntil(Promise.all([notifPromise,setBadgeSafe()]));
 });
 
 self.addEventListener('notificationclick',e=>{
@@ -46,7 +57,7 @@ self.addEventListener('notificationclick',e=>{
   const target=(e.notification.data&&e.notification.data.url)||'https://app.secretariadebolso.com';
   e.waitUntil(
     Promise.all([
-      'clearAppBadge' in self.registration ? self.registration.clearAppBadge().catch(()=>{}) : Promise.resolve(),
+      clearBadgeSafe(),
       clients.matchAll({type:'window',includeUncontrolled:true}).then(list=>{
         for(const c of list){
           if(c.url.startsWith('https://app.secretariadebolso.com')&&'focus' in c)return c.focus();
