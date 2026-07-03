@@ -498,6 +498,7 @@ input::placeholder{color:var(--text3)}
               <option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option>
               <option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option>
             </select>
+            <select style="padding:6px 10px;width:auto;font-size:13px" id="filtro-ano" onchange="carregarDashboard();carregarResumos()"></select>
             <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden">
               <div id="ltab-despesas" onclick="switchLTab('despesas')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Despesas</div>
               <div id="ltab-receitas" onclick="switchLTab('receitas')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Receitas</div>
@@ -705,7 +706,16 @@ function switchTab2(tab){
   if(tab==='agenda')carregarAgenda();
   if(tab==='boletos')carregarBoletos();
   if(tab==='perfil')carregarPerfil();
-  if(tab==='financeiro'){document.getElementById('filtro-mes').value=new Date().getMonth();carregarDashboard();carregarResumos();}
+  if(tab==='financeiro'){
+    var selAno=document.getElementById('filtro-ano');
+    if(!selAno.options.length){
+      var anoAtual=new Date().getFullYear();
+      for(var a=anoAtual-3;a<=anoAtual;a++)selAno.innerHTML+=`<option value="${a}"${a===anoAtual?' selected':''}>${a}</option>`;
+    }
+    document.getElementById('filtro-mes').value=new Date().getMonth();
+    selAno.value=new Date().getFullYear();
+    carregarDashboard();carregarResumos();
+  }
   if(tab==='registrar')carregarHistoricoChat();
 }
 function switchFinSub(sub){
@@ -972,7 +982,7 @@ function parseSalario(str){if(!str)return 0;return parseFloat(str.replace(/[R$\s
 function recalcularComSalario(){var sal=parseSalario(document.getElementById('dash-salario').value),totalRec=totalReceitasSupa+sal;document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2).replace('.',',');var saldo=totalRec-totalDespesasSupa,el=document.getElementById('m-saldo');el.textContent='R$ '+saldo.toFixed(2).replace('.',',');el.className='metric-value '+(saldo>=0?'green':'red')}
 async function salvarSalarioDash(){var val=parseSalario(document.getElementById('dash-salario').value);await sb.from('clientes').update({salario_fixo:val}).eq('user_id',currentUser.id);recalcularComSalario();toast('Salário salvo!')}
 function periodoAtual(){
-  var mes=parseInt(document.getElementById('filtro-mes').value),ano=new Date().getFullYear();
+  var mes=parseInt(document.getElementById('filtro-mes').value),ano=parseInt(document.getElementById('filtro-ano').value);
   return{dataIni:ano+'-'+(mes+1).toString().padStart(2,'0')+'-01',dataFim:ano+'-'+(mes+1).toString().padStart(2,'0')+'-31'};
 }
 function periodoSemanal(){
@@ -1007,7 +1017,7 @@ async function carregarResumos(){
     var per=currentResumoPeriodo==='semana'?periodoSemanal():periodoAtual();
     var lbl=currentResumoPeriodo==='semana'
       ?'Essa semana: '+fmtCurto(per.dataIni)+' a '+fmtCurto(per.dataFim)
-      :'Esse mês: '+NOMES_MESES[parseInt(document.getElementById('filtro-mes').value)]+' de '+new Date().getFullYear();
+      :'Esse mês: '+NOMES_MESES[parseInt(document.getElementById('filtro-mes').value)]+' de '+document.getElementById('filtro-ano').value;
     document.getElementById('r-periodo-label').textContent=lbl;
     var {data:lancs}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).gte('data',per.dataIni).lte('data',per.dataFim);
     if(!lancs)return;
