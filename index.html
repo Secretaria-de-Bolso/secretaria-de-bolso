@@ -480,7 +480,7 @@ input::placeholder{color:var(--text3)}
       <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
         <div class="section-label" style="margin-bottom:0">Lançamentos</div>
         <div style="display:flex;gap:8px;align-items:center">
-          <select style="padding:6px 10px;width:auto;font-size:13px" id="filtro-mes" onchange="carregarLancamentos()">
+          <select style="padding:6px 10px;width:auto;font-size:13px" id="filtro-mes" onchange="carregarDashboard()">
             <option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option>
             <option value="3">Abril</option><option value="4">Maio</option><option value="5" selected>Junho</option>
             <option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option>
@@ -671,7 +671,7 @@ function switchTab2(tab){
   if(tab==='agenda')carregarAgenda();
   if(tab==='boletos')carregarBoletos();
   if(tab==='perfil')carregarPerfil();
-  if(tab==='financeiro')carregarDashboard();
+  if(tab==='financeiro'){document.getElementById('filtro-mes').value=new Date().getMonth();carregarDashboard();}
   if(tab==='registrar')carregarHistoricoChat();
 }
 function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-despesas').style.background=tab==='despesas'?'var(--teal-dim)':'transparent';document.getElementById('ltab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-receitas').style.background=tab==='receitas'?'var(--teal-dim)':'transparent';carregarLancamentos()}
@@ -929,12 +929,16 @@ async function doCadastro(){
 function parseSalario(str){if(!str)return 0;return parseFloat(str.replace(/[R$\s.]/g,'').replace(',','.'))||0}
 function recalcularComSalario(){var sal=parseSalario(document.getElementById('dash-salario').value),totalRec=totalReceitasSupa+sal;document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2).replace('.',',');var saldo=totalRec-totalDespesasSupa,el=document.getElementById('m-saldo');el.textContent='R$ '+saldo.toFixed(2).replace('.',',');el.className='metric-value '+(saldo>=0?'green':'red')}
 async function salvarSalarioDash(){var val=parseSalario(document.getElementById('dash-salario').value);await sb.from('clientes').update({salario_fixo:val}).eq('user_id',currentUser.id);recalcularComSalario();toast('Salário salvo!')}
+function periodoAtual(){
+  var mes=parseInt(document.getElementById('filtro-mes').value),ano=new Date().getFullYear();
+  return{dataIni:ano+'-'+(mes+1).toString().padStart(2,'0')+'-01',dataFim:ano+'-'+(mes+1).toString().padStart(2,'0')+'-31'};
+}
 async function carregarDashboard(){
   try{
     var {data:cliente}=await sb.from('clientes').select('salario_fixo').eq('user_id',currentUser.id).single();
     if(cliente&&cliente.salario_fixo)document.getElementById('dash-salario').value='R$ '+parseFloat(cliente.salario_fixo).toFixed(2).replace('.',',');
-    document.getElementById('filtro-mes').value=new Date().getMonth();
-    var {data:lancs}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
+    var{dataIni,dataFim}=periodoAtual();
+    var {data:lancs}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).gte('data',dataIni).lte('data',dataFim).order('created_at',{ascending:false});
     if(!lancs)return;
     var desp=0,rec=0,cats={},recentes=[];
     lancs.forEach(l=>{var val=parseFloat(l.valor)||0;if(l.tipo==='despesa'){desp+=val;cats[l.categoria||'Outros']=(cats[l.categoria||'Outros']||0)+val;}else if(l.tipo==='receita'){rec+=val;}recentes.push(l);});
@@ -948,7 +952,7 @@ async function carregarDashboard(){
     else{recentes.slice(0,5).forEach(it=>{var val=parseFloat(it.valor)||0,isRec=it.tipo==='receita';rl.innerHTML+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${it.descricao||'—'}</div><div style="font-size:12px;color:var(--text2)">${formatData(it.data)}</div></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><div style="color:${isRec?'var(--teal)':'var(--red)'};font-weight:600;font-size:14px">${isRec?'+':'-'}R$ ${val.toFixed(2).replace('.',',')}</div><div style="display:flex;gap:4px"><button class="td-edit-btn" onclick="abrirEdicao('${it.id}','${(it.descricao||'').replace(/'/g,"\\'")}',${val},'${it.data||''}','${it.categoria||''}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirLancamentoDireto('${it.id}')">Excluir</button></div></div></div>`;});}
     var catChart=document.getElementById('cat-chart'),cs=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
     if(!cs.length){catChart.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhuma despesa ainda.</div>';}
-    else{var maxV=cs[0][1];catChart.innerHTML='';cs.forEach(([cat,val],i)=>{var pct=Math.round((val/maxV)*100);catChart.innerHTML+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="font-size:13px;color:var(--text2);width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cat}</div><div style="flex:1;background:var(--bg3);border-radius:4px;height:7px"><div style="width:${pct}%;background:var(--teal);height:100%;border-radius:4px;opacity:${Math.max(0.4,1-i*0.12)}"></div></div><div style="font-size:13px;font-weight:600;width:70px;text-align:right">R$ ${val.toFixed(2).replace('.',',')}</div></div>`;});}
+    else{var maxV=cs[0][1];catChart.innerHTML='';cs.forEach(([cat,val],i)=>{var barPct=Math.round((val/maxV)*100),pctTotal=desp?Math.round((val/desp)*100):0;catChart.innerHTML+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="font-size:13px;color:var(--text2);width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cat}</div><div style="flex:1;background:var(--bg3);border-radius:4px;height:7px"><div style="width:${barPct}%;background:var(--teal);height:100%;border-radius:4px;opacity:${Math.max(0.4,1-i*0.12)}"></div></div><div style="font-size:13px;font-weight:600;width:110px;text-align:right">R$ ${val.toFixed(2).replace('.',',')} <span style="color:var(--text2);font-weight:400">(${pctTotal}%)</span></div></div>`;});}
     carregarLancamentos();
   }catch(e){console.log(e)}
 }
@@ -956,8 +960,7 @@ function formatData(d){if(!d)return'—';try{if(/^\d{2}\/\d{2}\/\d{4}$/.test(d))
 var lancamentosData=[],lancPagina=0,LANC_POR_PAG=6;
 async function carregarLancamentos(){
   try{
-    var mes=parseInt(document.getElementById('filtro-mes').value),ano=new Date().getFullYear();
-    var dataIni=ano+'-'+(mes+1).toString().padStart(2,'0')+'-01',dataFim=ano+'-'+(mes+1).toString().padStart(2,'0')+'-31';
+    var{dataIni,dataFim}=periodoAtual();
     var tipo=currentLTab==='despesas'?'despesa':'receita';
     var {data}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).eq('tipo',tipo).gte('data',dataIni).lte('data',dataFim).order('data',{ascending:false});
     lancamentosData=data||[];lancPagina=0;renderLancamentos();
