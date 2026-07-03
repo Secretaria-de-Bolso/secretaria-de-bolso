@@ -454,63 +454,74 @@ input::placeholder{color:var(--text3)}
   <!-- FINANCEIRO -->
   <div class="tab-content" id="content-financeiro">
   <div class="content fade-in">
-    <div class="card" style="margin-bottom:16px">
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:nowrap">
-        <div style="flex:1;min-width:0;overflow:hidden">
-          <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">💼 Salário Fixo</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-          <input type="text" id="dash-salario" placeholder="R$ 0,00" style="width:110px;min-width:0;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;text-align:right" oninput="recalcularComSalario()">
-          <button class="btn btn-primary btn-sm" onclick="salvarSalarioDash()">Salvar</button>
-        </div>
-      </div>
-      <div style="font-size:14px;color:var(--text2);margin-top:8px">Cadastre seu salário aqui. (se houver)</div>
+    <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden;width:fit-content;margin-bottom:16px">
+      <div id="finsub-geral" onclick="switchFinSub('geral')" style="padding:8px 16px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Visão Geral</div>
+      <div id="finsub-resumos" onclick="switchFinSub('resumos')" style="padding:8px 16px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Resumos</div>
+      <div id="finsub-lancamentos" onclick="switchFinSub('lancamentos')" style="padding:8px 16px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Lançamentos</div>
     </div>
-    <div class="grid-4" style="margin-bottom:16px">
-      <div class="metric"><div class="metric-label">Receitas</div><div class="metric-value green" id="m-receitas">R$ —</div><div class="metric-sub">Este mês</div></div>
-      <div class="metric"><div class="metric-label">Despesas</div><div class="metric-value red" id="m-despesas">R$ —</div><div class="metric-sub">Este mês</div></div>
-      <div class="metric"><div class="metric-label">Saldo</div><div class="metric-value" id="m-saldo">R$ —</div><div class="metric-sub">Receitas − Despesas</div></div>
-      <div class="metric"><div class="metric-label">Lançamentos</div><div class="metric-value yellow" id="m-total">—</div><div class="metric-sub">Este mês</div></div>
-    </div>
-    <div class="grid-2" style="margin-bottom:20px">
-      <div class="card"><div class="section-label">Despesas por categoria</div><div id="cat-chart"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
-      <div class="card"><div class="section-label">Últimos lançamentos</div><div id="recentes-list"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
-    </div>
-    <div class="card" style="margin-bottom:20px">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
-        <div class="section-label" style="margin-bottom:0">Resumos</div>
-        <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden">
-          <div id="rtab-semana" onclick="switchResumoPeriodo('semana')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Semana</div>
-          <div id="rtab-mes" onclick="switchResumoPeriodo('mes')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Mês</div>
-        </div>
-      </div>
-      <div class="grid-2" style="margin-bottom:14px">
-        <div class="metric"><div class="metric-label">Ganhos</div><div class="metric-value green" id="r-ganhos">R$ —</div></div>
-        <div class="metric"><div class="metric-label">Gastos</div><div class="metric-value red" id="r-gastos">R$ —</div></div>
-      </div>
-      <div class="grid-2">
-        <div><div class="section-label" style="font-size:12px">Gastos por categoria</div><div id="r-cat-gastos"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
-        <div><div class="section-label" style="font-size:12px">Ganhos por categoria</div><div id="r-cat-ganhos"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
-      </div>
-    </div>
-    <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px">
-      <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-        <div class="section-label" style="margin-bottom:0">Lançamentos</div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <select style="padding:6px 10px;width:auto;font-size:13px" id="filtro-mes" onchange="carregarDashboard()">
-            <option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option>
-            <option value="3">Abril</option><option value="4">Maio</option><option value="5" selected>Junho</option>
-            <option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option>
-            <option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option>
-          </select>
-          <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden">
-            <div id="ltab-despesas" onclick="switchLTab('despesas')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Despesas</div>
-            <div id="ltab-receitas" onclick="switchLTab('receitas')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Receitas</div>
+
+    <div class="tab-content active" id="fin-geral">
+      <div class="card" style="margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:nowrap">
+          <div style="flex:1;min-width:0;overflow:hidden">
+            <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">💼 Salário Fixo</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+            <input type="text" id="dash-salario" placeholder="R$ 0,00" style="width:110px;min-width:0;font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;text-align:right" oninput="recalcularComSalario()">
+            <button class="btn btn-primary btn-sm" onclick="salvarSalarioDash()">Salvar</button>
           </div>
         </div>
+        <div style="font-size:14px;color:var(--text2);margin-top:8px">Cadastre seu salário aqui. (se houver)</div>
       </div>
-      <div class="table-wrap"><table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead><tbody id="tbody-lanc"><tr><td colspan="5" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody></table></div>
-      <div id="lanc-paginacao"></div>
+      <div class="grid-4" style="margin-bottom:16px">
+        <div class="metric"><div class="metric-label">Receitas</div><div class="metric-value green" id="m-receitas">R$ —</div><div class="metric-sub">Este mês</div></div>
+        <div class="metric"><div class="metric-label">Despesas</div><div class="metric-value red" id="m-despesas">R$ —</div><div class="metric-sub">Este mês</div></div>
+        <div class="metric"><div class="metric-label">Saldo</div><div class="metric-value" id="m-saldo">R$ —</div><div class="metric-sub">Receitas − Despesas</div></div>
+        <div class="metric"><div class="metric-label">Lançamentos</div><div class="metric-value yellow" id="m-total">—</div><div class="metric-sub">Este mês</div></div>
+      </div>
+      <div class="card"><div class="section-label">Últimos lançamentos</div><div id="recentes-list"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
+    </div>
+
+    <div class="tab-content" id="fin-resumos">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+          <div class="section-label" style="margin-bottom:0">Resumos</div>
+          <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden">
+            <div id="rtab-semana" onclick="switchResumoPeriodo('semana')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Semana</div>
+            <div id="rtab-mes" onclick="switchResumoPeriodo('mes')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Mês</div>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-bottom:14px">
+          <div class="metric"><div class="metric-label">Ganhos</div><div class="metric-value green" id="r-ganhos">R$ —</div></div>
+          <div class="metric"><div class="metric-label">Gastos</div><div class="metric-value red" id="r-gastos">R$ —</div></div>
+        </div>
+        <div class="grid-2">
+          <div><div class="section-label" style="font-size:12px">Gastos por categoria</div><div id="r-cat-gastos"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
+          <div><div class="section-label" style="font-size:12px">Ganhos por categoria</div><div id="r-cat-ganhos"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="fin-lancamentos">
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div class="section-label" style="margin-bottom:0">Lançamentos</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <select style="padding:6px 10px;width:auto;font-size:13px" id="filtro-mes" onchange="carregarDashboard()">
+              <option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option>
+              <option value="3">Abril</option><option value="4">Maio</option><option value="5" selected>Junho</option>
+              <option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option>
+              <option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option>
+            </select>
+            <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden">
+              <div id="ltab-despesas" onclick="switchLTab('despesas')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Despesas</div>
+              <div id="ltab-receitas" onclick="switchLTab('receitas')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Receitas</div>
+            </div>
+          </div>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead><tbody id="tbody-lanc"><tr><td colspan="5" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody></table></div>
+        <div id="lanc-paginacao"></div>
+      </div>
     </div>
   </div>
   </div>
@@ -690,6 +701,16 @@ function switchTab2(tab){
   if(tab==='perfil')carregarPerfil();
   if(tab==='financeiro'){document.getElementById('filtro-mes').value=new Date().getMonth();carregarDashboard();carregarResumos();}
   if(tab==='registrar')carregarHistoricoChat();
+}
+function switchFinSub(sub){
+  ['geral','resumos','lancamentos'].forEach(s=>{
+    document.getElementById('fin-'+s).classList.remove('active');
+    document.getElementById('finsub-'+s).style.color='var(--text2)';
+    document.getElementById('finsub-'+s).style.background='transparent';
+  });
+  document.getElementById('fin-'+sub).classList.add('active');
+  document.getElementById('finsub-'+sub).style.color='var(--teal)';
+  document.getElementById('finsub-'+sub).style.background='var(--teal-dim)';
 }
 function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-despesas').style.background=tab==='despesas'?'var(--teal-dim)':'transparent';document.getElementById('ltab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-receitas').style.background=tab==='receitas'?'var(--teal-dim)':'transparent';carregarLancamentos()}
 
@@ -998,8 +1019,8 @@ async function carregarDashboard(){
     var{dataIni,dataFim}=periodoAtual();
     var {data:lancs}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).gte('data',dataIni).lte('data',dataFim).order('created_at',{ascending:false});
     if(!lancs)return;
-    var desp=0,rec=0,cats={},recentes=[];
-    lancs.forEach(l=>{var val=parseFloat(l.valor)||0;if(l.tipo==='despesa'){desp+=val;cats[l.categoria||'Outros']=(cats[l.categoria||'Outros']||0)+val;}else if(l.tipo==='receita'){rec+=val;}recentes.push(l);});
+    var desp=0,rec=0,recentes=[];
+    lancs.forEach(l=>{var val=parseFloat(l.valor)||0;if(l.tipo==='despesa'){desp+=val;}else if(l.tipo==='receita'){rec+=val;}recentes.push(l);});
     totalDespesasSupa=desp;totalReceitasSupa=rec;
     document.getElementById('m-despesas').textContent='R$ '+desp.toFixed(2).replace('.',',');document.getElementById('m-total').textContent=lancs.length;
     var sal=parseSalario(document.getElementById('dash-salario').value),totalRec=rec+sal;
@@ -1008,7 +1029,6 @@ async function carregarDashboard(){
     var rl=document.getElementById('recentes-list');rl.innerHTML='';
     if(!recentes.length){rl.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhum lançamento ainda.</div>';}
     else{recentes.slice(0,5).forEach(it=>{var val=parseFloat(it.valor)||0,isRec=it.tipo==='receita';rl.innerHTML+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${it.descricao||'—'}</div><div style="font-size:12px;color:var(--text2)">${formatData(it.data)}</div></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><div style="color:${isRec?'var(--teal)':'var(--red)'};font-weight:600;font-size:14px">${isRec?'+':'-'}R$ ${val.toFixed(2).replace('.',',')}</div><div style="display:flex;gap:4px"><button class="td-edit-btn" onclick="abrirEdicao('${it.id}','${(it.descricao||'').replace(/'/g,"\\'")}',${val},'${it.data||''}','${it.categoria||''}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirLancamentoDireto('${it.id}')">Excluir</button></div></div></div>`;});}
-    renderCatChart('cat-chart',cats,'Nenhuma despesa ainda.');
     carregarLancamentos();
   }catch(e){console.log(e)}
 }
