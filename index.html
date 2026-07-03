@@ -476,6 +476,23 @@ input::placeholder{color:var(--text3)}
       <div class="card"><div class="section-label">Despesas por categoria</div><div id="cat-chart"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
       <div class="card"><div class="section-label">Últimos lançamentos</div><div id="recentes-list"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
     </div>
+    <div class="card" style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+        <div class="section-label" style="margin-bottom:0">Resumos</div>
+        <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden">
+          <div id="rtab-semana" onclick="switchResumoPeriodo('semana')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Semana</div>
+          <div id="rtab-mes" onclick="switchResumoPeriodo('mes')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Mês</div>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-bottom:14px">
+        <div class="metric"><div class="metric-label">Ganhos</div><div class="metric-value green" id="r-ganhos">R$ —</div></div>
+        <div class="metric"><div class="metric-label">Gastos</div><div class="metric-value red" id="r-gastos">R$ —</div></div>
+      </div>
+      <div class="grid-2">
+        <div><div class="section-label" style="font-size:12px">Gastos por categoria</div><div id="r-cat-gastos"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
+        <div><div class="section-label" style="font-size:12px">Ganhos por categoria</div><div id="r-cat-ganhos"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
+      </div>
+    </div>
     <div class="card" style="padding:0;overflow:hidden;margin-bottom:20px">
       <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
         <div class="section-label" style="margin-bottom:0">Lançamentos</div>
@@ -671,7 +688,7 @@ function switchTab2(tab){
   if(tab==='agenda')carregarAgenda();
   if(tab==='boletos')carregarBoletos();
   if(tab==='perfil')carregarPerfil();
-  if(tab==='financeiro'){document.getElementById('filtro-mes').value=new Date().getMonth();carregarDashboard();}
+  if(tab==='financeiro'){document.getElementById('filtro-mes').value=new Date().getMonth();carregarDashboard();carregarResumos();}
   if(tab==='registrar')carregarHistoricoChat();
 }
 function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-despesas').style.background=tab==='despesas'?'var(--teal-dim)':'transparent';document.getElementById('ltab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-receitas').style.background=tab==='receitas'?'var(--teal-dim)':'transparent';carregarLancamentos()}
@@ -933,6 +950,47 @@ function periodoAtual(){
   var mes=parseInt(document.getElementById('filtro-mes').value),ano=new Date().getFullYear();
   return{dataIni:ano+'-'+(mes+1).toString().padStart(2,'0')+'-01',dataFim:ano+'-'+(mes+1).toString().padStart(2,'0')+'-31'};
 }
+function periodoSemanal(){
+  var hoje=new Date(),dow=hoje.getDay(),diffSeg=dow===0?6:dow-1;
+  var seg=new Date(hoje);seg.setDate(hoje.getDate()-diffSeg);
+  var dom=new Date(seg);dom.setDate(seg.getDate()+6);
+  var fmt=d=>d.getFullYear()+'-'+(d.getMonth()+1).toString().padStart(2,'0')+'-'+d.getDate().toString().padStart(2,'0');
+  return{dataIni:fmt(seg),dataFim:fmt(dom)};
+}
+function renderCatChart(elId,catsObj,msgVazio){
+  var el=document.getElementById(elId),cs=Object.entries(catsObj).sort((a,b)=>b[1]-a[1]);
+  if(!cs.length){el.innerHTML='<div style="color:var(--text2);font-size:13px">'+(msgVazio||'Nenhum lançamento.')+'</div>';return}
+  var total=cs.reduce((s,[,v])=>s+v,0),maxV=cs[0][1];el.innerHTML='';
+  cs.forEach(([cat,val],i)=>{
+    var barPct=Math.round((val/maxV)*100),pctTotal=total?Math.round((val/total)*100):0;
+    el.innerHTML+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="font-size:13px;color:var(--text2);width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cat}</div><div style="flex:1;background:var(--bg3);border-radius:4px;height:7px"><div style="width:${barPct}%;background:var(--teal);height:100%;border-radius:4px;opacity:${Math.max(0.4,1-i*0.12)}"></div></div><div style="font-size:13px;font-weight:600;width:110px;text-align:right">R$ ${val.toFixed(2).replace('.',',')} <span style="color:var(--text2);font-weight:400">(${pctTotal}%)</span></div></div>`;
+  });
+}
+var currentResumoPeriodo='semana';
+function switchResumoPeriodo(p){
+  currentResumoPeriodo=p;
+  document.getElementById('rtab-semana').style.color=p==='semana'?'var(--teal)':'var(--text2)';
+  document.getElementById('rtab-semana').style.background=p==='semana'?'var(--teal-dim)':'transparent';
+  document.getElementById('rtab-mes').style.color=p==='mes'?'var(--teal)':'var(--text2)';
+  document.getElementById('rtab-mes').style.background=p==='mes'?'var(--teal-dim)':'transparent';
+  carregarResumos();
+}
+async function carregarResumos(){
+  try{
+    var per=currentResumoPeriodo==='semana'?periodoSemanal():periodoAtual();
+    var {data:lancs}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).gte('data',per.dataIni).lte('data',per.dataFim);
+    if(!lancs)return;
+    var gastos=0,ganhos=0,catsGastos={},catsGanhos={};
+    lancs.forEach(l=>{var val=parseFloat(l.valor)||0,cat=l.categoria||'Outros';
+      if(l.tipo==='despesa'){gastos+=val;catsGastos[cat]=(catsGastos[cat]||0)+val;}
+      else if(l.tipo==='receita'){ganhos+=val;catsGanhos[cat]=(catsGanhos[cat]||0)+val;}
+    });
+    document.getElementById('r-gastos').textContent='R$ '+gastos.toFixed(2).replace('.',',');
+    document.getElementById('r-ganhos').textContent='R$ '+ganhos.toFixed(2).replace('.',',');
+    renderCatChart('r-cat-gastos',catsGastos,'Nenhum gasto no período.');
+    renderCatChart('r-cat-ganhos',catsGanhos,'Nenhum ganho no período.');
+  }catch(e){console.log(e)}
+}
 async function carregarDashboard(){
   try{
     var {data:cliente}=await sb.from('clientes').select('salario_fixo').eq('user_id',currentUser.id).single();
@@ -950,9 +1008,7 @@ async function carregarDashboard(){
     var rl=document.getElementById('recentes-list');rl.innerHTML='';
     if(!recentes.length){rl.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhum lançamento ainda.</div>';}
     else{recentes.slice(0,5).forEach(it=>{var val=parseFloat(it.valor)||0,isRec=it.tipo==='receita';rl.innerHTML+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${it.descricao||'—'}</div><div style="font-size:12px;color:var(--text2)">${formatData(it.data)}</div></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><div style="color:${isRec?'var(--teal)':'var(--red)'};font-weight:600;font-size:14px">${isRec?'+':'-'}R$ ${val.toFixed(2).replace('.',',')}</div><div style="display:flex;gap:4px"><button class="td-edit-btn" onclick="abrirEdicao('${it.id}','${(it.descricao||'').replace(/'/g,"\\'")}',${val},'${it.data||''}','${it.categoria||''}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirLancamentoDireto('${it.id}')">Excluir</button></div></div></div>`;});}
-    var catChart=document.getElementById('cat-chart'),cs=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
-    if(!cs.length){catChart.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhuma despesa ainda.</div>';}
-    else{var maxV=cs[0][1];catChart.innerHTML='';cs.forEach(([cat,val],i)=>{var barPct=Math.round((val/maxV)*100),pctTotal=desp?Math.round((val/desp)*100):0;catChart.innerHTML+=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><div style="font-size:13px;color:var(--text2);width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${cat}</div><div style="flex:1;background:var(--bg3);border-radius:4px;height:7px"><div style="width:${barPct}%;background:var(--teal);height:100%;border-radius:4px;opacity:${Math.max(0.4,1-i*0.12)}"></div></div><div style="font-size:13px;font-weight:600;width:110px;text-align:right">R$ ${val.toFixed(2).replace('.',',')} <span style="color:var(--text2);font-weight:400">(${pctTotal}%)</span></div></div>`;});}
+    renderCatChart('cat-chart',cats,'Nenhuma despesa ainda.');
     carregarLancamentos();
   }catch(e){console.log(e)}
 }
