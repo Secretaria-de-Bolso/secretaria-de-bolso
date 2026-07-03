@@ -193,6 +193,12 @@ input::placeholder{color:var(--text3)}
 .boleto-tab-btn:last-child{border-right:none}
 .boleto-tab-btn.active{background:var(--teal);color:#fff}
 .boleto-tab-btn .tab-count{display:block;font-size:16px;font-weight:700;margin-bottom:2px}
+
+/* SUB-ABAS FINANCEIRO */
+.finsub-tabs{display:flex;gap:0;margin-bottom:16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.finsub-btn{flex:1;padding:12px 4px;font-size:13px;font-family:'Syne',sans-serif;font-weight:700;text-align:center;cursor:pointer;color:var(--text2);border:none;background:transparent;transition:all 0.15s;border-right:1px solid var(--border)}
+.finsub-btn:last-child{border-right:none}
+.finsub-btn.active{background:var(--teal);color:#fff}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;width:100%;max-width:440px}
@@ -454,10 +460,10 @@ input::placeholder{color:var(--text3)}
   <!-- FINANCEIRO -->
   <div class="tab-content" id="content-financeiro">
   <div class="content fade-in">
-    <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden;width:fit-content;margin-bottom:16px">
-      <div id="finsub-geral" onclick="switchFinSub('geral')" style="padding:8px 16px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Visão Geral</div>
-      <div id="finsub-resumos" onclick="switchFinSub('resumos')" style="padding:8px 16px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Resumos</div>
-      <div id="finsub-lancamentos" onclick="switchFinSub('lancamentos')" style="padding:8px 16px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Lançamentos</div>
+    <div class="finsub-tabs">
+      <button class="finsub-btn active" id="finsub-geral" onclick="switchFinSub('geral')">Visão Geral</button>
+      <button class="finsub-btn" id="finsub-lancamentos" onclick="switchFinSub('lancamentos')">Lançamentos</button>
+      <button class="finsub-btn" id="finsub-resumos" onclick="switchFinSub('resumos')">Resumos</button>
     </div>
 
     <div class="tab-content active" id="fin-geral">
@@ -473,32 +479,11 @@ input::placeholder{color:var(--text3)}
         </div>
         <div style="font-size:14px;color:var(--text2);margin-top:8px">Cadastre seu salário aqui. (se houver)</div>
       </div>
-      <div class="grid-4" style="margin-bottom:16px">
+      <div class="grid-4">
         <div class="metric"><div class="metric-label">Receitas</div><div class="metric-value green" id="m-receitas">R$ —</div><div class="metric-sub">Este mês</div></div>
         <div class="metric"><div class="metric-label">Despesas</div><div class="metric-value red" id="m-despesas">R$ —</div><div class="metric-sub">Este mês</div></div>
         <div class="metric"><div class="metric-label">Saldo</div><div class="metric-value" id="m-saldo">R$ —</div><div class="metric-sub">Receitas − Despesas</div></div>
         <div class="metric"><div class="metric-label">Lançamentos</div><div class="metric-value yellow" id="m-total">—</div><div class="metric-sub">Este mês</div></div>
-      </div>
-      <div class="card"><div class="section-label">Últimos lançamentos</div><div id="recentes-list"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
-    </div>
-
-    <div class="tab-content" id="fin-resumos">
-      <div class="card">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
-          <div class="section-label" style="margin-bottom:0">Resumos</div>
-          <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden">
-            <div id="rtab-semana" onclick="switchResumoPeriodo('semana')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Semana</div>
-            <div id="rtab-mes" onclick="switchResumoPeriodo('mes')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Mês</div>
-          </div>
-        </div>
-        <div class="grid-2" style="margin-bottom:14px">
-          <div class="metric"><div class="metric-label">Ganhos</div><div class="metric-value green" id="r-ganhos">R$ —</div></div>
-          <div class="metric"><div class="metric-label">Gastos</div><div class="metric-value red" id="r-gastos">R$ —</div></div>
-        </div>
-        <div class="grid-2">
-          <div><div class="section-label" style="font-size:12px">Gastos por categoria</div><div id="r-cat-gastos"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
-          <div><div class="section-label" style="font-size:12px">Ganhos por categoria</div><div id="r-cat-ganhos"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
-        </div>
       </div>
     </div>
 
@@ -507,7 +492,7 @@ input::placeholder{color:var(--text3)}
         <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
           <div class="section-label" style="margin-bottom:0">Lançamentos</div>
           <div style="display:flex;gap:8px;align-items:center">
-            <select style="padding:6px 10px;width:auto;font-size:13px" id="filtro-mes" onchange="carregarDashboard()">
+            <select style="padding:6px 10px;width:auto;font-size:13px" id="filtro-mes" onchange="carregarDashboard();carregarResumos()">
               <option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option>
               <option value="3">Abril</option><option value="4">Maio</option><option value="5" selected>Junho</option>
               <option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option>
@@ -521,6 +506,27 @@ input::placeholder{color:var(--text3)}
         </div>
         <div class="table-wrap"><table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead><tbody id="tbody-lanc"><tr><td colspan="5" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody></table></div>
         <div id="lanc-paginacao"></div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="fin-resumos">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:4px">
+          <div class="section-label" style="margin-bottom:0">Resumos</div>
+          <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden">
+            <div id="rtab-semana" onclick="switchResumoPeriodo('semana')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Semana</div>
+            <div id="rtab-mes" onclick="switchResumoPeriodo('mes')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Mês</div>
+          </div>
+        </div>
+        <div id="r-periodo-label" style="font-size:13px;color:var(--text2);margin-bottom:14px">—</div>
+        <div class="grid-2" style="margin-bottom:14px">
+          <div class="metric"><div class="metric-label">Ganhos</div><div class="metric-value green" id="r-ganhos">R$ —</div></div>
+          <div class="metric"><div class="metric-label">Gastos</div><div class="metric-value red" id="r-gastos">R$ —</div></div>
+        </div>
+        <div class="grid-2">
+          <div><div class="section-label" style="font-size:12px">Gastos por categoria</div><div id="r-cat-gastos"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
+          <div><div class="section-label" style="font-size:12px">Ganhos por categoria</div><div id="r-cat-ganhos"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -703,14 +709,12 @@ function switchTab2(tab){
   if(tab==='registrar')carregarHistoricoChat();
 }
 function switchFinSub(sub){
-  ['geral','resumos','lancamentos'].forEach(s=>{
+  ['geral','lancamentos','resumos'].forEach(s=>{
     document.getElementById('fin-'+s).classList.remove('active');
-    document.getElementById('finsub-'+s).style.color='var(--text2)';
-    document.getElementById('finsub-'+s).style.background='transparent';
+    document.getElementById('finsub-'+s).classList.remove('active');
   });
   document.getElementById('fin-'+sub).classList.add('active');
-  document.getElementById('finsub-'+sub).style.color='var(--teal)';
-  document.getElementById('finsub-'+sub).style.background='var(--teal-dim)';
+  document.getElementById('finsub-'+sub).classList.add('active');
 }
 function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-despesas').style.background=tab==='despesas'?'var(--teal-dim)':'transparent';document.getElementById('ltab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-receitas').style.background=tab==='receitas'?'var(--teal-dim)':'transparent';carregarLancamentos()}
 
@@ -996,9 +1000,15 @@ function switchResumoPeriodo(p){
   document.getElementById('rtab-mes').style.background=p==='mes'?'var(--teal-dim)':'transparent';
   carregarResumos();
 }
+var NOMES_MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+function fmtCurto(d){var p=d.split('-');return p[2]+'/'+p[1]}
 async function carregarResumos(){
   try{
     var per=currentResumoPeriodo==='semana'?periodoSemanal():periodoAtual();
+    var lbl=currentResumoPeriodo==='semana'
+      ?'Essa semana: '+fmtCurto(per.dataIni)+' a '+fmtCurto(per.dataFim)
+      :'Esse mês: '+NOMES_MESES[parseInt(document.getElementById('filtro-mes').value)]+' de '+new Date().getFullYear();
+    document.getElementById('r-periodo-label').textContent=lbl;
     var {data:lancs}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).gte('data',per.dataIni).lte('data',per.dataFim);
     if(!lancs)return;
     var gastos=0,ganhos=0,catsGastos={},catsGanhos={};
@@ -1019,16 +1029,13 @@ async function carregarDashboard(){
     var{dataIni,dataFim}=periodoAtual();
     var {data:lancs}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).gte('data',dataIni).lte('data',dataFim).order('created_at',{ascending:false});
     if(!lancs)return;
-    var desp=0,rec=0,recentes=[];
-    lancs.forEach(l=>{var val=parseFloat(l.valor)||0;if(l.tipo==='despesa'){desp+=val;}else if(l.tipo==='receita'){rec+=val;}recentes.push(l);});
+    var desp=0,rec=0;
+    lancs.forEach(l=>{var val=parseFloat(l.valor)||0;if(l.tipo==='despesa'){desp+=val;}else if(l.tipo==='receita'){rec+=val;}});
     totalDespesasSupa=desp;totalReceitasSupa=rec;
     document.getElementById('m-despesas').textContent='R$ '+desp.toFixed(2).replace('.',',');document.getElementById('m-total').textContent=lancs.length;
     var sal=parseSalario(document.getElementById('dash-salario').value),totalRec=rec+sal;
     document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2).replace('.',',');
     var saldo=totalRec-desp,el=document.getElementById('m-saldo');el.textContent='R$ '+saldo.toFixed(2).replace('.',',');el.className='metric-value '+(saldo>=0?'green':'red');
-    var rl=document.getElementById('recentes-list');rl.innerHTML='';
-    if(!recentes.length){rl.innerHTML='<div style="color:var(--text2);font-size:13px">Nenhum lançamento ainda.</div>';}
-    else{recentes.slice(0,5).forEach(it=>{var val=parseFloat(it.valor)||0,isRec=it.tipo==='receita';rl.innerHTML+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)"><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${it.descricao||'—'}</div><div style="font-size:12px;color:var(--text2)">${formatData(it.data)}</div></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0"><div style="color:${isRec?'var(--teal)':'var(--red)'};font-weight:600;font-size:14px">${isRec?'+':'-'}R$ ${val.toFixed(2).replace('.',',')}</div><div style="display:flex;gap:4px"><button class="td-edit-btn" onclick="abrirEdicao('${it.id}','${(it.descricao||'').replace(/'/g,"\\'")}',${val},'${it.data||''}','${it.categoria||''}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirLancamentoDireto('${it.id}')">Excluir</button></div></div></div>`;});}
     carregarLancamentos();
   }catch(e){console.log(e)}
 }
