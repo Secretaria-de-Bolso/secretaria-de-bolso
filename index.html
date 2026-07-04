@@ -477,7 +477,7 @@ input::placeholder{color:var(--text3)}
             <button class="btn btn-primary btn-sm" onclick="salvarSalarioDash()">Salvar</button>
           </div>
         </div>
-        <div style="font-size:14px;color:var(--text2);margin-top:8px">Cadastre seu salário aqui. (se houver)</div>
+        <div style="font-size:14px;color:var(--text2);margin-top:8px" id="dash-salario-info">Cadastre seu salário aqui (se houver). Some no Saldo e zera automaticamente 1 mês depois — cadastre de novo quando receber.</div>
       </div>
       <div class="grid-4">
         <div class="metric"><div class="metric-label">Receitas</div><div class="metric-value green" id="m-receitas">R$ —</div><div class="metric-sub">Este mês</div></div>
@@ -980,7 +980,7 @@ async function doCadastro(){
 }
 function parseSalario(str){if(!str)return 0;return parseFloat(str.replace(/[R$\s.]/g,'').replace(',','.'))||0}
 function recalcularComSalario(){var sal=parseSalario(document.getElementById('dash-salario').value),totalRec=totalReceitasSupa+sal;document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2).replace('.',',');var saldo=totalRec-totalDespesasSupa,el=document.getElementById('m-saldo');el.textContent='R$ '+saldo.toFixed(2).replace('.',',');el.className='metric-value '+(saldo>=0?'green':'red')}
-async function salvarSalarioDash(){var val=parseSalario(document.getElementById('dash-salario').value);await sb.from('clientes').update({salario_fixo:val}).eq('user_id',currentUser.id);recalcularComSalario();toast('Salário salvo!')}
+async function salvarSalarioDash(){var val=parseSalario(document.getElementById('dash-salario').value);var hoje=new Date().toISOString().split('T')[0];await sb.from('clientes').update({salario_fixo:val,salario_fixo_data:hoje}).eq('user_id',currentUser.id);recalcularComSalario();atualizarInfoSalario(hoje);toast('Salário salvo! Zera automaticamente em 1 mês.')}
 function periodoAtual(){
   var mes=parseInt(document.getElementById('filtro-mes').value),ano=parseInt(document.getElementById('filtro-ano').value);
   return{dataIni:ano+'-'+(mes+1).toString().padStart(2,'0')+'-01',dataFim:ano+'-'+(mes+1).toString().padStart(2,'0')+'-31'};
@@ -1032,10 +1032,20 @@ async function carregarResumos(){
     renderCatChart('r-cat-ganhos',catsGanhos,'Nenhum ganho no período.');
   }catch(e){console.log(e)}
 }
+function addMeses(dataStr,n){var d=new Date(dataStr+'T00:00:00');d.setMonth(d.getMonth()+n);return d.toISOString().split('T')[0]}
+function salarioEstaExpirado(dataCadastro){if(!dataCadastro)return false;var hoje=new Date();hoje.setHours(0,0,0,0);return hoje>=new Date(addMeses(dataCadastro,1)+'T00:00:00')}
+function atualizarInfoSalario(dataCadastro){
+  var el=document.getElementById('dash-salario-info');if(!el)return;
+  if(!dataCadastro){el.textContent='Cadastre seu salário aqui (se houver). Some no Saldo e zera automaticamente 1 mês depois — cadastre de novo quando receber.';return}
+  if(salarioEstaExpirado(dataCadastro)){el.textContent='Zerado — o cadastro de '+formatData(dataCadastro)+' já passou de 1 mês. Cadastre de novo quando receber.'}
+  else{el.textContent='Cadastrado em '+formatData(dataCadastro)+'. Zera automaticamente em '+formatData(addMeses(dataCadastro,1))+'.'}
+}
 async function carregarDashboard(){
   try{
-    var {data:cliente}=await sb.from('clientes').select('salario_fixo').eq('user_id',currentUser.id).single();
-    if(cliente&&cliente.salario_fixo)document.getElementById('dash-salario').value='R$ '+parseFloat(cliente.salario_fixo).toFixed(2).replace('.',',');
+    var {data:cliente}=await sb.from('clientes').select('salario_fixo,salario_fixo_data').eq('user_id',currentUser.id).single();
+    var expirado=cliente&&salarioEstaExpirado(cliente.salario_fixo_data);
+    document.getElementById('dash-salario').value=(cliente&&cliente.salario_fixo&&!expirado)?'R$ '+parseFloat(cliente.salario_fixo).toFixed(2).replace('.',','):'';
+    atualizarInfoSalario(cliente?cliente.salario_fixo_data:null);
     var{dataIni,dataFim}=periodoAtual();
     var {data:lancs}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).gte('data',dataIni).lte('data',dataFim).order('created_at',{ascending:false});
     if(!lancs)return;
