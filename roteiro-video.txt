@@ -1,0 +1,11 @@
+Pra usar a Secretária de Bolso: abre o app, segura o microfone e grava.
+
+Despesa: "Gastei 45 reais na farmácia ontem." — Confirmar.
+
+Receita: "Ganhei 20 reais da Paula ontem." — Confirmar.
+
+Agenda: "Academia amanhã às 7h." — Confirmar.
+
+Boleto: "Boleto do banco pra pagar dia 15, 200 reais." — Confirmar.
+
+Excluir: toca no item que quer remover e em "Excluir" — Exclua.

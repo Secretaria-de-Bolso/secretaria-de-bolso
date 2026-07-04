@@ -1,3 +1,4 @@
+require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const webpush = require('web-push');
 
@@ -5,7 +6,9 @@ const app = express();
 app.use(express.json());
 
 const SUPABASE_URL = 'https://krqlbdpuuamimbllddtj.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_DWDJXwLW4zXqeApYiZOLGA_yt9pJj1e';
+// service key (bypassa RLS) — necessário porque este servidor lê subscriptions de TODOS os usuários pra fazer broadcast
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
+if (!SUPABASE_KEY) throw new Error('SUPABASE_SERVICE_KEY não definida (.env ausente?)');
 const VAPID_PUBLIC  = 'BJTs92Dy1WoUpGHN_evm-CxoTF72VFYPw4icitZZ8xzAZ95qO-lxZhBOD4_umq-5c81VXvCX4GagbSDoT8AVE0Y';
 const VAPID_PRIVATE = 'wNPzospRbg40aw0mr8_TriAwLg3RP58ZIAiHLFP0qm8';
 
