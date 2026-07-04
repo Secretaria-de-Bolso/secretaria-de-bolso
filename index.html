@@ -1119,7 +1119,7 @@ async function carregarBoletos(){
     var tabInicial=cV>0?'vencidos':cH>0?'hoje':cA>0?'apagar':'pagos';switchBoletoTab(tabInicial);
   }catch(e){console.log(e)}
 }
-async function marcarPago(id,btn){btn.textContent='✓';btn.disabled=true;btn.className='btn-pagar pago';var {data:boleto}=await sb.from('Boletos').select('nome,valor').eq('id',id).single();await sb.from('Boletos').update({pago:true}).eq('id',id);if(boleto){var hoje=new Date().toISOString().split('T')[0];await sb.from('lancamentos').insert({user_id:currentUser.id,tipo:'despesa',descricao:'Boleto: '+(boleto.nome||'Boleto'),valor:parseFloat(boleto.valor)||0,data:hoje,categoria:'Boletos',origem:'painel'});}toast('Boleto pago e lançado no financeiro!');setTimeout(()=>carregarBoletos(),600)}
+async function marcarPago(id,btn){btn.textContent='✓';btn.disabled=true;btn.className='btn-pagar pago';var {data:boleto}=await sb.from('Boletos').select('nome,valor').eq('id',id).single();await sb.from('Boletos').update({pago:true}).eq('id',id);if(boleto){var hoje=new Date().toISOString().split('T')[0];await sb.from('lancamentos').insert({user_id:currentUser.id,tipo:'despesa',descricao:'Boleto: '+(boleto.nome||'Boleto'),valor:parseFloat(boleto.valor)||0,data:hoje,categoria:'Boletos',origem:'painel',boleto_id:id});}toast('Boleto pago e lançado no financeiro!');setTimeout(()=>carregarBoletos(),600)}
 async function carregarPerfil(){
   try{
     var {data:authData}=await sb.auth.getUser(),user=authData?.user,nomeAuth=user?.user_metadata?.nome||currentUser.nome;
