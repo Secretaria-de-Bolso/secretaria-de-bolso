@@ -1205,7 +1205,9 @@ async function registrarPush(){
     const reg=await navigator.serviceWorker.ready;
     const existing=await reg.pushManager.getSubscription();
     if(existing)await existing.unsubscribe();
-    const sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:VAPID_PUBLIC});
+    let sub;
+    try{sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:VAPID_PUBLIC});}
+    catch(e1){await new Promise(r=>setTimeout(r,2000));sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:VAPID_PUBLIC});}
     const s=sub.toJSON();
     await sb.from("push_subscriptions").upsert({user_id:currentUser.id,endpoint:s.endpoint,p256dh:s.keys.p256dh,auth:s.keys.auth,subscription:JSON.stringify(s)},{onConflict:"user_id"});
   }catch(e){console.error("Push:",e)}
