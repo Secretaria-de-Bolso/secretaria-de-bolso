@@ -491,7 +491,7 @@ input::placeholder{color:var(--text3)}
       <div class="card" style="padding:0;overflow:hidden">
         <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
           <div class="section-label" style="margin-bottom:0">Lançamentos</div>
-          <div style="display:flex;gap:8px;align-items:center">
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
             <select style="padding:6px 10px;width:auto;font-size:13px" id="filtro-mes" onchange="carregarDashboard();carregarResumos()">
               <option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option>
               <option value="3">Abril</option><option value="4">Maio</option><option value="5" selected>Junho</option>
@@ -499,7 +499,7 @@ input::placeholder{color:var(--text3)}
               <option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option>
             </select>
             <select style="padding:6px 10px;width:auto;font-size:13px" id="filtro-ano" onchange="carregarDashboard();carregarResumos()"></select>
-            <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden">
+            <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden;flex-shrink:0">
               <div id="ltab-despesas" onclick="switchLTab('despesas')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Despesas</div>
               <div id="ltab-receitas" onclick="switchLTab('receitas')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Receitas</div>
             </div>
