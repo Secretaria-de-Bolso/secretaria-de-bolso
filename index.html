@@ -199,6 +199,8 @@ input::placeholder{color:var(--text3)}
 .finsub-btn{flex:1;padding:12px 4px;font-size:13px;font-family:'Syne',sans-serif;font-weight:700;text-align:center;cursor:pointer;color:var(--text2);border:none;background:transparent;transition:all 0.15s;border-right:1px solid var(--border)}
 .finsub-btn:last-child{border-right:none}
 .finsub-btn.active{background:var(--teal);color:#fff}
+.ltab-btn{padding:6px 14px;font-size:13px;font-family:'Syne',sans-serif;font-weight:700;text-align:center;cursor:pointer;color:var(--text2);background:transparent;transition:all 0.15s}
+.ltab-btn.active{background:var(--teal);color:#fff}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
 .modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;width:100%;max-width:440px}
@@ -500,8 +502,8 @@ input::placeholder{color:var(--text3)}
             </select>
             <select style="padding:6px 10px;width:auto;font-size:13px" id="filtro-ano" onchange="carregarDashboard();carregarResumos()"></select>
             <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden;flex-shrink:0">
-              <div id="ltab-despesas" onclick="switchLTab('despesas')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--teal);background:var(--teal-dim)">Despesas</div>
-              <div id="ltab-receitas" onclick="switchLTab('receitas')" style="padding:6px 14px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;color:var(--text2)">Receitas</div>
+              <div id="ltab-despesas" class="ltab-btn active" onclick="switchLTab('despesas')">Despesas</div>
+              <div id="ltab-receitas" class="ltab-btn" onclick="switchLTab('receitas')">Receitas</div>
             </div>
           </div>
         </div>
@@ -726,7 +728,7 @@ function switchFinSub(sub){
   document.getElementById('fin-'+sub).classList.add('active');
   document.getElementById('finsub-'+sub).classList.add('active');
 }
-function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').style.color=tab==='despesas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-despesas').style.background=tab==='despesas'?'var(--teal-dim)':'transparent';document.getElementById('ltab-receitas').style.color=tab==='receitas'?'var(--teal)':'var(--text2)';document.getElementById('ltab-receitas').style.background=tab==='receitas'?'var(--teal-dim)':'transparent';carregarLancamentos()}
+function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').classList.toggle('active',tab==='despesas');document.getElementById('ltab-receitas').classList.toggle('active',tab==='receitas');carregarLancamentos()}
 
 /* ── CHAT ── */
 function atualizarBtnChat(){var txt=document.getElementById('chat-texto').value.trim();document.getElementById('chat-send-btn').style.display=txt?'flex':'none';document.getElementById('chat-mic-btn').style.display=txt?'none':'flex'}
