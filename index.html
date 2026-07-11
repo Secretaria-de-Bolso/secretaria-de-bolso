@@ -1256,7 +1256,7 @@ function renderProxPagNav(id){
   var item=st.lista[st.idx],podeAnterior=st.idx>0,podeProximo=st.idx<st.lista.length-1;
   div.innerHTML=`<div style="display:flex;align-items:center;gap:8px">
     <button onclick="navProxPag('${id}',-1)" ${podeAnterior?'':'disabled'} style="background:var(--teal);border:1px solid var(--teal2);border-radius:8px;padding:7px 16px;cursor:${podeAnterior?'pointer':'not-allowed'};color:#fff;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;opacity:${podeAnterior?1:0.4}">← Anterior</button>
-    <div style="flex:1;text-align:center"><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text)">${formatData(item.vencimento)}</div><div style="font-size:13px;color:var(--text2)">R$ ${parseFloat(item.valor||0).toFixed(2).replace('.',',')} · ${st.idx+1} de ${st.lista.length}</div></div>
+    <div style="flex:1;text-align:center"><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text)">${formatData(item.vencimento)}</div><div style="font-size:13px;color:var(--text2)">R$ ${parseFloat(item.valor||0).toFixed(2).replace('.',',')}</div></div>
     <button onclick="navProxPag('${id}',1)" ${podeProximo?'':'disabled'} style="background:var(--teal);border:1px solid var(--teal2);border-radius:8px;padding:7px 16px;cursor:${podeProximo?'pointer':'not-allowed'};color:#fff;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;opacity:${podeProximo?1:0.4}">Próximo →</button>
   </div>
   <div style="display:flex;gap:4px;justify-content:center;margin-top:6px">
