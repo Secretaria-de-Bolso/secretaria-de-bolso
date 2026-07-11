@@ -1229,7 +1229,7 @@ async function carregarRecorrencias(tipo){
       var ids=lista.map(function(r){return r.id});
       var {data:pagamentos}=await sb.from('Boletos').select('id,nome,vencimento,valor,pago,recorrencia_id').in('recorrencia_id',ids).eq('pago',false).gte('vencimento',hoje).order('vencimento');
       lista.forEach(function(r){
-        proxPagState[r.id]={lista:(pagamentos||[]).filter(function(b){return b.recorrencia_id===r.id})};
+        proxPagState[r.id]={lista:(pagamentos||[]).filter(function(b){return b.recorrencia_id===r.id}),idx:0};
         renderProxPagNav(r.id);
       });
     }
@@ -1247,30 +1247,37 @@ async function pagarDoNavegador(recId,boletoId,btn){
   await marcarPago(boletoId,btn);
   var st=proxPagState[recId];if(!st)return;
   st.lista=st.lista.filter(function(b){return b.id!=boletoId});
+  if(st.idx>=st.lista.length)st.idx=Math.max(0,st.lista.length-1);
   renderProxPagNav(recId);
 }
 function renderProxPagNav(id){
   var div=document.getElementById('prox-pag-'+id);var st=proxPagState[id];
   if(!st||!st.lista.length){div.innerHTML='Nenhum pagamento futuro gerado ainda';return}
-  div.innerHTML=st.lista.map(function(item){
-    return `<div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;padding:3px 0">
-      <div style="font-size:13px;color:var(--text);white-space:nowrap">${formatData(item.vencimento)} · R$ ${parseFloat(item.valor||0).toFixed(2).replace('.',',')}</div>
-      <div style="display:flex;gap:4px">
-        <button class="btn-pagar" onclick="pagarDoNavegador('${id}','${item.id}',this)">Pagar</button>
-        <button class="td-edit-btn" onclick="abrirEdicaoBoleto('${item.id}','${(item.nome||'').replace(/'/g,"\\'")}',${parseFloat(item.valor)||0},'${item.vencimento||''}')">Editar</button>
-        <button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirOcorrenciaBoleto('${id}','${item.id}')">Excluir</button>
-      </div>
-    </div>`;
-  }).join('');
+  var item=st.lista[st.idx],podeAnterior=st.idx>0,podeProximo=st.idx<st.lista.length-1;
+  div.innerHTML=`<div style="display:flex;align-items:center;gap:8px">
+    <button onclick="navProxPag('${id}',-1)" ${podeAnterior?'':'disabled'} style="background:var(--teal);border:1px solid var(--teal2);border-radius:8px;padding:7px 16px;cursor:${podeAnterior?'pointer':'not-allowed'};color:#fff;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;opacity:${podeAnterior?1:0.4}">← Anterior</button>
+    <div style="flex:1;text-align:center"><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text)">${formatData(item.vencimento)}</div><div style="font-size:13px;color:var(--text2)">R$ ${parseFloat(item.valor||0).toFixed(2).replace('.',',')} · ${st.idx+1} de ${st.lista.length}</div></div>
+    <button onclick="navProxPag('${id}',1)" ${podeProximo?'':'disabled'} style="background:var(--teal);border:1px solid var(--teal2);border-radius:8px;padding:7px 16px;cursor:${podeProximo?'pointer':'not-allowed'};color:#fff;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;opacity:${podeProximo?1:0.4}">Próximo →</button>
+  </div>
+  <div style="display:flex;gap:4px;justify-content:center;margin-top:6px">
+    <button class="btn-pagar" onclick="pagarDoNavegador('${id}','${item.id}',this)">Pagar</button>
+    <button class="td-edit-btn" onclick="abrirEdicaoBoleto('${item.id}','${(item.nome||'').replace(/'/g,"\\'")}',${parseFloat(item.valor)||0},'${item.vencimento||''}')">Editar</button>
+    <button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirOcorrenciaBoleto('${id}','${item.id}')">Excluir</button>
+  </div>`;
 }
 function excluirOcorrenciaBoleto(recId,boletoId){
   confirmarAcao('Excluir pagamento','Excluir só esse pagamento (os outros meses continuam na lista). Continuar?',async()=>{
     await sb.from('lancamentos').delete().eq('boleto_id',boletoId);
     await sb.from('Boletos').delete().eq('id',boletoId);
     var st=proxPagState[recId];
-    if(st){st.lista=st.lista.filter(function(b){return b.id!=boletoId});renderProxPagNav(recId);}
+    if(st){st.lista=st.lista.filter(function(b){return b.id!=boletoId});if(st.idx>=st.lista.length)st.idx=Math.max(0,st.lista.length-1);renderProxPagNav(recId);}
     toast('Pagamento excluído!');
   });
+}
+function navProxPag(id,delta){
+  var st=proxPagState[id];if(!st)return;
+  st.idx=Math.max(0,Math.min(st.lista.length-1,st.idx+delta));
+  renderProxPagNav(id);
 }
 function abrirEdicaoRecorrencia(id){
   var r=recCache[id];if(!r)return;
