@@ -1240,8 +1240,27 @@ function renderRecorrenciaCard(r){
   var valorTxt=r.tipo==='boleto'&&r.valor?` · R$ ${parseFloat(r.valor).toFixed(2).replace('.',',')}`:'';
   var horaTxt=r.tipo==='agendamento'&&r.hora?` · ${r.hora.substring(0,5)}`:'';
   var linha=`${r.descricao||'—'}${meta?' · '+meta:''}${valorTxt}${horaTxt}`;
-  var navArea=r.tipo==='boleto'?`<div id="prox-pag-${r.id}" style="margin-top:4px">Carregando próximos pagamentos...</div>`:'';
-  return `<div class="kanban-card" style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><div class="kanban-card-title" style="flex:1;min-width:180px">${linha}</div><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="td-edit-btn" onclick="abrirEdicaoRecorrencia('${r.id}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirRecorrenciaDireto('${r.id}','${r.tipo}')">Excluir</button></div></div>${navArea}</div>`;
+  var navArea=r.tipo==='boleto'?`<div id="prox-pag-${r.id}" style="margin-top:8px">Carregando próximos pagamentos...</div>`:'';
+  return `<div class="kanban-card" style="cursor:pointer;padding:10px 12px" onclick="toggleRecCard('${r.id}')">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+      <div class="kanban-card-title" style="flex:1;min-width:0;margin-bottom:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${linha}</div>
+      <span id="rec-chevron-${r.id}" style="color:var(--text2);font-size:13px;flex-shrink:0;display:inline-block;transition:transform 0.15s">▸</span>
+    </div>
+    <div id="rec-detail-${r.id}" style="display:none;margin-top:10px" onclick="event.stopPropagation()">
+      <div style="display:flex;gap:4px;flex-wrap:wrap">
+        <button class="td-edit-btn" onclick="abrirEdicaoRecorrencia('${r.id}')">Editar</button>
+        <button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirRecorrenciaDireto('${r.id}','${r.tipo}')">Excluir</button>
+      </div>
+      ${navArea}
+    </div>
+  </div>`;
+}
+function toggleRecCard(id){
+  var det=document.getElementById('rec-detail-'+id);
+  var chev=document.getElementById('rec-chevron-'+id);
+  var aberto=det.style.display!=='none';
+  det.style.display=aberto?'none':'';
+  chev.style.transform=aberto?'':'rotate(90deg)';
 }
 async function pagarDoNavegador(recId,boletoId,btn){
   await marcarPago(boletoId,btn);
