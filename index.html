@@ -1239,12 +1239,19 @@ async function toggleProximosPagamentos(id,btn){
   if(div.style.display==='none'){
     if(!proxPagState[id]){
       var hoje=new Date().toISOString().split('T')[0];
-      var {data}=await sb.from('Boletos').select('vencimento,valor,pago').eq('recorrencia_id',id).gte('vencimento',hoje).order('vencimento');
+      var {data}=await sb.from('Boletos').select('id,vencimento,valor,pago').eq('recorrencia_id',id).gte('vencimento',hoje).order('vencimento');
       proxPagState[id]={lista:data||[],idx:0};
     }
     renderProxPagNav(id);
     div.style.display='';btn.textContent='Ocultar';
   }else{div.style.display='none';btn.textContent='Próximos pagamentos';}
+}
+async function pagarDoNavegador(recId,boletoId,btn){
+  await marcarPago(boletoId,btn);
+  var st=proxPagState[recId];if(!st)return;
+  st.lista=st.lista.filter(function(b){return b.id!=boletoId});
+  if(st.idx>=st.lista.length)st.idx=Math.max(0,st.lista.length-1);
+  renderProxPagNav(recId);
 }
 function renderProxPagNav(id){
   var div=document.getElementById('prox-pag-'+id);var st=proxPagState[id];
@@ -1252,7 +1259,7 @@ function renderProxPagNav(id){
   var item=st.lista[st.idx],podeAnterior=st.idx>0,podeProximo=st.idx<st.lista.length-1;
   div.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;gap:10px">
     <button onclick="navProxPag('${id}',-1)" ${podeAnterior?'':'disabled'} style="background:var(--teal);border:none;border-radius:8px;padding:5px 12px;cursor:${podeAnterior?'pointer':'not-allowed'};color:#fff;font-size:12px;font-weight:700;font-family:'Syne',sans-serif;opacity:${podeAnterior?1:0.4}">← Anterior</button>
-    <div style="text-align:center;min-width:110px"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--text)">${formatData(item.vencimento)}</div><div style="font-size:12px;color:var(--text2)">R$ ${parseFloat(item.valor||0).toFixed(2).replace('.',',')}</div></div>
+    <div style="text-align:center;min-width:110px"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--text)">${formatData(item.vencimento)}</div><div style="font-size:12px;color:var(--text2)">R$ ${parseFloat(item.valor||0).toFixed(2).replace('.',',')}</div><button class="btn-pagar" style="margin-top:4px" onclick="pagarDoNavegador('${id}','${item.id}',this)">Pagar</button></div>
     <button onclick="navProxPag('${id}',1)" ${podeProximo?'':'disabled'} style="background:var(--teal);border:none;border-radius:8px;padding:5px 12px;cursor:${podeProximo?'pointer':'not-allowed'};color:#fff;font-size:12px;font-weight:700;font-family:'Syne',sans-serif;opacity:${podeProximo?1:0.4}">Próximo →</button>
   </div><div style="text-align:center;font-size:11px;color:var(--text2);margin-top:4px">${st.idx+1} de ${st.lista.length}</div>`;
 }
