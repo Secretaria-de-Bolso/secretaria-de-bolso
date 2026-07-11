@@ -1183,8 +1183,9 @@ async function salvarAgendamento(){var id=document.getElementById('agenda-edit-i
 async function excluirAgendamento(){var id=document.getElementById('agenda-edit-id').value;fecharModal('modal-agenda-edit');confirmarAcao('Excluir compromisso','Tem certeza que deseja excluir este compromisso?',async()=>{await sb.from('agendamentos').delete().eq('id',id);toast('Compromisso excluído!');carregarAgenda()})}
 function excluirAgendamentoDireto(id){confirmarAcao('Excluir compromisso','Tem certeza que deseja excluir este compromisso?',async()=>{await sb.from('agendamentos').delete().eq('id',id);toast('Compromisso excluído!');carregarAgenda()})}
 function abrirEdicaoBoleto(id,nome,val,venc){document.getElementById('boleto-edit-id').value=id;document.getElementById('boleto-edit-nome').value=nome;document.getElementById('boleto-edit-valor').value=val;document.getElementById('boleto-edit-venc').value=venc;abrirModal('modal-boleto-edit')}
-async function salvarBoleto(){var id=document.getElementById('boleto-edit-id').value;await sb.from('Boletos').update({nome:document.getElementById('boleto-edit-nome').value,valor:parseFloat(document.getElementById('boleto-edit-valor').value),vencimento:document.getElementById('boleto-edit-venc').value}).eq('id',id);fecharModal('modal-boleto-edit');toast('Boleto atualizado!');carregarBoletos()}
-async function excluirBoleto(){var id=document.getElementById('boleto-edit-id').value;fecharModal('modal-boleto-edit');confirmarAcao('Excluir boleto','Tem certeza que deseja excluir este boleto?',async()=>{await sb.from('lancamentos').delete().eq('boleto_id',id);await sb.from('Boletos').delete().eq('id',id);toast('Boleto excluído!');carregarBoletos()})}
+function atualizarNavRecorrenciasSeVisivel(){if(document.getElementById('boletos-view-recorrencias').style.display!=='none')carregarRecorrencias('boleto')}
+async function salvarBoleto(){var id=document.getElementById('boleto-edit-id').value;await sb.from('Boletos').update({nome:document.getElementById('boleto-edit-nome').value,valor:parseFloat(document.getElementById('boleto-edit-valor').value),vencimento:document.getElementById('boleto-edit-venc').value}).eq('id',id);fecharModal('modal-boleto-edit');toast('Boleto atualizado!');carregarBoletos();atualizarNavRecorrenciasSeVisivel()}
+async function excluirBoleto(){var id=document.getElementById('boleto-edit-id').value;fecharModal('modal-boleto-edit');confirmarAcao('Excluir boleto','Tem certeza que deseja excluir este boleto?',async()=>{await sb.from('lancamentos').delete().eq('boleto_id',id);await sb.from('Boletos').delete().eq('id',id);toast('Boleto excluído!');carregarBoletos();atualizarNavRecorrenciasSeVisivel()})}
 
 /* ── RECORRÊNCIAS ── */
 function formatarRecorrencia(rec){
@@ -1226,7 +1227,7 @@ async function carregarRecorrencias(tipo){
     if(tipo==='boleto'&&lista.length){
       var hoje=new Date().toISOString().split('T')[0];
       var ids=lista.map(function(r){return r.id});
-      var {data:pagamentos}=await sb.from('Boletos').select('id,vencimento,valor,pago,recorrencia_id').in('recorrencia_id',ids).eq('pago',false).gte('vencimento',hoje).order('vencimento');
+      var {data:pagamentos}=await sb.from('Boletos').select('id,nome,vencimento,valor,pago,recorrencia_id').in('recorrencia_id',ids).eq('pago',false).gte('vencimento',hoje).order('vencimento');
       lista.forEach(function(r){
         proxPagState[r.id]={lista:(pagamentos||[]).filter(function(b){return b.recorrencia_id===r.id}),idx:0};
         renderProxPagNav(r.id);
@@ -1257,8 +1258,21 @@ function renderProxPagNav(id){
     <button onclick="navProxPag('${id}',-1)" ${podeAnterior?'':'disabled'} style="background:var(--teal);border:1px solid var(--teal2);border-radius:8px;padding:7px 16px;cursor:${podeAnterior?'pointer':'not-allowed'};color:#fff;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;opacity:${podeAnterior?1:0.4}">← Anterior</button>
     <div style="flex:1;text-align:center"><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text)">${formatData(item.vencimento)}</div><div style="font-size:13px;color:var(--text2)">R$ ${parseFloat(item.valor||0).toFixed(2).replace('.',',')} · ${st.idx+1} de ${st.lista.length}</div></div>
     <button onclick="navProxPag('${id}',1)" ${podeProximo?'':'disabled'} style="background:var(--teal);border:1px solid var(--teal2);border-radius:8px;padding:7px 16px;cursor:${podeProximo?'pointer':'not-allowed'};color:#fff;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;opacity:${podeProximo?1:0.4}">Próximo →</button>
+  </div>
+  <div style="display:flex;gap:4px;justify-content:center;margin-top:6px">
     <button class="btn-pagar" onclick="pagarDoNavegador('${id}','${item.id}',this)">Pagar</button>
+    <button class="td-edit-btn" onclick="abrirEdicaoBoleto('${item.id}','${(item.nome||'').replace(/'/g,"\\'")}',${parseFloat(item.valor)||0},'${item.vencimento||''}')">Editar</button>
+    <button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirOcorrenciaBoleto('${id}','${item.id}')">Excluir</button>
   </div>`;
+}
+function excluirOcorrenciaBoleto(recId,boletoId){
+  confirmarAcao('Excluir pagamento','Excluir só esse pagamento (os outros meses continuam na lista). Continuar?',async()=>{
+    await sb.from('lancamentos').delete().eq('boleto_id',boletoId);
+    await sb.from('Boletos').delete().eq('id',boletoId);
+    var st=proxPagState[recId];
+    if(st){st.lista=st.lista.filter(function(b){return b.id!=boletoId});if(st.idx>=st.lista.length)st.idx=Math.max(0,st.lista.length-1);renderProxPagNav(recId);}
+    toast('Pagamento excluído!');
+  });
 }
 function navProxPag(id,delta){
   var st=proxPagState[id];if(!st)return;
