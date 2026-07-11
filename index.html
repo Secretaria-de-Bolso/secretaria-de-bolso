@@ -1149,15 +1149,21 @@ async function salvarEdicao(){var id=document.getElementById('edit-id').value;aw
 function confirmarAcao(titulo,msg,callback){document.getElementById('confirm-title').textContent=titulo;document.getElementById('confirm-msg').textContent=msg;document.getElementById('confirm-btn').onclick=()=>{fecharModal('modal-confirm');callback()};abrirModal('modal-confirm')}
 async function deletarLancamento(){var id=document.getElementById('edit-id').value;fecharModal('modal-edit');confirmarAcao('Excluir lançamento','Tem certeza que deseja excluir este lançamento?',async()=>{await sb.from('lancamentos').delete().eq('id',id);toast('Lançamento excluído!');carregarDashboard()})}
 function excluirLancamentoDireto(id){confirmarAcao('Excluir lançamento','Tem certeza que deseja excluir este lançamento?',async()=>{await sb.from('lancamentos').delete().eq('id',id);toast('Lançamento excluído!');carregarDashboard()})}
-var agendaTodos=[],agendaOffset=0;
+var agendaTodos=[],agendaBoletosRec=[],agendaOffset=0;
+function renderAgendaBoletoCard(b){
+  var val=parseFloat(b.valor)||0;
+  return `<div class="kanban-card" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;align-items:center;gap:10px;flex:1"><div class="kanban-card-title">🧾 ${b.nome||'Boleto'}</div><div class="kanban-card-meta">R$ ${val.toFixed(2).replace('.',',')}</div></div><button class="btn-pagar" onclick="marcarPago('${b.id}',this)">Pagar</button></div>`;
+}
 async function carregarAgenda(){
   try{
     var hoje=new Date();hoje.setHours(0,0,0,0);
     var seg=new Date(hoje);var dom=new Date(hoje);dom.setDate(hoje.getDate()+6);
     var elLS=document.getElementById('label-semana');if(elLS)elLS.textContent=seg.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' até '+dom.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
     var {data}=await sb.from('agendamentos').select('*').eq('user_id',currentUser.id).order('data').order('hora');agendaTodos=data||[];
+    var {data:dataBol}=await sb.from('Boletos').select('*').eq('user_id',currentUser.id).eq('pago',false).not('recorrencia_id','is',null).order('vencimento');agendaBoletosRec=dataBol||[];
     var colSem=document.getElementById('col-semana');colSem.innerHTML='';var cntS=0;
     agendaTodos.forEach(ag=>{var d=new Date(ag.data+'T00:00:00'),hora=ag.hora?ag.hora.substring(0,5):'';if(d>=seg&&d<=dom){colSem.innerHTML+=`<div class="kanban-card" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;align-items:center;gap:10px;flex:1">${hora?`<div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--teal);min-width:48px">${hora}</div>`:''}<div><div class="kanban-card-title">${ag.descricao||'Compromisso'}</div><div class="kanban-card-meta">${formatData(ag.data)}</div></div></div><div style="display:flex;gap:4px"><button class="td-edit-btn" onclick="abrirEdicaoAgenda('${ag.id}','${(ag.descricao||'').replace(/'/g,"\\'")}','${ag.data||''}','${ag.hora||''}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirAgendamentoDireto('${ag.id}')">Excluir</button></div></div>`;cntS++;}});
+    agendaBoletosRec.forEach(b=>{var d=new Date(b.vencimento+'T00:00:00');if(d>=seg&&d<=dom){colSem.innerHTML+=renderAgendaBoletoCard(b);cntS++;}});
     if(!cntS)colSem.innerHTML='<div class="kanban-empty">Nenhum compromisso esta semana</div>';document.getElementById('cnt-semana').textContent=cntS;agendaOffset=0;renderAgendaDia();
   }catch(e){console.log(e)}
 }
@@ -1165,9 +1171,9 @@ function renderAgendaDia(){
   var hoje=new Date();hoje.setHours(0,0,0,0);var dia=new Date(hoje);dia.setDate(hoje.getDate()+agendaOffset);var diaStr=dia.toISOString().split('T')[0];
   var label=agendaOffset===0?'Hoje':agendaOffset===1?'Amanhã':agendaOffset===-1?'Ontem':dia.toLocaleDateString('pt-BR',{weekday:'short'});
   document.getElementById('agenda-nav-label').textContent=label;document.getElementById('agenda-nav-data').textContent=dia.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
-  var col=document.getElementById('col-hoje');col.innerHTML='';var items=agendaTodos.filter(ag=>ag.data===diaStr),cnt=items.length;
+  var col=document.getElementById('col-hoje');col.innerHTML='';var items=agendaTodos.filter(ag=>ag.data===diaStr);var boletosDia=agendaBoletosRec.filter(b=>b.vencimento===diaStr);var cnt=items.length+boletosDia.length;
   if(!cnt){col.innerHTML='<div class="kanban-empty">Nenhum compromisso neste dia</div>';}
-  else{items.forEach(ag=>{var hora=ag.hora?ag.hora.substring(0,5):'';col.innerHTML+=`<div class="kanban-card" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;align-items:center;gap:10px;flex:1">${hora?`<div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--teal);min-width:48px">${hora}</div>`:''}<div class="kanban-card-title">${ag.descricao||'Compromisso'}</div></div><div style="display:flex;gap:4px"><button class="td-edit-btn" onclick="abrirEdicaoAgenda('${ag.id}','${(ag.descricao||'').replace(/'/g,"\\'")}','${ag.data||''}','${ag.hora||''}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirAgendamentoDireto('${ag.id}')">Excluir</button></div></div>`;});}
+  else{items.forEach(ag=>{var hora=ag.hora?ag.hora.substring(0,5):'';col.innerHTML+=`<div class="kanban-card" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;align-items:center;gap:10px;flex:1">${hora?`<div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--teal);min-width:48px">${hora}</div>`:''}<div class="kanban-card-title">${ag.descricao||'Compromisso'}</div></div><div style="display:flex;gap:4px"><button class="td-edit-btn" onclick="abrirEdicaoAgenda('${ag.id}','${(ag.descricao||'').replace(/'/g,"\\'")}','${ag.data||''}','${ag.hora||''}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirAgendamentoDireto('${ag.id}')">Excluir</button></div></div>`;});boletosDia.forEach(b=>{col.innerHTML+=renderAgendaBoletoCard(b);});}
   document.getElementById('cnt-hoje').textContent=cnt;
 }
 function agendaNavDia(delta){agendaOffset+=delta;var hoje=new Date();hoje.setHours(0,0,0,0);var dia=new Date(hoje);dia.setDate(hoje.getDate()+agendaOffset);var picker=document.getElementById('agenda-data-picker');if(picker)picker.value=dia.toISOString().split('T')[0];renderAgendaDia()}
@@ -1223,7 +1229,20 @@ function renderRecorrenciaCard(r){
   var meta=formatarRecorrencia(r)||'';
   var valorTxt=r.tipo==='boleto'&&r.valor?` · R$ ${parseFloat(r.valor).toFixed(2).replace('.',',')}`:'';
   var horaTxt=r.tipo==='agendamento'&&r.hora?` · ${r.hora.substring(0,5)}`:'';
-  return `<div class="kanban-card" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div><div class="kanban-card-title">${r.descricao||'—'}</div><div class="kanban-card-meta">${meta}${valorTxt}${horaTxt}</div></div><div style="display:flex;gap:4px"><button class="td-edit-btn" onclick="abrirEdicaoRecorrencia('${r.id}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirRecorrenciaDireto('${r.id}','${r.tipo}')">Excluir</button></div></div>`;
+  var proxBtn=r.tipo==='boleto'?`<button class="td-edit-btn" onclick="toggleProximosPagamentos('${r.id}',this)">Próximos pagamentos</button>`:'';
+  return `<div class="kanban-card" style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div><div class="kanban-card-title">${r.descricao||'—'}</div><div class="kanban-card-meta">${meta}${valorTxt}${horaTxt}</div></div><div style="display:flex;gap:4px;flex-wrap:wrap">${proxBtn}<button class="td-edit-btn" onclick="abrirEdicaoRecorrencia('${r.id}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirRecorrenciaDireto('${r.id}','${r.tipo}')">Excluir</button></div></div><div id="prox-pag-${r.id}" style="display:none;font-size:12px;color:var(--text2);line-height:1.6"></div></div>`;
+}
+async function toggleProximosPagamentos(id,btn){
+  var div=document.getElementById('prox-pag-'+id);
+  if(div.style.display==='none'){
+    if(!div.dataset.loaded){
+      var hoje=new Date().toISOString().split('T')[0];
+      var {data}=await sb.from('Boletos').select('vencimento,valor,pago').eq('recorrencia_id',id).gte('vencimento',hoje).order('vencimento');
+      div.innerHTML=(data&&data.length)?data.map(function(b){return formatData(b.vencimento)+' · R$ '+parseFloat(b.valor||0).toFixed(2).replace('.',',')}).join('<br>'):'Nenhum pagamento futuro gerado ainda';
+      div.dataset.loaded='1';
+    }
+    div.style.display='';btn.textContent='Ocultar pagamentos';
+  }else{div.style.display='none';btn.textContent='Próximos pagamentos';}
 }
 function abrirEdicaoRecorrencia(id){
   var r=recCache[id];if(!r)return;
@@ -1297,14 +1316,14 @@ async function carregarBoletos(){
     var hoje=new Date().toISOString().split('T')[0],{data}=await sb.from('Boletos').select('*').eq('user_id',currentUser.id).order('vencimento');
     var colV=document.getElementById('col-bol-vencidos'),colH=document.getElementById('col-bol-hoje'),colA=document.getElementById('col-bol-apagar'),colP=document.getElementById('col-bol-pagos');
     colV.innerHTML='';colH.innerHTML='';colA.innerHTML='';colP.innerHTML='';todosBoletosPagos=[];todosBoletos=[];todosBoletosPendentes=[];boletosVencidos=[];boletosHoje=[];var cV=0,cH=0,cA=0,cP=0;
-    (data||[]).forEach(b=>{var venc=b.vencimento,vencido=!b.pago&&venc<hoje,card=renderBoletoCard(b,vencido);todosBoletos.push(b);if(b.pago){colP.innerHTML+=card;cP++;todosBoletosPagos.push(b);}else if(venc<hoje){colV.innerHTML+=card;cV++;boletosVencidos.push(b);}else if(venc===hoje){colH.innerHTML+=card;cH++;boletosHoje.push(b);}else{colA.innerHTML+=card;cA++;todosBoletosPendentes.push(b);}});
+    (data||[]).forEach(b=>{var venc=b.vencimento,vencido=!b.pago&&venc<hoje,card=renderBoletoCard(b,vencido);todosBoletos.push(b);if(b.pago){colP.innerHTML+=card;cP++;todosBoletosPagos.push(b);}else if(venc<hoje){colV.innerHTML+=card;cV++;boletosVencidos.push(b);}else if(venc===hoje){colH.innerHTML+=card;cH++;boletosHoje.push(b);}else if(!b.recorrencia_id){colA.innerHTML+=card;cA++;todosBoletosPendentes.push(b);}});
     if(!cV)colV.innerHTML='<div class="kanban-empty">Nenhum boleto vencido</div>';if(!cH)colH.innerHTML='<div class="kanban-empty">Nenhum boleto hoje</div>';if(!cA)colA.innerHTML='<div class="kanban-empty">Nenhum boleto pendente</div>';if(!cP)colP.innerHTML='<div class="kanban-empty">Nenhum boleto pago</div>';
     document.getElementById('cnt-bol-vencidos').textContent=cV;document.getElementById('cnt-bol-hoje').textContent=cH;document.getElementById('cnt-bol-apagar').textContent=cA;document.getElementById('cnt-bol-pagos').textContent=cP;
     document.getElementById('btab-cnt-vencidos').textContent=cV;document.getElementById('btab-cnt-hoje').textContent=cH;document.getElementById('btab-cnt-apagar').textContent=cA;document.getElementById('btab-cnt-pagos').textContent=cP;
     var tabInicial=cV>0?'vencidos':cH>0?'hoje':cA>0?'apagar':'pagos';switchBoletoTab(tabInicial);
   }catch(e){console.log(e)}
 }
-async function marcarPago(id,btn){btn.textContent='✓';btn.disabled=true;btn.className='btn-pagar pago';var {data:boleto}=await sb.from('Boletos').select('nome,valor').eq('id',id).single();await sb.from('Boletos').update({pago:true}).eq('id',id);if(boleto){var hoje=new Date().toISOString().split('T')[0];await sb.from('lancamentos').insert({user_id:currentUser.id,tipo:'despesa',descricao:'Boleto: '+(boleto.nome||'Boleto'),valor:parseFloat(boleto.valor)||0,data:hoje,categoria:'Boletos',origem:'painel',boleto_id:id});}toast('Boleto pago e lançado no financeiro!');setTimeout(()=>carregarBoletos(),600)}
+async function marcarPago(id,btn){btn.textContent='✓';btn.disabled=true;btn.className='btn-pagar pago';var {data:boleto}=await sb.from('Boletos').select('nome,valor').eq('id',id).single();await sb.from('Boletos').update({pago:true}).eq('id',id);if(boleto){var hoje=new Date().toISOString().split('T')[0];await sb.from('lancamentos').insert({user_id:currentUser.id,tipo:'despesa',descricao:'Boleto: '+(boleto.nome||'Boleto'),valor:parseFloat(boleto.valor)||0,data:hoje,categoria:'Boletos',origem:'painel',boleto_id:id});}toast('Boleto pago e lançado no financeiro!');setTimeout(()=>{carregarBoletos();if(document.getElementById('content-agenda').classList.contains('active'))carregarAgenda();},600)}
 async function carregarPerfil(){
   try{
     var {data:authData}=await sb.auth.getUser(),user=authData?.user,nomeAuth=user?.user_metadata?.nome||currentUser.nome;
