@@ -1244,7 +1244,7 @@ function renderRecorrenciaCard(r){
   return `<div class="kanban-card" style="cursor:pointer;padding:10px 12px" onclick="toggleRecCard('${r.id}')">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
       <div class="kanban-card-title" style="flex:1;min-width:0;margin-bottom:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${linha}</div>
-      <span id="rec-chevron-${r.id}" style="background:var(--teal-dim);color:var(--teal2);border:1px solid rgba(23,179,105,0.4);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;white-space:nowrap">Detalhes ▸</span>
+      <span id="rec-chevron-${r.id}" style="background:var(--teal-dim);color:var(--teal2);border:1px solid rgba(23,179,105,0.4);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;white-space:nowrap">Próximo ▸</span>
     </div>
     <div id="rec-detail-${r.id}" style="display:none;margin-top:10px" onclick="event.stopPropagation()">
       <div style="display:flex;gap:4px;flex-wrap:wrap">
@@ -1260,7 +1260,7 @@ function toggleRecCard(id){
   var chev=document.getElementById('rec-chevron-'+id);
   var aberto=det.style.display!=='none';
   det.style.display=aberto?'none':'';
-  chev.textContent=aberto?'Detalhes ▸':'Fechar ▾';
+  chev.textContent=aberto?'Próximo ▸':'Fechar ▾';
 }
 async function pagarDoNavegador(recId,boletoId,btn){
   await marcarPago(boletoId,btn);
