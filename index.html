@@ -194,6 +194,12 @@ input::placeholder{color:var(--text3)}
 .boleto-tab-btn.active{background:var(--teal);color:#fff}
 .boleto-tab-btn .tab-count{display:block;font-size:16px;font-weight:700;margin-bottom:2px}
 
+/* SUB-ABAS AGENDA/BOLETOS (sempre visiveis, desktop e mobile) */
+.subtab-bar{display:flex;gap:0;margin-bottom:16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.subtab-btn{flex:1;padding:10px 4px;font-size:12px;font-family:'Syne',sans-serif;font-weight:700;text-align:center;cursor:pointer;color:var(--text2);border:none;background:transparent;transition:all 0.15s;border-right:1px solid var(--border)}
+.subtab-btn:last-child{border-right:none}
+.subtab-btn.active{background:var(--teal);color:#fff}
+
 /* SUB-ABAS FINANCEIRO */
 .finsub-tabs{display:flex;gap:0;margin-bottom:16px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .finsub-btn{flex:1;padding:12px 4px;font-size:13px;font-family:'Syne',sans-serif;font-weight:700;text-align:center;cursor:pointer;color:var(--text2);border:none;background:transparent;transition:all 0.15s;border-right:1px solid var(--border)}
@@ -300,6 +306,42 @@ input::placeholder{color:var(--text3)}
     <button class="btn btn-outline" style="flex:1" onclick="fecharModal('modal-boleto-edit')">Cancelar</button>
     <button class="btn btn-danger" style="flex:1" onclick="excluirBoleto()">Excluir</button>
     <button class="btn btn-primary" style="flex:1" onclick="salvarBoleto()">Salvar</button>
+  </div>
+</div>
+</div>
+<div class="modal-overlay" id="modal-recorrencia-edit">
+<div class="modal">
+  <div class="modal-title">Editar recorrência</div>
+  <input type="hidden" id="rec-edit-id">
+  <input type="hidden" id="rec-edit-tipo">
+  <div class="form-group"><label>Descrição</label><input type="text" id="rec-edit-desc"></div>
+  <div class="form-group"><label>Repete</label>
+    <select id="rec-edit-padrao" onchange="alternarCamposRecorrencia()">
+      <option value="diario">Todos os dias</option>
+      <option value="dias_semana">Dias da semana</option>
+      <option value="mensal">Todo mês (dia fixo)</option>
+    </select>
+  </div>
+  <div class="form-group" id="rec-edit-dias-wrap">
+    <label>Dias da semana</label>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" id="rec-dow-0">Dom</label>
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" id="rec-dow-1">Seg</label>
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" id="rec-dow-2">Ter</label>
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" id="rec-dow-3">Qua</label>
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" id="rec-dow-4">Qui</label>
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" id="rec-dow-5">Sex</label>
+      <label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" id="rec-dow-6">Sáb</label>
+    </div>
+  </div>
+  <div class="form-group" id="rec-edit-diames-wrap"><label>Dia do mês</label><input type="number" id="rec-edit-dia-mes" min="1" max="31"></div>
+  <div class="form-group" id="rec-edit-hora-wrap"><label>Hora</label><input type="time" id="rec-edit-hora"></div>
+  <div class="form-group" id="rec-edit-valor-wrap"><label>Valor (R$)</label><input type="number" id="rec-edit-valor" step="0.01"></div>
+  <div class="form-group"><label>Repetir até (opcional)</label><input type="date" id="rec-edit-data-fim"></div>
+  <div class="modal-actions">
+    <button class="btn btn-outline" style="flex:1" onclick="fecharModal('modal-recorrencia-edit')">Cancelar</button>
+    <button class="btn btn-danger" style="flex:1" onclick="excluirRecorrencia()">Excluir</button>
+    <button class="btn btn-primary" style="flex:1" onclick="salvarRecorrencia()">Salvar</button>
   </div>
 </div>
 </div>
@@ -540,6 +582,11 @@ input::placeholder{color:var(--text3)}
   <div class="content fade-in">
     <div class="page-title">Agenda</div>
     <div class="page-sub" id="agenda-sub">Seus compromissos</div>
+    <div class="subtab-bar">
+      <button class="subtab-btn active" id="asub-agenda" onclick="switchAgendaSub('agenda')">Agenda</button>
+      <button class="subtab-btn" id="asub-recorrencias" onclick="switchAgendaSub('recorrencias')">Recorrências</button>
+    </div>
+    <div id="agenda-view-normal">
     <div class="grid-2">
       <div class="kanban-col">
         <div class="kanban-header" style="flex-direction:column;gap:8px;align-items:stretch">
@@ -558,6 +605,13 @@ input::placeholder{color:var(--text3)}
         <div class="kanban-body" id="col-semana"><div class="kanban-empty">Nenhum compromisso esta semana</div></div>
       </div>
     </div>
+    </div>
+    <div id="agenda-view-recorrencias" style="display:none">
+      <div class="kanban-col">
+        <div class="kanban-header"><div class="kanban-title" style="color:var(--teal)">Recorrências de agenda</div><div class="kanban-count" id="cnt-rec-agenda">0</div></div>
+        <div class="kanban-body" id="col-rec-agenda"><div class="kanban-empty">Nenhuma recorrência cadastrada</div></div>
+      </div>
+    </div>
   </div>
   </div>
 
@@ -572,6 +626,11 @@ input::placeholder{color:var(--text3)}
         <span id="busca-boletos-limpar" onclick="document.getElementById('busca-boletos-global').value='';filtrarBoletosGlobal()" style="cursor:pointer;color:var(--text2);font-size:18px;display:none">✕</span>
       </div>
     </div>
+    <div class="subtab-bar">
+      <button class="subtab-btn active" id="bsub-lista" onclick="switchBoletosSub('lista')">Boletos</button>
+      <button class="subtab-btn" id="bsub-recorrencias" onclick="switchBoletosSub('recorrencias')">Recorrências</button>
+    </div>
+    <div id="boletos-view-lista">
     <div class="boleto-tabs" id="boleto-tabs">
       <button class="boleto-tab-btn active" id="btab-vencidos" onclick="switchBoletoTab('vencidos')"><span class="tab-count" id="btab-cnt-vencidos">0</span>Vencidos</button>
       <button class="boleto-tab-btn" id="btab-hoje" onclick="switchBoletoTab('hoje')"><span class="tab-count" id="btab-cnt-hoje">0</span>Hoje</button>
@@ -613,6 +672,13 @@ input::placeholder{color:var(--text3)}
       </div>
     </div>
     <div id="resultado-busca-boletos" style="display:none;margin-top:16px"><div class="section-label">Resultados da busca</div><div id="lista-busca-boletos" style="display:flex;flex-direction:column;gap:8px"></div></div>
+    </div>
+    <div id="boletos-view-recorrencias" style="display:none">
+      <div class="kanban-col">
+        <div class="kanban-header"><div class="kanban-title" style="color:var(--teal)">Recorrências de boletos</div><div class="kanban-count" id="cnt-rec-boleto">0</div></div>
+        <div class="kanban-body" id="col-rec-boleto"><div class="kanban-empty">Nenhuma recorrência cadastrada</div></div>
+      </div>
+    </div>
   </div>
   </div>
 
@@ -763,7 +829,8 @@ async function _enviarPayload(payload){
         if(ehPadrao){msgResp.querySelector('.chat-bubble').innerHTML='⚠️ Áudio não encontrado, tente novamente.';salvarMsgHistorico('recebido','⚠️ Áudio não encontrado, tente novamente.');return true;}
       }
       var tipoEmoji={despesa:'💸',receita:'💰',agendamento:'📅',boleto:'🧾'}[data.tipo]||'📋';
-      var html=`${tipoEmoji} <strong>Confirme o registro:</strong><br><span style="color:var(--text2);font-size:14.95px">Tipo:</span> ${data.tipo||'—'}<br><span style="color:var(--text2);font-size:14.95px">Descrição:</span> ${data.descricao||'—'}${data.valor?`<br><span style="color:var(--text2);font-size:14.95px">Valor:</span> R$ ${parseFloat(data.valor).toFixed(2).replace('.',',')}`:''  }${data.data?`<br><span style="color:var(--text2);font-size:14.95px">Data:</span> ${formatData(data.data)}`:''}${data.hora?`<br><span style="color:var(--text2);font-size:14.95px">Hora:</span> ${data.hora}`:''}`;
+      var recorrenciaTxt=formatarRecorrencia(data.recorrencia);
+      var html=`${tipoEmoji} <strong>Confirme o registro:</strong><br><span style="color:var(--text2);font-size:14.95px">Tipo:</span> ${data.tipo||'—'}<br><span style="color:var(--text2);font-size:14.95px">Descrição:</span> ${data.descricao||'—'}${data.valor?`<br><span style="color:var(--text2);font-size:14.95px">Valor:</span> R$ ${parseFloat(data.valor).toFixed(2).replace('.',',')}`:''  }${data.data?`<br><span style="color:var(--text2);font-size:14.95px">Data:</span> ${formatData(data.data)}`:''}${data.hora?`<br><span style="color:var(--text2);font-size:14.95px">Hora:</span> ${data.hora}`:''}${recorrenciaTxt?`<br><span style="color:var(--text2);font-size:14.95px">Repete:</span> ${recorrenciaTxt}`:''}`;
       pendingConfirm={...data,cardHtml:html};
       msgResp.querySelector('.chat-bubble').innerHTML=html;
       var btns=document.createElement('div');btns.className='chat-confirm-btns';
@@ -800,7 +867,7 @@ async function confirmarRegistro(btn){
   try{
     var d=pendingConfirm;
     function normData(s){if(!s)return null;if(/^\d{4}-\d{2}-\d{2}$/.test(s))return s;return s.split('/').reverse().join('-');}
-    if(d.tipo==='agendamento'&&d.hora){
+    if(d.tipo==='agendamento'&&d.hora&&!d.recorrencia){
       var dataFmt=normData(d.data);
       var {data:chkData,error:chkErr}=await sb.from('agendamentos').select('id').eq('user_id',currentUser.id).eq('data',dataFmt).eq('hora',d.hora);
       if(!chkErr&&chkData&&chkData.length>0){
@@ -808,19 +875,27 @@ async function confirmarRegistro(btn){
         pendingConfirm=null;return;
       }
     }
-    var tabela,obj;
-    if(d.tipo==='despesa'||d.tipo==='receita'){
-      tabela='lancamentos';
-      obj={user_id:currentUser.id,tipo:d.tipo,descricao:d.descricao,valor:parseFloat(d.valor)||0,data:normData(d.data),categoria:d.categoria||null};
-    }else if(d.tipo==='agendamento'){
-      tabela='agendamentos';
-      obj={user_id:currentUser.id,descricao:d.descricao,data:normData(d.data),hora:d.hora||null};
-    }else if(d.tipo==='boleto'){
-      tabela='Boletos';
-      obj={user_id:currentUser.id,nome:d.descricao,valor:parseFloat(d.valor)||0,vencimento:normData(d.data),pago:false};
-    }else{throw new Error('tipo desconhecido');}
-    var {error}=await sb.from(tabela).insert([obj]);
-    if(error)throw error;
+    if(d.recorrencia&&d.recorrencia.padrao&&(d.tipo==='agendamento'||d.tipo==='boleto')){
+      var recObj={user_id:currentUser.id,tipo:d.tipo,padrao:d.recorrencia.padrao,dias_semana:d.recorrencia.dias_semana||null,dia_mes:d.recorrencia.dia_mes||null,descricao:d.descricao,hora:d.tipo==='agendamento'?(d.hora||null):null,valor:d.tipo==='boleto'?(parseFloat(d.valor)||null):null,origem:d.origem||null,data_inicio:normData(d.data),data_fim:d.recorrencia.data_fim?normData(d.recorrencia.data_fim):null,ativo:true};
+      var {data:novaRec,error:errRec}=await sb.from('recorrencias').insert([recObj]).select('id').single();
+      if(errRec)throw errRec;
+      var {error:errGer}=await sb.rpc('gerar_ocorrencias_recorrencia',{p_id:novaRec.id});
+      if(errGer)throw errGer;
+    }else{
+      var tabela,obj;
+      if(d.tipo==='despesa'||d.tipo==='receita'){
+        tabela='lancamentos';
+        obj={user_id:currentUser.id,tipo:d.tipo,descricao:d.descricao,valor:parseFloat(d.valor)||0,data:normData(d.data),categoria:d.categoria||null};
+      }else if(d.tipo==='agendamento'){
+        tabela='agendamentos';
+        obj={user_id:currentUser.id,descricao:d.descricao,data:normData(d.data),hora:d.hora||null};
+      }else if(d.tipo==='boleto'){
+        tabela='Boletos';
+        obj={user_id:currentUser.id,nome:d.descricao,valor:parseFloat(d.valor)||0,vencimento:normData(d.data),pago:false};
+      }else{throw new Error('tipo desconhecido');}
+      var {error}=await sb.from(tabela).insert([obj]);
+      if(error)throw error;
+    }
     var confMsg='✅ Registrado com sucesso!';
     msgResp.querySelector('.chat-bubble').innerHTML=confMsg;
     if(d.cardHtml)salvarMsgHistorico('recebido',d.cardHtml);
@@ -1104,6 +1179,114 @@ function excluirAgendamentoDireto(id){confirmarAcao('Excluir compromisso','Tem c
 function abrirEdicaoBoleto(id,nome,val,venc){document.getElementById('boleto-edit-id').value=id;document.getElementById('boleto-edit-nome').value=nome;document.getElementById('boleto-edit-valor').value=val;document.getElementById('boleto-edit-venc').value=venc;abrirModal('modal-boleto-edit')}
 async function salvarBoleto(){var id=document.getElementById('boleto-edit-id').value;await sb.from('Boletos').update({nome:document.getElementById('boleto-edit-nome').value,valor:parseFloat(document.getElementById('boleto-edit-valor').value),vencimento:document.getElementById('boleto-edit-venc').value}).eq('id',id);fecharModal('modal-boleto-edit');toast('Boleto atualizado!');carregarBoletos()}
 async function excluirBoleto(){var id=document.getElementById('boleto-edit-id').value;fecharModal('modal-boleto-edit');confirmarAcao('Excluir boleto','Tem certeza que deseja excluir este boleto?',async()=>{await sb.from('lancamentos').delete().eq('boleto_id',id);await sb.from('Boletos').delete().eq('id',id);toast('Boleto excluído!');carregarBoletos()})}
+
+/* ── RECORRÊNCIAS ── */
+function formatarRecorrencia(rec){
+  if(!rec||!rec.padrao)return null;
+  var txt;
+  if(rec.padrao==='diario')txt='Todos os dias';
+  else if(rec.padrao==='dias_semana'){var nomes=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];txt=(rec.dias_semana||[]).slice().sort(function(a,b){return a-b}).map(function(d){return nomes[d]}).join(', ');}
+  else if(rec.padrao==='mensal')txt='Todo dia '+rec.dia_mes+' do mês';
+  else return null;
+  if(rec.data_fim)txt+=' até '+formatData(rec.data_fim);
+  return txt;
+}
+function switchAgendaSub(tab){
+  document.getElementById('asub-agenda').classList.toggle('active',tab==='agenda');
+  document.getElementById('asub-recorrencias').classList.toggle('active',tab==='recorrencias');
+  document.getElementById('agenda-view-normal').style.display=tab==='agenda'?'':'none';
+  document.getElementById('agenda-view-recorrencias').style.display=tab==='recorrencias'?'':'none';
+  if(tab==='recorrencias')carregarRecorrencias('agendamento');
+}
+function switchBoletosSub(tab){
+  document.getElementById('bsub-lista').classList.toggle('active',tab==='lista');
+  document.getElementById('bsub-recorrencias').classList.toggle('active',tab==='recorrencias');
+  document.getElementById('boletos-view-lista').style.display=tab==='lista'?'':'none';
+  document.getElementById('boletos-view-recorrencias').style.display=tab==='recorrencias'?'':'none';
+  if(tab==='recorrencias')carregarRecorrencias('boleto');
+}
+var recCache={};
+async function carregarRecorrencias(tipo){
+  try{
+    var {data}=await sb.from('recorrencias').select('*').eq('user_id',currentUser.id).eq('tipo',tipo).eq('ativo',true).order('created_at');
+    var lista=data||[];
+    lista.forEach(function(r){recCache[r.id]=r});
+    var colId=tipo==='agendamento'?'col-rec-agenda':'col-rec-boleto';
+    var cntId=tipo==='agendamento'?'cnt-rec-agenda':'cnt-rec-boleto';
+    var col=document.getElementById(colId);col.innerHTML='';
+    if(!lista.length){col.innerHTML='<div class="kanban-empty">Nenhuma recorrência cadastrada</div>';}
+    else lista.forEach(function(r){col.innerHTML+=renderRecorrenciaCard(r)});
+    document.getElementById(cntId).textContent=lista.length;
+  }catch(e){console.log(e)}
+}
+function renderRecorrenciaCard(r){
+  var meta=formatarRecorrencia(r)||'';
+  var valorTxt=r.tipo==='boleto'&&r.valor?` · R$ ${parseFloat(r.valor).toFixed(2).replace('.',',')}`:'';
+  var horaTxt=r.tipo==='agendamento'&&r.hora?` · ${r.hora.substring(0,5)}`:'';
+  return `<div class="kanban-card" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div><div class="kanban-card-title">${r.descricao||'—'}</div><div class="kanban-card-meta">${meta}${valorTxt}${horaTxt}</div></div><div style="display:flex;gap:4px"><button class="td-edit-btn" onclick="abrirEdicaoRecorrencia('${r.id}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirRecorrenciaDireto('${r.id}','${r.tipo}')">Excluir</button></div></div>`;
+}
+function abrirEdicaoRecorrencia(id){
+  var r=recCache[id];if(!r)return;
+  document.getElementById('rec-edit-id').value=r.id;
+  document.getElementById('rec-edit-tipo').value=r.tipo;
+  document.getElementById('rec-edit-desc').value=r.descricao||'';
+  document.getElementById('rec-edit-padrao').value=r.padrao;
+  for(var i=0;i<7;i++)document.getElementById('rec-dow-'+i).checked=(r.dias_semana||[]).includes(i);
+  document.getElementById('rec-edit-dia-mes').value=r.dia_mes||'';
+  document.getElementById('rec-edit-hora').value=r.hora?r.hora.substring(0,5):'';
+  document.getElementById('rec-edit-valor').value=r.valor||'';
+  document.getElementById('rec-edit-data-fim').value=r.data_fim||'';
+  alternarCamposRecorrencia();
+  abrirModal('modal-recorrencia-edit');
+}
+function alternarCamposRecorrencia(){
+  var tipo=document.getElementById('rec-edit-tipo').value;
+  var padrao=document.getElementById('rec-edit-padrao').value;
+  document.getElementById('rec-edit-dias-wrap').style.display=padrao==='dias_semana'?'':'none';
+  document.getElementById('rec-edit-diames-wrap').style.display=padrao==='mensal'?'':'none';
+  document.getElementById('rec-edit-hora-wrap').style.display=tipo==='agendamento'?'':'none';
+  document.getElementById('rec-edit-valor-wrap').style.display=tipo==='boleto'?'':'none';
+}
+async function salvarRecorrencia(){
+  var id=document.getElementById('rec-edit-id').value,tipo=document.getElementById('rec-edit-tipo').value;
+  var padrao=document.getElementById('rec-edit-padrao').value;
+  var diasSel=[];for(var i=0;i<7;i++)if(document.getElementById('rec-dow-'+i).checked)diasSel.push(i);
+  var upd={
+    descricao:document.getElementById('rec-edit-desc').value,
+    padrao:padrao,
+    dias_semana:padrao==='dias_semana'?diasSel:null,
+    dia_mes:padrao==='mensal'?(parseInt(document.getElementById('rec-edit-dia-mes').value)||null):null,
+    hora:tipo==='agendamento'?(document.getElementById('rec-edit-hora').value||null):null,
+    valor:tipo==='boleto'?(parseFloat(document.getElementById('rec-edit-valor').value)||null):null,
+    data_fim:document.getElementById('rec-edit-data-fim').value||null
+  };
+  var hoje=new Date().toISOString().split('T')[0];
+  await sb.from('recorrencias').update(upd).eq('id',id);
+  if(tipo==='agendamento')await sb.from('agendamentos').delete().eq('recorrencia_id',id).gte('data',hoje);
+  else await sb.from('Boletos').delete().eq('recorrencia_id',id).gte('vencimento',hoje).eq('pago',false);
+  await sb.rpc('gerar_ocorrencias_recorrencia',{p_id:id});
+  fecharModal('modal-recorrencia-edit');
+  toast('Recorrência atualizada!');
+  carregarRecorrencias(tipo);
+  if(tipo==='agendamento')carregarAgenda();else carregarBoletos();
+}
+function excluirRecorrencia(){
+  var id=document.getElementById('rec-edit-id').value,tipo=document.getElementById('rec-edit-tipo').value;
+  fecharModal('modal-recorrencia-edit');
+  excluirRecorrenciaDireto(id,tipo);
+}
+function excluirRecorrenciaDireto(id,tipo){
+  confirmarAcao('Excluir recorrência','Isso cancela as próximas ocorrências futuras (as já ocorridas ou pagas ficam no histórico). Continuar?',async()=>{
+    var hoje=new Date().toISOString().split('T')[0];
+    if(tipo==='agendamento')await sb.from('agendamentos').delete().eq('recorrencia_id',id).gte('data',hoje);
+    else await sb.from('Boletos').delete().eq('recorrencia_id',id).gte('vencimento',hoje).eq('pago',false);
+    await sb.from('recorrencias').delete().eq('id',id);
+    toast('Recorrência excluída!');
+    carregarRecorrencias(tipo);
+    if(tipo==='agendamento')carregarAgenda();else carregarBoletos();
+  });
+}
+
 var todosBoletosPagos=[],todosBoletos=[],todosBoletosPendentes=[],boletosVencidos=[],boletosHoje=[];
 function renderBoletoCard(b,vencido){var val=parseFloat(b.valor)||0;return `<div class="boleto-card" style="${vencido?'border-color:rgba(255,77,77,0.3)':''}"><div class="boleto-info"><div class="boleto-nome">${b.nome||'Boleto'}</div><div class="boleto-meta" style="${vencido?'color:var(--red)':''}">${vencido?'⚠️ Venceu em':'Vence:'} ${formatData(b.vencimento)}</div></div><div style="display:flex;align-items:center;gap:8px"><div class="boleto-val ${b.pago?'boleto-pago':''}">R$ ${val.toFixed(2).replace('.',',')}</div>${!b.pago?`<button class="btn-pagar" onclick="marcarPago('${b.id}',this)">Pagar</button>`:'<span class="badge badge-green">✓ Pago</span>'}<button class="td-edit-btn" onclick="abrirEdicaoBoleto('${b.id}','${(b.nome||'').replace(/'/g,"\\'")}',${val},'${b.vencimento||''}')">Editar</button></div></div>`}
 function filtrarColuna(col){var configs={vencidos:{nome:'busca-vencidos-nome',data:'busca-vencidos-data',body:'col-bol-vencidos',dados:boletosVencidos,vencido:true,empty:'Nenhum boleto vencido'},hoje:{nome:'busca-hoje-nome',data:'busca-hoje-data',body:'col-bol-hoje',dados:boletosHoje,vencido:false,empty:'Nenhum boleto hoje'},apagar:{nome:'busca-apagar-nome',data:'busca-apagar-data',body:'col-bol-apagar',dados:todosBoletosPendentes,vencido:false,empty:'Nenhum boleto pendente'},pagos:{nome:'busca-pagos-nome',data:'busca-pagos-data2',body:'col-bol-pagos',dados:todosBoletosPagos,vencido:false,empty:'Nenhum boleto pago'}};var c=configs[col];if(!c)return;var nome=(document.getElementById(c.nome).value||'').toLowerCase().trim(),data=document.getElementById(c.data).value;var filtrados=c.dados.filter(b=>(!nome||normBoleto(b.nome).includes(normBoleto(nome)))&&(!data||b.vencimento===data));var body=document.getElementById(c.body);body.innerHTML='';if(!filtrados.length){body.innerHTML=`<div class="kanban-empty">${c.empty}</div>`;return}filtrados.forEach(b=>body.innerHTML+=renderBoletoCard(b,c.vencido))}
