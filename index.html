@@ -1211,7 +1211,7 @@ function switchBoletosSub(tab){
   document.getElementById('boletos-view-recorrencias').style.display=tab==='recorrencias'?'':'none';
   if(tab==='recorrencias')carregarRecorrencias('boleto');
 }
-var recCache={};
+var recCache={},proxPagState={};
 async function carregarRecorrencias(tipo){
   try{
     var {data}=await sb.from('recorrencias').select('*').eq('user_id',currentUser.id).eq('tipo',tipo).eq('ativo',true).order('created_at');
@@ -1223,6 +1223,15 @@ async function carregarRecorrencias(tipo){
     if(!lista.length){col.innerHTML='<div class="kanban-empty">Nenhuma recorrência cadastrada</div>';}
     else lista.forEach(function(r){col.innerHTML+=renderRecorrenciaCard(r)});
     document.getElementById(cntId).textContent=lista.length;
+    if(tipo==='boleto'&&lista.length){
+      var hoje=new Date().toISOString().split('T')[0];
+      var ids=lista.map(function(r){return r.id});
+      var {data:pagamentos}=await sb.from('Boletos').select('id,vencimento,valor,pago,recorrencia_id').in('recorrencia_id',ids).eq('pago',false).gte('vencimento',hoje).order('vencimento');
+      lista.forEach(function(r){
+        proxPagState[r.id]={lista:(pagamentos||[]).filter(function(b){return b.recorrencia_id===r.id}),idx:0};
+        renderProxPagNav(r.id);
+      });
+    }
   }catch(e){console.log(e)}
 }
 function renderRecorrenciaCard(r){
@@ -1230,21 +1239,8 @@ function renderRecorrenciaCard(r){
   var valorTxt=r.tipo==='boleto'&&r.valor?` · R$ ${parseFloat(r.valor).toFixed(2).replace('.',',')}`:'';
   var horaTxt=r.tipo==='agendamento'&&r.hora?` · ${r.hora.substring(0,5)}`:'';
   var linha=`${r.descricao||'—'}${meta?' · '+meta:''}${valorTxt}${horaTxt}`;
-  var proxBtn=r.tipo==='boleto'?`<button class="btn-pagar" onclick="toggleProximosPagamentos('${r.id}',this)">Próximos pagamentos</button>`:'';
-  return `<div class="kanban-card" style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><div class="kanban-card-title" style="flex:1;min-width:180px">${linha}</div><div style="display:flex;gap:4px;flex-wrap:wrap">${proxBtn}<button class="td-edit-btn" onclick="abrirEdicaoRecorrencia('${r.id}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirRecorrenciaDireto('${r.id}','${r.tipo}')">Excluir</button></div></div><div id="prox-pag-${r.id}" style="display:none;font-size:12px;color:var(--text2);line-height:1.6"></div></div>`;
-}
-var proxPagState={};
-async function toggleProximosPagamentos(id,btn){
-  var div=document.getElementById('prox-pag-'+id);
-  if(div.style.display==='none'){
-    if(!proxPagState[id]){
-      var hoje=new Date().toISOString().split('T')[0];
-      var {data}=await sb.from('Boletos').select('id,vencimento,valor,pago').eq('recorrencia_id',id).gte('vencimento',hoje).order('vencimento');
-      proxPagState[id]={lista:data||[],idx:0};
-    }
-    renderProxPagNav(id);
-    div.style.display='';btn.textContent='Ocultar';
-  }else{div.style.display='none';btn.textContent='Próximos pagamentos';}
+  var navArea=r.tipo==='boleto'?`<div id="prox-pag-${r.id}" style="margin-top:4px">Carregando próximos pagamentos...</div>`:'';
+  return `<div class="kanban-card" style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><div class="kanban-card-title" style="flex:1;min-width:180px">${linha}</div><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="td-edit-btn" onclick="abrirEdicaoRecorrencia('${r.id}')">Editar</button><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirRecorrenciaDireto('${r.id}','${r.tipo}')">Excluir</button></div></div>${navArea}</div>`;
 }
 async function pagarDoNavegador(recId,boletoId,btn){
   await marcarPago(boletoId,btn);
@@ -1257,11 +1253,12 @@ function renderProxPagNav(id){
   var div=document.getElementById('prox-pag-'+id);var st=proxPagState[id];
   if(!st||!st.lista.length){div.innerHTML='Nenhum pagamento futuro gerado ainda';return}
   var item=st.lista[st.idx],podeAnterior=st.idx>0,podeProximo=st.idx<st.lista.length-1;
-  div.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;gap:10px">
-    <button onclick="navProxPag('${id}',-1)" ${podeAnterior?'':'disabled'} style="background:var(--teal);border:none;border-radius:8px;padding:5px 12px;cursor:${podeAnterior?'pointer':'not-allowed'};color:#fff;font-size:12px;font-weight:700;font-family:'Syne',sans-serif;opacity:${podeAnterior?1:0.4}">← Anterior</button>
-    <div style="text-align:center;min-width:110px"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--text)">${formatData(item.vencimento)}</div><div style="font-size:12px;color:var(--text2)">R$ ${parseFloat(item.valor||0).toFixed(2).replace('.',',')}</div><button class="btn-pagar" style="margin-top:4px" onclick="pagarDoNavegador('${id}','${item.id}',this)">Pagar</button></div>
-    <button onclick="navProxPag('${id}',1)" ${podeProximo?'':'disabled'} style="background:var(--teal);border:none;border-radius:8px;padding:5px 12px;cursor:${podeProximo?'pointer':'not-allowed'};color:#fff;font-size:12px;font-weight:700;font-family:'Syne',sans-serif;opacity:${podeProximo?1:0.4}">Próximo →</button>
-  </div><div style="text-align:center;font-size:11px;color:var(--text2);margin-top:4px">${st.idx+1} de ${st.lista.length}</div>`;
+  div.innerHTML=`<div style="display:flex;align-items:center;gap:8px">
+    <button onclick="navProxPag('${id}',-1)" ${podeAnterior?'':'disabled'} style="background:var(--teal);border:1px solid var(--teal2);border-radius:8px;padding:7px 16px;cursor:${podeAnterior?'pointer':'not-allowed'};color:#fff;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;opacity:${podeAnterior?1:0.4}">← Anterior</button>
+    <div style="flex:1;text-align:center"><div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text)">${formatData(item.vencimento)}</div><div style="font-size:13px;color:var(--text2)">R$ ${parseFloat(item.valor||0).toFixed(2).replace('.',',')} · ${st.idx+1} de ${st.lista.length}</div></div>
+    <button onclick="navProxPag('${id}',1)" ${podeProximo?'':'disabled'} style="background:var(--teal);border:1px solid var(--teal2);border-radius:8px;padding:7px 16px;cursor:${podeProximo?'pointer':'not-allowed'};color:#fff;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0;opacity:${podeProximo?1:0.4}">Próximo →</button>
+    <button class="btn-pagar" onclick="pagarDoNavegador('${id}','${item.id}',this)">Pagar</button>
+  </div>`;
 }
 function navProxPag(id,delta){
   var st=proxPagState[id];if(!st)return;
