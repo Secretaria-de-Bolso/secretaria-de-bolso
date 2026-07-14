@@ -1191,10 +1191,10 @@ async function carregarDashboard(){
     document.getElementById('m-despesas').textContent='R$ '+desp.toFixed(2).replace('.',',');document.getElementById('m-total').textContent=lancs.length;
     var sal=parseSalario(document.getElementById('dash-salario').value),totalRec=rec+sal;
     document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2).replace('.',',');
-    var saldo=totalRec-desp,el=document.getElementById('m-saldo');el.textContent='R$ '+saldo.toFixed(2).replace('.',',');el.className='metric-value '+(saldo>=0?'green':'red');
     var {data:invs}=await sb.from('investimentos').select('valor').eq('user_id',currentUser.id).gte('data',dataIni).lte('data',dataFim);
     var investidoMes=(invs||[]).reduce((s,i)=>s+(parseFloat(i.valor)||0),0);
     document.getElementById('m-investido-geral').textContent='R$ '+investidoMes.toFixed(2).replace('.',',');
+    var saldo=totalRec-desp-investidoMes,el=document.getElementById('m-saldo');el.textContent='R$ '+saldo.toFixed(2).replace('.',',');el.className='metric-value '+(saldo>=0?'green':'red');
     carregarLancamentos();
   }catch(e){console.log(e)}
 }
