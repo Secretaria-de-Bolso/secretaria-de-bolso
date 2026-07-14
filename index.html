@@ -270,6 +270,21 @@ input::placeholder{color:var(--text3)}
   </div>
 </div>
 </div>
+<div class="modal-overlay" id="modal-invest-edit">
+<div class="modal">
+  <div class="modal-title">Editar investimento</div>
+  <input type="hidden" id="invest-edit-id">
+  <div class="form-group"><label>Descrição</label><input type="text" id="invest-edit-desc"></div>
+  <div class="form-group"><label>Valor (R$)</label><input type="number" id="invest-edit-valor" step="0.01"></div>
+  <div class="form-group"><label>Data</label><input type="date" id="invest-edit-data"></div>
+  <div class="form-group"><label>Categoria</label><input type="text" id="invest-edit-cat" list="invest-cats-list"><datalist id="invest-cats-list"></datalist></div>
+  <div class="modal-actions">
+    <button class="btn btn-outline" style="flex:1" onclick="fecharModal('modal-invest-edit')">Cancelar</button>
+    <button class="btn btn-danger" style="flex:1" onclick="deletarInvestimentoModal()">Excluir</button>
+    <button class="btn btn-primary" style="flex:1" onclick="salvarEdicaoInvestimento()">Salvar</button>
+  </div>
+</div>
+</div>
 <div class="modal-overlay" id="modal-confirm">
 <div class="modal" style="max-width:360px;text-align:center">
   <div style="font-size:36px;margin-bottom:12px">⚠️</div>
@@ -1168,16 +1183,48 @@ function renderInvestimentos(){
   if(!investimentosData.length){tbody.innerHTML='<tr><td colspan="5" style="color:var(--text2);text-align:center;padding:20px">Nenhum investimento registrado ainda.</td></tr>';return}
   investimentosData.forEach(inv=>{
     var val=parseFloat(inv.valor)||0,cat=(inv.categorias_investimento&&inv.categorias_investimento.nome)||'Outros';
-    tbody.innerHTML+=`<tr><td>${formatData(inv.data)}</td><td>${inv.descricao||'—'}</td><td><span class="badge badge-yellow">${cat}</span></td><td style="color:var(--teal);font-weight:600">R$ ${val.toFixed(2).replace('.',',')}</td><td style="white-space:nowrap"><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirInvestimentoDireto('${inv.id}')">Excluir</button></td></tr>`;
+    tbody.innerHTML+=`<tr><td>${formatData(inv.data)}</td><td>${inv.descricao||'—'}</td><td><span class="badge badge-yellow">${cat}</span></td><td style="color:var(--teal);font-weight:600">R$ ${val.toFixed(2).replace('.',',')}</td><td style="white-space:nowrap"><button class="td-edit-btn" onclick="abrirEdicaoInvestimento('${inv.id}','${(inv.descricao||'').replace(/'/g,"\\'")}',${val},'${inv.data||''}','${cat.replace(/'/g,"\\'")}')">Editar</button> <button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirInvestimentoDireto('${inv.id}')">Excluir</button></td></tr>`;
   });
 }
 function excluirInvestimentoDireto(id){confirmarAcao('Excluir investimento','Tem certeza que deseja excluir este investimento?',async()=>{
   await sb.from('investimentos').delete().eq('id',id);
   toast('Investimento excluído!');
+  atualizarViewsInvestimento();
+})}
+function atualizarViewsInvestimento(){
   if(document.getElementById('fin-investimentos').classList.contains('active'))carregarInvestimentos();
   if(currentLTab==='investimentos')carregarLancamentos();
   if(document.getElementById('fin-resumos').classList.contains('active'))carregarResumos();
-})}
+  carregarDashboard();
+}
+async function popularDatalistCategoriasInvestimento(){
+  var {data}=await sb.from('categorias_investimento').select('nome').eq('user_id',currentUser.id).order('nome');
+  var dl=document.getElementById('invest-cats-list');dl.innerHTML='';
+  (data||[]).forEach(c=>{var op=document.createElement('option');op.value=c.nome;dl.appendChild(op)});
+}
+function abrirEdicaoInvestimento(id,desc,val,data,cat){
+  document.getElementById('invest-edit-id').value=id;
+  document.getElementById('invest-edit-desc').value=desc;
+  document.getElementById('invest-edit-valor').value=val;
+  document.getElementById('invest-edit-data').value=data;
+  document.getElementById('invest-edit-cat').value=cat;
+  popularDatalistCategoriasInvestimento();
+  abrirModal('modal-invest-edit');
+}
+async function salvarEdicaoInvestimento(){
+  var id=document.getElementById('invest-edit-id').value;
+  var catId=await obterOuCriarCategoriaInvestimento(document.getElementById('invest-edit-cat').value);
+  await sb.from('investimentos').update({
+    descricao:document.getElementById('invest-edit-desc').value,
+    valor:parseFloat(document.getElementById('invest-edit-valor').value)||0,
+    data:document.getElementById('invest-edit-data').value,
+    categoria_id:catId
+  }).eq('id',id);
+  fecharModal('modal-invest-edit');
+  toast('Investimento atualizado!');
+  atualizarViewsInvestimento();
+}
+function deletarInvestimentoModal(){var id=document.getElementById('invest-edit-id').value;fecharModal('modal-invest-edit');excluirInvestimentoDireto(id)}
 async function carregarDashboard(){
   try{
     var {data:cliente}=await sb.from('clientes').select('salario_fixo').eq('user_id',currentUser.id).single();
@@ -1222,7 +1269,7 @@ function renderLancamentos(){
     var val=parseFloat(l.valor)||0;
     var cor=l.tipo==='receita'?'var(--teal)':(l.tipo==='investimento'?'var(--yellow)':'var(--red)');
     var acoes=l.tipo==='investimento'
-      ?`<button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirInvestimentoDireto('${l.id}')">Excluir</button>`
+      ?`<button class="td-edit-btn" onclick="abrirEdicaoInvestimento('${l.id}','${(l.descricao||'').replace(/'/g,"\\'")}',${val},'${l.data||''}','${(l.categoria||'').replace(/'/g,"\\'")}')">Editar</button> <button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirInvestimentoDireto('${l.id}')">Excluir</button>`
       :`<button class="td-edit-btn" onclick="abrirEdicao('${l.id}','${(l.descricao||'').replace(/'/g,"\\'")}',${val},'${l.data||''}','${l.categoria||''}')">Editar</button> <button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirLancamentoDireto('${l.id}')">Excluir</button>`;
     tbody.innerHTML+=`<tr><td>${formatData(l.data)}</td><td>${l.descricao||'—'}</td><td><span class="badge badge-yellow">${l.categoria||'Outros'}</span></td><td style="color:${cor};font-weight:600">R$ ${val.toFixed(2).replace('.',',')}</td><td style="white-space:nowrap">${acoes}</td></tr>`;
   });
