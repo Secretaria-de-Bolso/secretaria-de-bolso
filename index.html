@@ -522,8 +522,8 @@ input::placeholder{color:var(--text3)}
     <div class="finsub-tabs">
       <button class="finsub-btn active" id="finsub-geral" onclick="switchFinSub('geral')">Visão Geral</button>
       <button class="finsub-btn" id="finsub-lancamentos" onclick="switchFinSub('lancamentos')">Lançamentos</button>
-      <button class="finsub-btn" id="finsub-resumos" onclick="switchFinSub('resumos')">Resumos</button>
       <button class="finsub-btn" id="finsub-investimentos" onclick="switchFinSub('investimentos')">Investimentos</button>
+      <button class="finsub-btn" id="finsub-resumos" onclick="switchFinSub('resumos')">Resumos</button>
     </div>
 
     <div class="tab-content active" id="fin-geral">
@@ -572,6 +572,21 @@ input::placeholder{color:var(--text3)}
       </div>
     </div>
 
+    <div class="tab-content" id="fin-investimentos">
+      <div class="grid-2" style="margin-bottom:14px">
+        <div class="metric"><div class="metric-label">Total investido</div><div class="metric-value green" id="m-investido">R$ —</div><div class="metric-sub">Todos os registros</div></div>
+        <div class="metric"><div class="metric-label">Registros</div><div class="metric-value yellow" id="m-investido-count">—</div><div class="metric-sub">Investimentos lançados</div></div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="section-label" style="font-size:12px">Por categoria</div>
+        <div id="invest-cat-chart"><div style="color:var(--text2);font-size:13px">Carregando...</div></div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border)"><div class="section-label" style="margin-bottom:0">Investimentos</div></div>
+        <div class="table-wrap"><table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead><tbody id="tbody-invest"><tr><td colspan="5" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody></table></div>
+      </div>
+    </div>
+
     <div class="tab-content" id="fin-resumos">
       <div class="card">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:4px">
@@ -592,21 +607,6 @@ input::placeholder{color:var(--text3)}
           <div><div class="section-label" style="font-size:12px">Ganhos por categoria</div><div id="r-cat-ganhos"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
           <div><div class="section-label" style="font-size:12px">Investimentos por categoria</div><div id="r-cat-investido"><div style="color:var(--text2);font-size:13px">Carregando...</div></div></div>
         </div>
-      </div>
-    </div>
-
-    <div class="tab-content" id="fin-investimentos">
-      <div class="grid-2" style="margin-bottom:14px">
-        <div class="metric"><div class="metric-label">Total investido</div><div class="metric-value green" id="m-investido">R$ —</div><div class="metric-sub">Todos os registros</div></div>
-        <div class="metric"><div class="metric-label">Registros</div><div class="metric-value yellow" id="m-investido-count">—</div><div class="metric-sub">Investimentos lançados</div></div>
-      </div>
-      <div class="card" style="margin-bottom:16px">
-        <div class="section-label" style="font-size:12px">Por categoria</div>
-        <div id="invest-cat-chart"><div style="color:var(--text2);font-size:13px">Carregando...</div></div>
-      </div>
-      <div class="card" style="padding:0;overflow:hidden">
-        <div style="padding:16px 20px;border-bottom:1px solid var(--border)"><div class="section-label" style="margin-bottom:0">Investimentos</div></div>
-        <div class="table-wrap"><table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead><tbody id="tbody-invest"><tr><td colspan="5" style="color:var(--text2);text-align:center">Carregando...</td></tr></tbody></table></div>
       </div>
     </div>
   </div>
