@@ -529,6 +529,7 @@ input::placeholder{color:var(--text3)}
         <div class="metric"><div class="metric-label">Despesas</div><div class="metric-value red" id="m-despesas">R$ —</div><div class="metric-sub">Este mês</div></div>
         <div class="metric"><div class="metric-label">Saldo</div><div class="metric-value" id="m-saldo">R$ —</div><div class="metric-sub">Receitas − Despesas</div></div>
         <div class="metric"><div class="metric-label">Lançamentos</div><div class="metric-value yellow" id="m-total">—</div><div class="metric-sub">Este mês</div></div>
+        <div class="metric"><div class="metric-label">Investimentos</div><div class="metric-value yellow" id="m-investido-geral">R$ —</div><div class="metric-sub">Este mês</div></div>
       </div>
     </div>
 
@@ -547,6 +548,7 @@ input::placeholder{color:var(--text3)}
             <div style="display:flex;gap:0;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;overflow:hidden;flex-shrink:0">
               <div id="ltab-despesas" class="ltab-btn active" onclick="switchLTab('despesas')">Despesas</div>
               <div id="ltab-receitas" class="ltab-btn" onclick="switchLTab('receitas')">Ganhos</div>
+              <div id="ltab-investimentos" class="ltab-btn" onclick="switchLTab('investimentos')">Investimentos</div>
             </div>
           </div>
         </div>
@@ -813,7 +815,7 @@ function switchFinSub(sub){
   document.getElementById('finsub-'+sub).classList.add('active');
   if(sub==='investimentos')carregarInvestimentos();
 }
-function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').classList.toggle('active',tab==='despesas');document.getElementById('ltab-receitas').classList.toggle('active',tab==='receitas');carregarLancamentos()}
+function switchLTab(tab){currentLTab=tab;document.getElementById('ltab-despesas').classList.toggle('active',tab==='despesas');document.getElementById('ltab-receitas').classList.toggle('active',tab==='receitas');document.getElementById('ltab-investimentos').classList.toggle('active',tab==='investimentos');carregarLancamentos()}
 
 /* ── CHAT ── */
 function atualizarBtnChat(){var txt=document.getElementById('chat-texto').value.trim();document.getElementById('chat-send-btn').style.display=txt?'flex':'none';document.getElementById('chat-mic-btn').style.display=txt?'none':'flex'}
@@ -1169,7 +1171,13 @@ function renderInvestimentos(){
     tbody.innerHTML+=`<tr><td>${formatData(inv.data)}</td><td>${inv.descricao||'—'}</td><td><span class="badge badge-yellow">${cat}</span></td><td style="color:var(--teal);font-weight:600">R$ ${val.toFixed(2).replace('.',',')}</td><td style="white-space:nowrap"><button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirInvestimentoDireto('${inv.id}')">Excluir</button></td></tr>`;
   });
 }
-function excluirInvestimentoDireto(id){confirmarAcao('Excluir investimento','Tem certeza que deseja excluir este investimento?',async()=>{await sb.from('investimentos').delete().eq('id',id);toast('Investimento excluído!');carregarInvestimentos()})}
+function excluirInvestimentoDireto(id){confirmarAcao('Excluir investimento','Tem certeza que deseja excluir este investimento?',async()=>{
+  await sb.from('investimentos').delete().eq('id',id);
+  toast('Investimento excluído!');
+  if(document.getElementById('fin-investimentos').classList.contains('active'))carregarInvestimentos();
+  if(currentLTab==='investimentos')carregarLancamentos();
+  if(document.getElementById('fin-resumos').classList.contains('active'))carregarResumos();
+})}
 async function carregarDashboard(){
   try{
     var {data:cliente}=await sb.from('clientes').select('salario_fixo').eq('user_id',currentUser.id).single();
@@ -1184,6 +1192,9 @@ async function carregarDashboard(){
     var sal=parseSalario(document.getElementById('dash-salario').value),totalRec=rec+sal;
     document.getElementById('m-receitas').textContent='R$ '+totalRec.toFixed(2).replace('.',',');
     var saldo=totalRec-desp,el=document.getElementById('m-saldo');el.textContent='R$ '+saldo.toFixed(2).replace('.',',');el.className='metric-value '+(saldo>=0?'green':'red');
+    var {data:invs}=await sb.from('investimentos').select('valor').eq('user_id',currentUser.id).gte('data',dataIni).lte('data',dataFim);
+    var investidoMes=(invs||[]).reduce((s,i)=>s+(parseFloat(i.valor)||0),0);
+    document.getElementById('m-investido-geral').textContent='R$ '+investidoMes.toFixed(2).replace('.',',');
     carregarLancamentos();
   }catch(e){console.log(e)}
 }
@@ -1192,16 +1203,29 @@ var lancamentosData=[],lancPagina=0,LANC_POR_PAG=6;
 async function carregarLancamentos(){
   try{
     var{dataIni,dataFim}=periodoAtual();
-    var tipo=currentLTab==='despesas'?'despesa':'receita';
-    var {data}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).eq('tipo',tipo).gte('data',dataIni).lte('data',dataFim).order('data',{ascending:false});
-    lancamentosData=data||[];lancPagina=0;renderLancamentos();
+    if(currentLTab==='investimentos'){
+      var {data}=await sb.from('investimentos').select('*, categorias_investimento(nome)').eq('user_id',currentUser.id).gte('data',dataIni).lte('data',dataFim).order('data',{ascending:false});
+      lancamentosData=(data||[]).map(inv=>({id:inv.id,tipo:'investimento',descricao:inv.descricao,valor:inv.valor,data:inv.data,categoria:(inv.categorias_investimento&&inv.categorias_investimento.nome)||'Outros'}));
+    }else{
+      var tipo=currentLTab==='despesas'?'despesa':'receita';
+      var {data}=await sb.from('lancamentos').select('*').eq('user_id',currentUser.id).eq('tipo',tipo).gte('data',dataIni).lte('data',dataFim).order('data',{ascending:false});
+      lancamentosData=data||[];
+    }
+    lancPagina=0;renderLancamentos();
   }catch(e){console.log(e)}
 }
 function renderLancamentos(){
   var tbody=document.getElementById('tbody-lanc'),paginacao=document.getElementById('lanc-paginacao');tbody.innerHTML='';
   if(!lancamentosData.length){tbody.innerHTML='<tr><td colspan="5" style="color:var(--text2);text-align:center;padding:20px">Nenhum lançamento neste mês.</td></tr>';if(paginacao)paginacao.innerHTML='';return}
   var inicio=lancPagina*LANC_POR_PAG,pagina=lancamentosData.slice(inicio,inicio+LANC_POR_PAG);
-  pagina.forEach(l=>{var val=parseFloat(l.valor)||0,cor=l.tipo==='receita'?'var(--teal)':'var(--red)';tbody.innerHTML+=`<tr><td>${formatData(l.data)}</td><td>${l.descricao||'—'}</td><td><span class="badge badge-yellow">${l.categoria||'Outros'}</span></td><td style="color:${cor};font-weight:600">R$ ${val.toFixed(2).replace('.',',')}</td><td style="white-space:nowrap"><button class="td-edit-btn" onclick="abrirEdicao('${l.id}','${(l.descricao||'').replace(/'/g,"\\'")}',${val},'${l.data||''}','${l.categoria||''}')">Editar</button> <button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirLancamentoDireto('${l.id}')">Excluir</button></td></tr>`;});
+  pagina.forEach(l=>{
+    var val=parseFloat(l.valor)||0;
+    var cor=l.tipo==='receita'?'var(--teal)':(l.tipo==='investimento'?'var(--yellow)':'var(--red)');
+    var acoes=l.tipo==='investimento'
+      ?`<button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirInvestimentoDireto('${l.id}')">Excluir</button>`
+      :`<button class="td-edit-btn" onclick="abrirEdicao('${l.id}','${(l.descricao||'').replace(/'/g,"\\'")}',${val},'${l.data||''}','${l.categoria||''}')">Editar</button> <button class="td-edit-btn" style="color:var(--red);border-color:rgba(204,51,51,0.3)" onclick="excluirLancamentoDireto('${l.id}')">Excluir</button>`;
+    tbody.innerHTML+=`<tr><td>${formatData(l.data)}</td><td>${l.descricao||'—'}</td><td><span class="badge badge-yellow">${l.categoria||'Outros'}</span></td><td style="color:${cor};font-weight:600">R$ ${val.toFixed(2).replace('.',',')}</td><td style="white-space:nowrap">${acoes}</td></tr>`;
+  });
   var total=lancamentosData.length,maxPag=Math.ceil(total/LANC_POR_PAG);
   if(paginacao){if(maxPag>1){paginacao.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border)"><span style="font-size:13px;color:var(--text2)">${inicio+1}–${Math.min(inicio+LANC_POR_PAG,total)} de ${total}</span><div style="display:flex;gap:6px"><button class="td-edit-btn" ${lancPagina===0?'disabled style="opacity:0.3"':''} onclick="lancPagina=Math.max(0,lancPagina-1);renderLancamentos()">← Anterior</button><button class="td-edit-btn" ${lancPagina>=maxPag-1?'disabled style="opacity:0.3"':''} onclick="lancPagina=Math.min(${maxPag-1},lancPagina+1);renderLancamentos()">Próximo →</button></div></div>`;}else{paginacao.innerHTML='';}}
 }
